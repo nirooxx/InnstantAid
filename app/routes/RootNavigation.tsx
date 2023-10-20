@@ -22,7 +22,7 @@ import { updateToken } from "../store/userSlice";
 import Tasks from "../screens/Tasks";
 import Login from "../screens/auth/Login";
 import Register from "../screens/auth/Register";
-import Dashboard from "../screens/Dashboard";
+import Dashboard from "../screens/dashboard/Dashboard";
 import Settings from "../screens/Settings";
 
 const styles = StyleSheet.create({
