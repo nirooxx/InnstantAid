@@ -25,7 +25,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events }) => {
   return (
     <View style={styles.section}>
       <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Today's Event</Text>
+        <Text style={styles.sectionTitle}>Today's Events</Text>
         <TouchableOpacity>
           <Text style={styles.viewAll}>View All</Text>
         </TouchableOpacity>

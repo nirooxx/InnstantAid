@@ -15,12 +15,19 @@ import { RootState } from "../../store/store";
 // Importieren der neuen EventsSection-Komponente
 import EventsSection from "./eventsSection/EventsSection";
 import RoomDetails from "./roomDetails/RoomDetails";
+import HotelMap from "./hotelMap/HotelMap";
 
 const MemoizedEventsSection = React.memo(EventsSection);
 const MemoizedRoomDetails = React.memo(RoomDetails);
+const MemoizedHotelMap = React.memo(HotelMap);
 
 export default function Dashboard() {
   const users = useSelector((state: RootState) => state.user);
+
+  const handleAreaPress = (area: string) => {
+    // Hier können Sie Aktionen oder Navigationen für den jeweiligen Bereich hinzufügen
+    console.log(`Sie haben den Bereich ${area} ausgewählt.`);
+  };
 
   useEffect(() => {
     console.log(users);
@@ -52,34 +59,44 @@ export default function Dashboard() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton}>
-            <Icon name="arrow-back" size={24} color="black" />
-          </TouchableOpacity>
-          <View style={styles.searchContainer}>
-            <Icon
-              name="search"
-              size={24}
-              color="black"
-              style={styles.searchIcon}
-            />
-            <TextInput placeholder="Search" style={styles.searchInput} />
+        <View style={styles.contentWrapper}>
+          <View style={styles.header}>
+            <TouchableOpacity style={styles.backButton}>
+              <Icon name="arrow-back" size={24} color="black" />
+            </TouchableOpacity>
+            <View style={styles.searchContainer}>
+              <Icon
+                name="search"
+                size={24}
+                color="black"
+                style={styles.searchIcon}
+              />
+              <TextInput placeholder="Search" style={styles.searchInput} />
+            </View>
+            <TouchableOpacity style={styles.menuButton}>
+              <Icon name="ellipsis-vertical" size={24} color="black" />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.menuButton}>
-            <Icon name="ellipsis-vertical" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
-        <MemoizedRoomDetails
-          guestName="Gerd Müller"
-          roomNumber="205"
-          checkIn="15.10.2023, 14:00 Uhr"
-          checkOut="20.10.2023, 11:00 Uhr"
-          wifiInfo={{ ssid: "Hotel_WiFi", password: "password123" }}
-          roomServiceMenu={["Frühstück", "Mittagessen", "Abendessen", "Snacks"]}
-        />
+          <MemoizedRoomDetails
+            guestName="Gerd Müller"
+            roomNumber="205"
+            checkIn="15.10.2023, 14:00 Uhr"
+            checkOut="20.10.2023, 11:00 Uhr"
+            wifiInfo={{ ssid: "Hotel_WiFi", password: "password123" }}
+            roomServiceMenu={[
+              "Frühstück",
+              "Mittagessen",
+              "Abendessen",
+              "Snacks",
+            ]}
+          />
+          {/* Verwendung der HotelMap-Komponente */}
 
-        {/* Verwendung der EventsSection-Komponente */}
-        <MemoizedEventsSection events={events} />
+          <MemoizedHotelMap onAreaPress={handleAreaPress} />
+
+          {/* Verwendung der EventsSection-Komponente */}
+          <MemoizedEventsSection events={events} />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -90,6 +107,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFFFFF", // Weißer Hintergrund
     paddingHorizontal: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    // paddingBottom: 80,
+  },
+  contentWrapper: {
+    paddingBottom: 80, // zusätzlicher Padding-Wert für den TabNavigator
   },
   header: {
     flexDirection: "row",
