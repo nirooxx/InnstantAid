@@ -1,104 +1,82 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
 
 interface RoomDetailsProps {
   guestName: string;
-  roomNumber: string;
-  checkIn: string;
-  checkOut: string;
-  wifiInfo: {
-    ssid: string;
-    password: string;
-  };
-  roomServiceMenu: string[];
+  role: string; // Diese Eigenschaft wurde hinzugefügt, um die Rolle (z. B. "General Doctor") darzustellen
+  date: string; // Für das Datum
+  time: string; // Für die Uhrzeit
+  onPress?: () => void; // Hinzugefügt, um eine Aktion beim Klicken auszuführen
 }
 
 const RoomDetails: React.FC<RoomDetailsProps> = ({
   guestName,
-  roomNumber,
-  checkIn,
-  checkOut,
-  wifiInfo,
-  roomServiceMenu,
+  role,
+  date,
+  time,
+  onPress,
 }) => {
   return (
-    <ScrollView
-      horizontal={true}
-      style={styles.container}
-      showsHorizontalScrollIndicator={false}
-    >
-      <View style={styles.card}>
-        <Text style={styles.guestName}>Willkommen, {guestName}</Text>
-        <Text style={styles.label}>Zimmernummer</Text>
-        <Text style={styles.info}>{roomNumber}</Text>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
+      <View style={styles.imageContainer}>
+        {/* Hier könnte ein Bild platziert werden, falls erforderlich */}
+        <Icon name="person-circle" size={50} color="#333" />
       </View>
-
-      <View style={styles.card}>
-        <Text style={styles.label}>Check-in</Text>
-        <Text style={styles.info}>{checkIn}</Text>
-        <Text style={styles.label}>Check-out</Text>
-        <Text style={styles.info}>{checkOut}</Text>
+      <View style={styles.infoContainer}>
+        <Text style={styles.guestName}>{guestName}</Text>
+        <Text style={styles.role}>{role}</Text>
+        <View style={styles.dateTimeContainer}>
+          <Icon name="calendar" size={20} color="#333" />
+          <Text style={styles.dateTimeText}>{date}</Text>
+          <Icon name="time" size={20} color="#333" />
+          <Text style={styles.dateTimeText}>{time}</Text>
+        </View>
       </View>
-
-      <View style={styles.card}>
-        <Text style={styles.label}>WLAN</Text>
-        <Text style={styles.info}>SSID: {wifiInfo.ssid}</Text>
-        <Text style={styles.info}>Passwort: {wifiInfo.password}</Text>
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.label}>Zimmerservice-Menü</Text>
-        {roomServiceMenu.map((item) => (
-          <Text key={item} style={styles.menuItem}>
-            {item}
-          </Text>
-        ))}
-      </View>
-    </ScrollView>
+      <Icon name="chevron-forward" size={30} color="#333" />
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height: 250,
-    marginVertical: 10,
+    flexDirection: "row",
+    backgroundColor: "transparent", // Transparenter Hintergrund
+    borderRadius: 25,
+    paddingVertical: 25,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    marginVertical: 20,
+    borderWidth: 1, // Hinzugefügte Borderlinie
+    borderColor: "#ddd", // Farbe der Borderlinie
   },
-  card: {
-    backgroundColor: "#f6f6f6",
-    borderRadius: 20,
-    borderColor: "#d4d4d4",
-    borderWidth: 1,
-    width: 250,
-    height: 200,
-    marginHorizontal: 10,
-    padding: 20,
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5,
+  imageContainer: {
+    marginRight: 30,
+  },
+  infoContainer: {
+    flex: 1,
+    paddingRight: 15,
   },
   guestName: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "bold",
     color: "#333",
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#888",
     marginBottom: 10,
   },
-  info: {
-    fontSize: 14,
-    color: "#555",
-    marginBottom: 5,
+  role: {
+    fontSize: 18,
+    color: "#444",
+    marginBottom: 15,
   },
-  menuItem: {
-    fontSize: 14,
-    color: "#777",
+  dateTimeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  dateTimeText: {
+    fontSize: 16,
+    color: "#555",
+    marginLeft: 10,
+    marginRight: 20,
   },
 });
 

@@ -79,16 +79,12 @@ export default function Dashboard() {
           </View>
           <MemoizedRoomDetails
             guestName="Gerd Müller"
-            roomNumber="205"
-            checkIn="15.10.2023, 14:00 Uhr"
-            checkOut="20.10.2023, 11:00 Uhr"
-            wifiInfo={{ ssid: "Hotel_WiFi", password: "password123" }}
-            roomServiceMenu={[
-              "Frühstück",
-              "Mittagessen",
-              "Abendessen",
-              "Snacks",
-            ]}
+            role="General Doctor"
+            date="15.10.2023"
+            time="14:00 Uhr"
+            onPress={() => {
+              console.log("change Screen");
+            }}
           />
           {/* Verwendung der HotelMap-Komponente */}
 
