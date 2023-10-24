@@ -16,10 +16,12 @@ import { RootState } from "../../store/store";
 import EventsSection from "./eventsSection/EventsSection";
 import RoomDetails from "./roomDetails/RoomDetails";
 import HotelMap from "./hotelMap/HotelMap";
+import slider from "./slider/SliderComponent";
 
 const MemoizedEventsSection = React.memo(EventsSection);
 const MemoizedRoomDetails = React.memo(RoomDetails);
 const MemoizedHotelMap = React.memo(HotelMap);
+const MemoizedSlider = React.memo(slider);
 
 export default function Dashboard() {
   const users = useSelector((state: RootState) => state.user);
@@ -77,6 +79,11 @@ export default function Dashboard() {
               <Icon name="ellipsis-vertical" size={24} color="black" />
             </TouchableOpacity>
           </View>
+
+          {/* Verwendung der Slider-Komponente */}
+          <MemoizedSlider />
+
+          {/* Verwendung der RoomDetails-Komponente */}
           <MemoizedRoomDetails
             guestName="Gerd Müller"
             role="General Doctor"
@@ -86,6 +93,7 @@ export default function Dashboard() {
               console.log("change Screen");
             }}
           />
+
           {/* Verwendung der HotelMap-Komponente */}
 
           <MemoizedHotelMap onAreaPress={handleAreaPress} />
