@@ -9,6 +9,10 @@ import {
   TextInput,
   StyleSheet,
 } from "react-native";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 
@@ -17,6 +21,7 @@ import EventsSection from "./eventsSection/EventsSection";
 import RoomDetails from "./roomDetails/RoomDetails";
 import HotelMap from "./hotelMap/HotelMap";
 import slider from "./slider/SliderComponent";
+import Layout from "../../components/Layout";
 
 const MemoizedEventsSection = React.memo(EventsSection);
 const MemoizedRoomDetails = React.memo(RoomDetails);
@@ -110,31 +115,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF", // Weißer Hintergrund
-    paddingHorizontal: 16,
+    paddingHorizontal: wp(4), // 4% der Bildschirmbreite
     justifyContent: "center",
     alignItems: "center",
     // paddingBottom: 80,
   },
   contentWrapper: {
-    paddingBottom: 80, // zusätzlicher Padding-Wert für den TabNavigator
+    paddingBottom: hp(10), // 10% der Bildschirmhöhe
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginVertical: 16,
+    marginVertical: hp(2), // 2% der Bildschirmhöhe
   },
   searchInput: {
     flex: 1,
-    padding: 8,
+    padding: wp(2), // 2% der Bildschirmbreite
     color: "#333",
-    fontSize: 16,
+    fontSize: hp(2), // 2% der Bildschirmhöhe
     backgroundColor: "#f0f0f0", // Hellgrauer Hintergrund für den Input
-    borderRadius: 8,
+    borderRadius: wp(2), // 2% der Bildschirmbreite
   },
 
   backButton: {
-    padding: 8,
+    padding: wp(2), // 2% der Bildschirmbreite
   },
   searchContainer: {
     flexDirection: "row",
@@ -142,15 +147,15 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     borderColor: "#D1D1D1",
-    borderRadius: 12,
-    paddingHorizontal: 8,
+    borderRadius: wp(3), // 3% der Bildschirmbreite
+    paddingHorizontal: wp(2), // 2% der Bildschirmbreite
     backgroundColor: "#f0f0f0",
   },
   searchIcon: {
-    marginRight: 8,
+    marginRight: wp(2), // 2% der Bildschirmbreite
     color: "#333",
   },
   menuButton: {
-    padding: 8,
+    padding: wp(2), // 2% der Bildschirmbreite
   },
 });

@@ -7,6 +7,11 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import Layout from "../../../components/Layout";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
 type Event = {
   id: string;
@@ -62,34 +67,34 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: hp("2.5%"), // 2.5% der Bildschirmhöhe
     fontWeight: "bold",
     color: "#333",
   },
   viewAll: {
     color: "#0077ff", // Leuchtendes Blau
-    fontSize: 16,
+    fontSize: hp("2%"), // 2% der Bildschirmhöhe
   },
   eventCard: {
-    marginRight: 10,
+    marginRight: wp("2.5%"), // 2.5% der Bildschirmbreite
     borderRadius: 10,
     overflow: "hidden",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: hp("0.25%") },
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 3,
   },
   eventImage: {
-    width: 200,
-    height: 120,
+    width: wp("50%"), // 50% der Bildschirmbreite
+    height: hp("15%"), // 15% der Bildschirmhöhe
   },
   eventOverlay: {
     position: "absolute",
     bottom: 0,
     backgroundColor: "rgba(0,0,0,0.5)",
     width: "100%",
-    padding: 5,
+    padding: wp("1.25%"), // 1.25% der Bildschirmbreite
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
   },
