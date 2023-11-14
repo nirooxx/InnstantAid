@@ -1,21 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
   Dimensions,
-  StyleProp,
-  ViewStyle,
-  TextStyle,
 } from "react-native";
 import Carousel from "react-native-snap-carousel";
 
-const { width } = Dimensions.get("window");
-
-// Hier berechnen wir die dynamischen Werte für sliderWidth und itemWidth
-const sliderWidth = width * 0.92; // 92% des Bildschirms
-const itemWidth = sliderWidth * 0.86; // 86% des sliderWidth
+const initialWidth = Dimensions.get("window").width;
 
 interface SliderItem {
   title: string;
@@ -30,6 +23,25 @@ interface RenderItemProps {
 }
 
 const SliderComponent: React.FC = () => {
+  const [dimensions, setDimensions] = useState(Dimensions.get("window"));
+  const [orientationKey, setOrientationKey] = useState("portrait"); // Zusätzlicher State für die Bildschirmorientierung
+
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener("change", ({ window }) => {
+      setDimensions(window);
+      const orientation =
+        window.height > window.width ? "portrait" : "landscape";
+      setOrientationKey(orientation); // Aktualisieren des Keys bei Drehung
+    });
+
+    // Cleanup subscription on unmount
+    return () => subscription?.remove();
+  }, []);
+
+  // Berechnen Sie die Größen basierend auf den aktuellen Dimensionen
+  const sliderWidth = dimensions.width;
+  const itemWidth = dimensions.width - 60; // Berücksichtigen Sie den gewünschten Abstand
+
   const sliderItems: SliderItem[] = [
     {
       title: "Restaurant",
@@ -58,7 +70,7 @@ const SliderComponent: React.FC = () => {
     },
   ];
 
-  const renderItem = ({ item, index }: RenderItemProps) => {
+  const renderItem = ({ item }: RenderItemProps) => {
     return (
       <View style={styles.slide}>
         <Text style={styles.title}>{item.title}</Text>
@@ -72,49 +84,54 @@ const SliderComponent: React.FC = () => {
 
   return (
     <Carousel
+      key={orientationKey} // Fügen Sie den Key hinzu, der sich bei Drehung ändert
       data={sliderItems}
       renderItem={renderItem}
-      sliderWidth={sliderWidth}
-      itemWidth={itemWidth}
+      sliderWidth={sliderWidth} // Verwenden Sie die gesamte Breite
+      itemWidth={itemWidth} // Abzüglich der Gesamtpolsterung
+      activeSlideAlignment="center"
+      containerCustomStyle={styles.carouselContainer}
+      contentContainerCustomStyle={styles.carouselContentContainer}
     />
   );
 };
 
 const styles = StyleSheet.create({
+  carouselContainer: {
+    flexGrow: 0, // Verhindert, dass der Container über die Größe der Kinder hinauswächst
+  },
+  carouselContentContainer: {
+    alignItems: "center", // Zentriert die Slides im Carousel, wenn diese kleiner als der Bildschirm sind
+  },
   slide: {
-    flexDirection: "column",
-    backgroundColor: "transparent",
-    borderRadius: 25,
-    paddingVertical: 25,
-    paddingHorizontal: 20,
+    backgroundColor: "white", // oder ein anderer gewünschter Hintergrund
+    borderRadius: 20,
+    padding: 20,
     justifyContent: "center",
     alignItems: "center",
-    marginVertical: 20,
-    borderWidth: 1,
-    borderColor: "#ddd",
-  } as ViewStyle,
+    // marginHorizontal: 30, // Gibt dem Slide etwas Abstand von den Rändern
+    width: initialWidth - 60, // Abzüglich der Gesamtpolsterung
+  },
   title: {
     fontSize: 22,
     fontWeight: "bold",
     color: "#333",
-    marginBottom: 10,
-  } as TextStyle,
+  },
   description: {
-    fontSize: 18,
-    color: "#444",
+    fontSize: 16,
+    color: "#666",
     textAlign: "center",
-    marginBottom: 15,
-  } as TextStyle,
+    marginBottom: 20,
+  },
   button: {
     backgroundColor: "#333",
-    borderRadius: 25,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  } as ViewStyle,
+    borderRadius: 10,
+    padding: 10,
+  },
   buttonText: {
     color: "white",
     fontSize: 16,
-  } as TextStyle,
+  },
 });
 
 export default SliderComponent;

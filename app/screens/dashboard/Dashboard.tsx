@@ -115,31 +115,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF", // Weißer Hintergrund
-    paddingHorizontal: wp(4), // 4% der Bildschirmbreite
-    justifyContent: "center",
-    alignItems: "center",
-    // paddingBottom: 80,
+    paddingHorizontal: wp("4%"), // 4% der Bildschirmbreite
   },
   contentWrapper: {
-    paddingBottom: hp(10), // 10% der Bildschirmhöhe
+    paddingBottom: hp("10%"), // 10% der Bildschirmhöhe für den TabNavigator
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginVertical: hp(2), // 2% der Bildschirmhöhe
+    marginVertical: hp("2%"), // 2% der Bildschirmhöhe
   },
   searchInput: {
     flex: 1,
-    padding: wp(2), // 2% der Bildschirmbreite
+    paddingVertical: hp("1%"), // 1% der Bildschirmhöhe
+    paddingHorizontal: wp("4%"), // 4% der Bildschirmbreite
     color: "#333",
-    fontSize: hp(2), // 2% der Bildschirmhöhe
+    fontSize: wp("4%"), // Dynamische Schriftgröße basierend auf der Bildschirmbreite
     backgroundColor: "#f0f0f0", // Hellgrauer Hintergrund für den Input
-    borderRadius: wp(2), // 2% der Bildschirmbreite
+    borderRadius: wp("2%"), // 2% der Bildschirmbreite
   },
-
   backButton: {
-    padding: wp(2), // 2% der Bildschirmbreite
+    padding: wp("2%"), // 2% der Bildschirmbreite
   },
   searchContainer: {
     flexDirection: "row",
@@ -147,15 +144,15 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     borderColor: "#D1D1D1",
-    borderRadius: wp(3), // 3% der Bildschirmbreite
-    paddingHorizontal: wp(2), // 2% der Bildschirmbreite
+    borderRadius: wp("3%"), // 3% der Bildschirmbreite
+    paddingHorizontal: wp("2%"), // 2% der Bildschirmbreite
     backgroundColor: "#f0f0f0",
   },
   searchIcon: {
-    marginRight: wp(2), // 2% der Bildschirmbreite
+    marginRight: wp("2%"), // 2% der Bildschirmbreite
     color: "#333",
   },
   menuButton: {
-    padding: wp(2), // 2% der Bildschirmbreite
+    padding: wp("2%"), // 2% der Bildschirmbreite
   },
 });
