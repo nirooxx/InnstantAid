@@ -32,10 +32,6 @@ const reservationData = [
   // ... add more reservations
 ];
 
-const getReservationDetails = (id: any) => {
-  return reservationData.find((reservation) => reservation.id === id);
-};
-
 const ReservationPage: React.FC = () => {
   const [selectedReservationId, setSelectedReservationId] = useState<
     string | null
@@ -49,12 +45,10 @@ const ReservationPage: React.FC = () => {
     setSelectedReservationId(id);
   };
 
-  const handleBook = () => {
-    console.log("Booking confirmed for reservation id:", selectedReservationId);
-  };
-
   const selectedReservation = selectedReservationId
-    ? getReservationDetails(selectedReservationId)
+    ? reservationData.find(
+        (reservation) => reservation.id === selectedReservationId
+      )
     : null;
 
   return (
@@ -82,13 +76,13 @@ const ReservationPage: React.FC = () => {
       </View>
       {selectedReservation ? (
         <ReservationDetail
+          {...selectedReservation}
           id={selectedReservation.id}
           title={selectedReservation.title}
           imageUri={selectedReservation.imageUri}
           details={selectedReservation.description}
           category={selectedReservation.category}
           price={selectedReservation.price}
-          onBook={handleBook}
         />
       ) : (
         <ReservationsList

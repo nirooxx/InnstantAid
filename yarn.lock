@@ -1261,6 +1261,13 @@
     "deepmerge" "^3.2.0"
     "hoist-non-react-statics" "^3.3.0"
 
+"@egjs/hammerjs@^2.0.17":
+  "integrity" "sha512-XQsZgjm2EcVUiZQf11UBJQfmZeEmOW8DpI1gsFeln6w0ae0ii4dMQEQ0kjl6DspdWX1aGY1/loyXnP0JS06e/A=="
+  "resolved" "https://registry.npmjs.org/@egjs/hammerjs/-/hammerjs-2.0.17.tgz"
+  "version" "2.0.17"
+  dependencies:
+    "@types/hammerjs" "^2.0.36"
+
 "@emotion/cache@^10.0.27":
   "integrity" "sha512-fU2VtSVlHiF27empSbxi1O2JFdNWZO+2NFHfwO0pxgTep6Xa3uGb+3pVKfLww2l/IBGLNEZl5Xf/++A4wAYDYQ=="
   "resolved" "https://registry.npmjs.org/@emotion/cache/-/cache-10.0.29.tgz"
@@ -2463,10 +2470,10 @@
     "react-is" "^16.13.0"
     "use-latest-callback" "^0.1.5"
 
-"@react-navigation/elements@^1.3.17":
-  "integrity" "sha512-/0hwnJkrr415yP0Hf4PjUKgGyfshrvNUKFXN85Mrt1gY49hy9IwxZgrrxlh0THXkPeq8q4VWw44eHDfAcQf20Q=="
-  "resolved" "https://registry.npmjs.org/@react-navigation/elements/-/elements-1.3.18.tgz"
-  "version" "1.3.18"
+"@react-navigation/elements@^1.3.17", "@react-navigation/elements@^1.3.21":
+  "integrity" "sha512-eyS2C6McNR8ihUoYfc166O1D8VYVh9KIl0UQPI8/ZJVsStlfSTgeEEh+WXge6+7SFPnZ4ewzEJdSAHH+jzcEfg=="
+  "resolved" "https://registry.npmjs.org/@react-navigation/elements/-/elements-1.3.21.tgz"
+  "version" "1.3.21"
 
 "@react-navigation/native-stack@^6.9.12":
   "integrity" "sha512-kS2zXCWP0Rgt7uWaCUKrRl7U2U1Gp19rM1kyRY2YzBPXhWGVPjQ2ygBp88CTQzjgy8M07H/79jvGiZ0mlEJI+g=="
@@ -2492,6 +2499,15 @@
   "version" "6.1.8"
   dependencies:
     "nanoid" "^3.1.23"
+
+"@react-navigation/stack@^6.3.20":
+  "integrity" "sha512-vE6mgZzOgoa5Uy7ayT97Cj+ZIK7DK+JBYVuKUViILlWZy6IWK7HFDuqoChSbZ1ajTIfAxj/acVGg1jkbAKsToA=="
+  "resolved" "https://registry.npmjs.org/@react-navigation/stack/-/stack-6.3.20.tgz"
+  "version" "6.3.20"
+  dependencies:
+    "@react-navigation/elements" "^1.3.21"
+    "color" "^4.2.3"
+    "warn-once" "^0.1.0"
 
 "@reduxjs/toolkit@^1 || ^2.0.0-beta.0", "@reduxjs/toolkit@^1.9.5":
   "integrity" "sha512-Rt97jHmfTeaxL4swLRNPD/zV4OxTes4la07Xc4hetpUW/vc75t5m1ANyxG6ymnEQ2FsLQsoMlYB2vV1sO3m8tQ=="
@@ -3048,6 +3064,11 @@
   "version" "4.1.6"
   dependencies:
     "@types/node" "*"
+
+"@types/hammerjs@^2.0.36":
+  "integrity" "sha512-qkcUlZmX6c4J8q45taBKTL3p+LbITgyx7qhlPYOdOHZB7B31K0mXbP5YA7i7SgDeEGuI9MnumiKPEMrxg8j3KQ=="
+  "resolved" "https://registry.npmjs.org/@types/hammerjs/-/hammerjs-2.0.45.tgz"
+  "version" "2.0.45"
 
 "@types/hoist-non-react-statics@^3.3.1":
   "integrity" "sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA=="
@@ -9945,6 +9966,17 @@
   "version" "3.4.8"
   dependencies:
     "dotenv" "^16.0.3"
+
+"react-native-gesture-handler@^2.13.4", "react-native-gesture-handler@>= 1.0.0":
+  "integrity" "sha512-smpYOVbvWABpq2H+lmDnfOLCTH934aUPO1w2/pQXvm1j+M/vmGQmvgRDJOpXcks17HLtNNKXD6tcODf3aPqDfA=="
+  "resolved" "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.13.4.tgz"
+  "version" "2.13.4"
+  dependencies:
+    "@egjs/hammerjs" "^2.0.17"
+    "hoist-non-react-statics" "^3.3.0"
+    "invariant" "^2.2.4"
+    "lodash" "^4.17.21"
+    "prop-types" "^15.7.2"
 
 "react-native-gradle-plugin@^0.71.19":
   "integrity" "sha512-1dVk9NwhoyKHCSxcrM6vY6cxmojeATsBobDicX0ZKr7DgUF2cBQRTKsimQFvzH8XhOVXyH8p4HyDSZNIFI8OlQ=="

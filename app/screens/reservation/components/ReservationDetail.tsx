@@ -10,6 +10,13 @@ import {
 } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../../../routes/types"; // Importieren Sie Ihre Typdefinitionen
+import { StackNavigationProp } from "@react-navigation/stack";
+
+type ReservationDetailNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "BookingConfirmationPage"
+>;
 
 interface ReservationDetailProps {
   id: string;
@@ -18,17 +25,26 @@ interface ReservationDetailProps {
   details: string;
   category: string;
   price: string;
-  onBook: () => void;
 }
 
 const ReservationDetail: React.FC<ReservationDetailProps> = ({
+  id,
   title,
   imageUri,
   details,
   category,
   price,
-  onBook,
 }) => {
+  const navigation = useNavigation<ReservationDetailNavigationProp>();
+
+  const onBook = () => {
+    navigation.navigate("BookingConfirmationPage", {
+      title,
+      date: "24.12.2023", // Beispiel Datum
+      time: "18:00", // Beispiel Uhrzeit
+      price,
+    });
+  };
   return (
     <ScrollView style={styles.container}>
       <Image source={{ uri: imageUri }} style={styles.image} />

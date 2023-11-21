@@ -15,8 +15,9 @@ import { getSecureValue } from "../utils/keyChain";
 // Redux slice for updating Access Token to store
 import { updateToken } from "../store/userSlice";
 
+import { RootStackParamList } from "./types";
 // import {RootState} from '../store/store';
-
+import { createStackNavigator } from "@react-navigation/stack";
 // Screens
 // import Login from '../screens/auth/Login';
 import Tasks from "../screens/Tasks";
@@ -25,6 +26,7 @@ import Register from "../screens/auth/Register";
 import Dashboard from "../screens/dashboard/Dashboard";
 import Settings from "../screens/Settings";
 import ReservationPage from "../screens/reservation/ReservationPage";
+import BookingConfirmationPage from "../screens/reservation/components/BookingConfirmationPage";
 
 const styles = StyleSheet.create({
   tabBar: {
@@ -58,6 +60,19 @@ const styles = StyleSheet.create({
 // Root Navigation
 // const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
+
+function ReservationStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Reservations" component={ReservationPage} />
+      <Stack.Screen
+        name="BookingConfirmationPage"
+        component={BookingConfirmationPage}
+      />
+    </Stack.Navigator>
+  );
+}
 
 export default function RootNavigation() {
   const { theme } = useTheme();
@@ -121,15 +136,7 @@ export default function RootNavigation() {
       >
         <Tab.Screen name="Tasks" component={Tasks} />
         <Tab.Screen name="Dashboard" component={Dashboard} />
-        <Tab.Screen
-          name="Reservations"
-          component={ReservationPage}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Icon name="ios-calendar" size={size} color={color} />
-            ),
-          }}
-        />
+        <Tab.Screen name="Reservations" component={ReservationStack} />
         <Tab.Screen name="Settings" component={Settings} />
       </Tab.Navigator>
     </NavigationContainer>

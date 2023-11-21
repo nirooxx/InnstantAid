@@ -1,96 +1,106 @@
-// BookingConfirmationPage.tsx
 import React, { useState } from "react";
 import {
   View,
   Text,
-  StyleSheet,
   TextInput,
-  Button,
-  Alert,
+  TouchableOpacity,
   ScrollView,
+  StyleSheet,
+  Alert,
 } from "react-native";
+import { RouteProp } from "@react-navigation/native";
+import { RootStackParamList } from "../../../routes/types"; // Stellen Sie sicher, dass der Pfad korrekt ist
 
-interface BookingDetails {
-  title: string;
-  date: string;
-  time: string;
-  numberOfGuests: number;
+interface BookingConfirmationProps {
+  route: RouteProp<RootStackParamList, "BookingConfirmationPage">;
 }
 
-interface BookingConfirmationPageProps {
-  reservationDetail: BookingDetails;
-  onCompleteBooking: () => void;
-}
-
-const BookingConfirmationPage: React.FC<BookingConfirmationPageProps> = ({
-  reservationDetail,
-  onCompleteBooking,
+const BookingConfirmationPage: React.FC<BookingConfirmationProps> = ({
+  route,
 }) => {
+  const { title, date, time, price } = route.params;
   const [guestName, setGuestName] = useState("");
   const [guestContact, setGuestContact] = useState("");
 
   const handleConfirmBooking = () => {
-    // Validate input fields
     if (!guestName || !guestContact) {
-      Alert.alert("Bitte füllen Sie alle Felder aus.");
+      Alert.alert("Fehler", "Bitte füllen Sie alle Felder aus.");
       return;
     }
-    // Implement booking logic here, e.g., send data to server
-    // ...
-    Alert.alert(
-      "Reservierung bestätigt",
-      "Ihre Reservierung wurde erfolgreich vorgenommen."
-    );
-    onCompleteBooking(); // Callback to reset state or navigate to another screen
+    Alert.alert("Bestätigung", "Ihre Reservierung wurde erfolgreich gebucht.");
+    // Hier würde die Logik stehen, um die Buchung zu verarbeiten
   };
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.header}>Reservierung bestätigen</Text>
-      <Text style={styles.detailText}>
-        {reservationDetail.title} am {reservationDetail.date} um{" "}
-        {reservationDetail.time}
-      </Text>
+      <View style={styles.detailContainer}>
+        <Text style={styles.header}>Ihre Reservierung</Text>
+        <Text style={styles.detail}>{title}</Text>
+        <Text style={styles.detail}>
+          {date} um {time}
+        </Text>
+        <Text style={styles.detail}>Preis: {price}</Text>
+      </View>
       <TextInput
         style={styles.input}
-        placeholder="Name"
+        placeholder="Ihr Name"
         value={guestName}
         onChangeText={setGuestName}
       />
       <TextInput
         style={styles.input}
-        placeholder="Kontaktinformationen"
+        placeholder="Ihre Kontaktinformationen"
         value={guestContact}
         onChangeText={setGuestContact}
       />
-      <Button title="Reservierung bestätigen" onPress={handleConfirmBooking} />
+      <TouchableOpacity style={styles.button} onPress={handleConfirmBooking}>
+        <Text style={styles.buttonText}>Bestätigen</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
 
+// Hier würden Sie Ihre Styles definieren
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 16,
+    backgroundColor: "#f7f7f7",
+  },
+  detailContainer: {
+    marginBottom: 32,
   },
   header: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20,
+    color: "#333",
+    marginBottom: 8,
   },
-  detailText: {
-    fontSize: 16,
-    marginBottom: 20,
+  detail: {
+    fontSize: 18,
+    marginBottom: 4,
   },
   input: {
     backgroundColor: "#fff",
     borderColor: "#ddd",
     borderWidth: 1,
-    padding: 10,
-    marginBottom: 20,
     borderRadius: 5,
+    padding: 12,
+    marginBottom: 16,
+    fontSize: 16,
   },
-  // ... Weitere Styles
+  button: {
+    backgroundColor: "#5C6BC0",
+    padding: 16,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  // Andere Styles...
 });
 
 export default BookingConfirmationPage;
