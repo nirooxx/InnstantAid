@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
-  Dimensions,
+  useWindowDimensions,
 } from "react-native";
 import Carousel from "react-native-snap-carousel";
-
-const initialWidth = Dimensions.get("window").width;
 
 interface SliderItem {
   title: string;
@@ -23,23 +21,10 @@ interface RenderItemProps {
 }
 
 const SliderComponent: React.FC = () => {
-  const [dimensions, setDimensions] = useState(Dimensions.get("window"));
-  const [orientationKey, setOrientationKey] = useState("portrait"); // Zusätzlicher State für die Bildschirmorientierung
-
-  useEffect(() => {
-    const subscription = Dimensions.addEventListener("change", ({ window }) => {
-      setDimensions(window);
-      const orientation =
-        window.height > window.width ? "portrait" : "landscape";
-      setOrientationKey(orientation); // Aktualisieren des Keys bei Drehung
-    });
-
-    // Cleanup subscription on unmount
-    return () => subscription?.remove();
-  }, []);
+  const dimensions = useWindowDimensions();
 
   // Berechnen Sie die Größen basierend auf den aktuellen Dimensionen
-  const sliderWidth = dimensions.width;
+  const sliderWidth = dimensions.width - 60;
   const itemWidth = dimensions.width - 60; // Berücksichtigen Sie den gewünschten Abstand
 
   const sliderItems: SliderItem[] = [
@@ -84,7 +69,6 @@ const SliderComponent: React.FC = () => {
 
   return (
     <Carousel
-      key={orientationKey} // Fügen Sie den Key hinzu, der sich bei Drehung ändert
       data={sliderItems}
       renderItem={renderItem}
       sliderWidth={sliderWidth} // Verwenden Sie die gesamte Breite
@@ -110,7 +94,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     // marginHorizontal: 30, // Gibt dem Slide etwas Abstand von den Rändern
-    width: initialWidth - 60, // Abzüglich der Gesamtpolsterung
+    //  width: useWindowDimensions().width - 60, // Abzüglich der Gesamtpolsterung
   },
   title: {
     fontSize: 22,

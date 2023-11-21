@@ -1,55 +1,69 @@
 import React, { useState } from "react";
-import { Image, View, TouchableOpacity, StyleSheet, Text } from "react-native";
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+  Text,
+} from "react-native";
 
-interface Props {
-  onAreaPress: (area: string) => void;
-}
+const hotelMapImage = require("../../../assets/images/Gebäude_Architektur.jpg");
 
-const HotelMap: React.FC<Props> = ({ onAreaPress }) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedArea, setSelectedArea] = useState<string | null>(null);
+// Informationen zu den Bereichen des Hotels
+const hotelAreas = {
+  spa: {
+    name: "Spa",
+    details: "Entspannen Sie in unserem luxuriösen Spa-Bereich.",
+    // ... weitere Details wie Öffnungszeiten, etc.
+  },
+  fitness: {
+    name: "Fitness",
+    details: "Bleiben Sie fit in unserem modernen Fitnesscenter.",
+    // ... weitere Details
+  },
+  // ... andere Bereiche
+};
 
-  const handleAreaPress = (area: string) => {
-    setSelectedArea(area);
-    setModalVisible(true);
-    onAreaPress(area); // Ruft die übergeordnete Funktion auf
-  };
+const HotelMap: React.FC = () => {
+  const [selectedArea, setSelectedArea] = useState<
+    keyof typeof hotelAreas | null
+  >(null);
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../../../assets/images/Gebäude_Architektur.jpg")}
-        style={styles.floorPlan}
-      />
-      {/* Die Linie, die vom SPA-Button zum Gebäude zeigt */}
-      <View style={styles.spaLine} />
-      <TouchableOpacity
-        style={styles.spaArea}
-        onPress={() => handleAreaPress("spa")}
-      >
-        <Text style={styles.spaAreaText}>SPA</Text>
-      </TouchableOpacity>
-      {/* Weitere Bereiche hier hinzufügen */}
+      <Image source={hotelMapImage} style={styles.mapImage} />
+      {Object.keys(hotelAreas).map((areaKey) => (
+        <TouchableOpacity
+          key={areaKey}
+          style={styles.areaButton} // Positionierung je nach Bild festlegen
+          onPress={() => setSelectedArea(areaKey as keyof typeof hotelAreas)}
+        >
+          <Text>{hotelAreas[areaKey as keyof typeof hotelAreas].name}</Text>
+        </TouchableOpacity>
+      ))}
 
-      {modalVisible && (
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>
-              Informationen für {selectedArea}
-            </Text>
-            <Text style={styles.modalDescription}>
-              Hier können Sie spezifische Informationen über {selectedArea}{" "}
-              hinzufügen.
-            </Text>
-
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.closeButtonText}>Schließen</Text>
-            </TouchableOpacity>
+      {selectedArea && (
+        <Modal
+          transparent
+          visible={selectedArea !== null}
+          onRequestClose={() => setSelectedArea(null)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>
+                {hotelAreas[selectedArea].name}
+              </Text>
+              <Text>{hotelAreas[selectedArea].details}</Text>
+              <TouchableOpacity
+                onPress={() => setSelectedArea(null)}
+                style={styles.closeButton}
+              >
+                <Text>Close</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        </Modal>
       )}
     </View>
   );
@@ -60,73 +74,57 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#fff", // Weißer Hintergrund für die gesamte Komponente
   },
-  floorPlan: {
-    width: 300,
-    height: 200,
-    resizeMode: "contain",
+  mapImage: {
+    width: "100%",
+    height: 300, // Höhe an Ihr Bild anpassen
+    resizeMode: "contain", // Verhindert Verzerrungen des Bildes
   },
-  spaArea: {
+  areaButton: {
     position: "absolute",
-    top: "0%",
-    left: "30%",
-    width: "10%",
-    height: "10%",
-    borderColor: "#000",
-    borderWidth: 2,
-    borderRadius: 10,
-    opacity: 0.5,
-    justifyContent: "center", // Ausrichtung des Textes vertikal in der Mitte
-    alignItems: "center",
+    backgroundColor: "#FFF",
+    padding: 10,
+    borderRadius: 5,
+    elevation: 5,
+    // Beispiel für die Positionierung des SPA-Bereichs
+    // Sie müssen die top und left Werte für jeden Bereich anpassen
+    top: 100, // Beispielwert
+    left: 50, // Beispielwert
   },
-  spaAreaText: {
-    fontSize: 12,
-    fontWeight: "bold",
-    color: "#000",
-  },
-  modalContainer: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+  modalOverlay: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.8)", // Semi-transparent background
+    backgroundColor: "rgba(0,0,0,0.5)", // Dunkler Hintergrund für das Modal
   },
   modalContent: {
-    backgroundColor: "rgba(255, 255, 255, 0.8)", // Semi-transparent white
-    padding: 20,
+    backgroundColor: "#FFF",
     borderRadius: 20,
-    width: "80%",
+    padding: 20,
+    alignItems: "center",
+    maxWidth: "80%", // Verhindert, dass das Modal zu breit wird
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
   },
-  modalDescription: {
-    fontSize: 16,
-  },
   closeButton: {
-    marginTop: 10,
+    marginTop: 20,
+    backgroundColor: "#f44336", // Rote Farbe für den Schließen-Button
     padding: 10,
-    backgroundColor: "#A567FF",
-    borderRadius: 15,
-  },
-  closeButtonText: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#FFF",
-    textAlign: "center",
-  },
-  spaLine: {
-    position: "absolute",
-    top: "10%", // Einstellen, um die Position der Linie zu bestimmen
-    left: "35%", // Einstellen, um die Position der Linie zu bestimmen
-    width: 2, // Dicke der Linie
-    height: "25%", // Länge der Linie
-    backgroundColor: "#000",
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "#FFF",
   },
 });
 

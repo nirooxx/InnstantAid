@@ -24,6 +24,7 @@ import Login from "../screens/auth/Login";
 import Register from "../screens/auth/Register";
 import Dashboard from "../screens/dashboard/Dashboard";
 import Settings from "../screens/Settings";
+import ReservationPage from "../screens/reservation/ReservationPage";
 
 const styles = StyleSheet.create({
   tabBar: {
@@ -120,6 +121,15 @@ export default function RootNavigation() {
       >
         <Tab.Screen name="Tasks" component={Tasks} />
         <Tab.Screen name="Dashboard" component={Dashboard} />
+        <Tab.Screen
+          name="Reservations"
+          component={ReservationPage}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Icon name="ios-calendar" size={size} color={color} />
+            ),
+          }}
+        />
         <Tab.Screen name="Settings" component={Settings} />
       </Tab.Navigator>
     </NavigationContainer>

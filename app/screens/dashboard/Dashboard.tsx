@@ -21,7 +21,6 @@ import EventsSection from "./eventsSection/EventsSection";
 import RoomDetails from "./roomDetails/RoomDetails";
 import HotelMap from "./hotelMap/HotelMap";
 import slider from "./slider/SliderComponent";
-import Layout from "../../components/Layout";
 
 const MemoizedEventsSection = React.memo(EventsSection);
 const MemoizedRoomDetails = React.memo(RoomDetails);
@@ -30,11 +29,6 @@ const MemoizedSlider = React.memo(slider);
 
 export default function Dashboard() {
   const users = useSelector((state: RootState) => state.user);
-
-  const handleAreaPress = (area: string) => {
-    // Hier können Sie Aktionen oder Navigationen für den jeweiligen Bereich hinzufügen
-    console.log(`Sie haben den Bereich ${area} ausgewählt.`);
-  };
 
   useEffect(() => {
     console.log(users);
@@ -65,7 +59,7 @@ export default function Dashboard() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={styles.contentWrapper}>
         <View style={styles.contentWrapper}>
           <View style={styles.header}>
             <TouchableOpacity style={styles.backButton}>
@@ -101,7 +95,7 @@ export default function Dashboard() {
 
           {/* Verwendung der HotelMap-Komponente */}
 
-          <MemoizedHotelMap onAreaPress={handleAreaPress} />
+          <MemoizedHotelMap />
 
           {/* Verwendung der EventsSection-Komponente */}
           <MemoizedEventsSection events={events} />
@@ -115,9 +109,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF", // Weißer Hintergrund
-    paddingHorizontal: wp("4%"), // 4% der Bildschirmbreite
   },
   contentWrapper: {
+    paddingHorizontal: wp("4%"),
     paddingBottom: hp("10%"), // 10% der Bildschirmhöhe für den TabNavigator
   },
   header: {
