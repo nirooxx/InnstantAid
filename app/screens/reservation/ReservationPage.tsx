@@ -1,14 +1,9 @@
 import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  SafeAreaView,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import ReservationsList from "./components/ReservationsList";
 import ReservationDetail from "./components/ReservationDetail";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const reservationData = [
   {
@@ -52,8 +47,8 @@ const ReservationPage: React.FC = () => {
     : null;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
+    <SafeAreaView style={styles.container} edges={["right", "bottom", "left"]}>
+      <View>
         {selectedReservationId && (
           <TouchableOpacity
             onPress={handleBackToList}
@@ -65,14 +60,6 @@ const ReservationPage: React.FC = () => {
         <Text style={styles.headerTitle}>
           {selectedReservationId ? selectedReservation?.title : ""}
         </Text>
-        {!selectedReservationId && (
-          <Icon
-            name="search-outline"
-            size={30}
-            color="#000"
-            style={styles.searchIcon}
-          />
-        )}
       </View>
       {selectedReservation ? (
         <ReservationDetail
@@ -99,15 +86,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f7f7f7",
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 16,
-    backgroundColor: "#ffffff", // Weißer Hintergrund für den Header
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
-  },
+
   headerTitle: {
     fontSize: 22,
     fontWeight: "bold",

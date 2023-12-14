@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useDispatch } from "react-redux";
 // import {useSelector, useDispatch} from 'react-redux';
-
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 // Hook for theme change (Light/Dark Mode)
 import { useTheme } from "../theme/useTheme";
 // Get Value from Keyring (Encrypted token)
@@ -19,6 +19,7 @@ import { RootStackParamList } from "./types";
 // import {RootState} from '../store/store';
 import { createStackNavigator } from "@react-navigation/stack";
 // Screens
+
 // import Login from '../screens/auth/Login';
 import Tasks from "../screens/Tasks";
 import Login from "../screens/auth/Login";
@@ -30,10 +31,7 @@ import BookingConfirmationPage from "../screens/reservation/components/BookingCo
 
 const styles = StyleSheet.create({
   tabBar: {
-    position: "absolute",
-    bottom: 10,
-    left: 20,
-    right: 20,
+    position: "relative",
     elevation: 20,
     backgroundColor: "#FFFFFF",
     borderRadius: 25,
@@ -47,7 +45,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
   tabButton: {
-    flex: 1,
+    flex: 2,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -65,10 +63,15 @@ const Stack = createStackNavigator<RootStackParamList>();
 function ReservationStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Reservations" component={ReservationPage} />
+      <Stack.Screen
+        name="Reservations"
+        component={ReservationPage}
+        options={{ headerShown: false }} // Header für diesen Screen ausschalten
+      />
       <Stack.Screen
         name="BookingConfirmationPage"
         component={BookingConfirmationPage}
+        options={{ headerShown: false }} // Auch hier den Header ausschalten
       />
     </Stack.Navigator>
   );
@@ -91,54 +94,69 @@ export default function RootNavigation() {
   }, [dispatch]);
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ color, size }) => {
-            let iconName;
-            if (route.name === "Tasks") {
-              iconName = "ios-list-sharp";
-            } else if (route.name === "Dashboard") {
-              iconName = "ios-home-sharp";
-            } else if (route.name === "Settings") {
-              iconName = "ios-settings-sharp";
-            }
-            return (
-              <Icon
-                name={iconName ? iconName : "ios-list-sharp"}
-                size={size}
-                color={color}
-              />
-            ); // Verwenden Sie die iconName Variable hier
-          },
-          tabBarStyle: styles.tabBar,
-          tabBarActiveTintColor: "#4B76E4",
-          tabBarInactiveTintColor: "#A5A5A5",
-          tabBarLabelStyle: {
-            fontSize: 12,
-          },
-          tabBarButton: (props: any) => (
-            <TouchableOpacity
-              style={styles.tabButton}
-              onPress={() => {
-                if (props.onPress) {
-                  props.onPress();
-                }
-              }}
-            >
-              {props.children}
-            </TouchableOpacity>
-          ),
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ color, size }) => {
+              let iconName;
+              if (route.name === "Tasks") {
+                iconName = "ios-list-sharp";
+              } else if (route.name === "Dashboard") {
+                iconName = "ios-home-sharp";
+              } else if (route.name === "Settings") {
+                iconName = "ios-settings-sharp";
+              }
+              return (
+                <Icon
+                  name={iconName ? iconName : "ios-list-sharp"}
+                  size={size}
+                  color={color}
+                />
+              ); // Verwenden Sie die iconName Variable hier
+            },
+            tabBarStyle: {
+              ...styles.tabBar,
+              // Entfernen Sie bottom: 10 und fügen Sie die SafeArea-Unterstützung hinzu
+              height: 65, // Setzen Sie die Höhe der TabBar
+            },
+            tabBarActiveTintColor: "#4B76E4",
+            tabBarInactiveTintColor: "#A5A5A5",
+            tabBarLabelStyle: {
+              fontSize: 12,
+            },
+            tabBarButton: (props: any) => (
+              <TouchableOpacity
+                style={styles.tabButton}
+                onPress={() => {
+                  if (props.onPress) {
+                    props.onPress();
+                  }
+                }}
+              >
+                {props.children}
+              </TouchableOpacity>
+            ),
 
-          tabBarShowLabel: false,
-          // Entfernen Sie headerMode, da es nicht zu BottomTabNavigationOptions gehört
-        })}
-      >
-        <Tab.Screen name="Tasks" component={Tasks} />
-        <Tab.Screen name="Dashboard" component={Dashboard} />
-        <Tab.Screen name="Reservations" component={ReservationStack} />
-        <Tab.Screen name="Settings" component={Settings} />
-      </Tab.Navigator>
-    </NavigationContainer>
+            tabBarShowLabel: false,
+            // Entfernen Sie headerMode, da es nicht zu BottomTabNavigationOptions gehört
+          })}
+        >
+          <Tab.Screen name="Tasks" component={Tasks} />
+          <Tab.Screen name="Dashboard" component={Dashboard} />
+          <Tab.Screen
+            name="Reservations"
+            component={ReservationStack}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <Icon name="ios-calendar" size={size} color={color} />
+              ),
+            }}
+          />
+
+          <Tab.Screen name="Settings" component={Settings} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }

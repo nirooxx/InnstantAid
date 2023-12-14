@@ -111,8 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF", // Weißer Hintergrund
   },
   contentWrapper: {
-    paddingHorizontal: wp("4%"),
-    paddingBottom: hp("10%"), // 10% der Bildschirmhöhe für den TabNavigator
+    paddingHorizontal: wp("1%"),
   },
   header: {
     flexDirection: "row",

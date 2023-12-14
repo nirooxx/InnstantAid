@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { RouteProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../../routes/types"; // Stellen Sie sicher, dass der Pfad korrekt ist
 
@@ -32,31 +33,33 @@ const BookingConfirmationPage: React.FC<BookingConfirmationProps> = ({
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.detailContainer}>
-        <Text style={styles.header}>Ihre Reservierung</Text>
-        <Text style={styles.detail}>{title}</Text>
-        <Text style={styles.detail}>
-          {date} um {time}
-        </Text>
-        <Text style={styles.detail}>Preis: {price}</Text>
-      </View>
-      <TextInput
-        style={styles.input}
-        placeholder="Ihr Name"
-        value={guestName}
-        onChangeText={setGuestName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Ihre Kontaktinformationen"
-        value={guestContact}
-        onChangeText={setGuestContact}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleConfirmBooking}>
-        <Text style={styles.buttonText}>Bestätigen</Text>
-      </TouchableOpacity>
-    </ScrollView>
+    <SafeAreaView style={styles.container} edges={["right", "bottom", "left"]}>
+      <ScrollView>
+        <View style={styles.detailContainer}>
+          <Text style={styles.header}>Ihre Reservierung</Text>
+          <Text style={styles.detail}>{title}</Text>
+          <Text style={styles.detail}>
+            {date} um {time}
+          </Text>
+          <Text style={styles.detail}>Preis: {price}</Text>
+        </View>
+        <TextInput
+          style={styles.input}
+          placeholder="Ihr Name"
+          value={guestName}
+          onChangeText={setGuestName}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Ihre Kontaktinformationen"
+          value={guestContact}
+          onChangeText={setGuestContact}
+        />
+        <TouchableOpacity style={styles.button} onPress={handleConfirmBooking}>
+          <Text style={styles.buttonText}>Bestätigen</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
