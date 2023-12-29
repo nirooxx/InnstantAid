@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import db from "../../firebase";
 
 const initialState = {
+  id: "",
   name: "",
   username: "",
   token: "",
