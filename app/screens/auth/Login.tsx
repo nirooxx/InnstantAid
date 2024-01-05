@@ -45,7 +45,7 @@ const Login = () => {
     dispatch(loginStarted());
     console.log("33");
     login(new URLSearchParams(reqObj))
-      .then((res) => {
+      .then((res: any) => {
         console.log(res);
         if (res.data?.user?.access_token) {
           const { name, username, access_token, refresh_token } = res.data.user;
@@ -54,7 +54,7 @@ const Login = () => {
           setSecureValue("refresh_token", refresh_token);
         }
       })
-      .catch((e) => {
+      .catch((e: any) => {
         console.log(e);
         dispatch(loginFailed());
         setError(e.response?.data?.message || e.message);

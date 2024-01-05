@@ -1,57 +1,82 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import db from "../../firebase";
+interface UserState {
+  id: string;
+  name: string;
+  username: string;
+  token: string;
+  isLoading: boolean;
+  error: string | null;
+}
 
-const initialState = {
+const initialState: UserState = {
   id: "",
   name: "",
   username: "",
   token: "",
-  registrationStatus: "idle", // new state for tracking registration status
-  loginStatus: "idle", // new state for tracking login status
+  isLoading: false,
+  error: null,
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    updateUser(state, action) {
+    updateUser(
+      state,
+      action: PayloadAction<{ name: string; username: string; token: string }>
+    ) {
       const { name, username, token } = action.payload;
       state.name = name;
       state.username = username;
       state.token = token;
     },
-    updateToken(state, action) {
+    updateToken(state, action: PayloadAction<{ token: string }>) {
       state.token = action.payload.token;
+    },
+    setLoading(state, action: PayloadAction<boolean>) {
+      state.isLoading = action.payload;
+    },
+    setError(state, action: PayloadAction<string | null>) {
+      state.error = action.payload;
     },
     clearUser() {
       return initialState;
     },
-    // new reducer for starting registration
-    registrationStarted(state) {
-      state.registrationStatus = "loading";
-    },
-    // new reducer for successful registration
-    registrationSucceeded(state, action) {
-      state.registrationStatus = "succeeded";
-      state.token = action.payload.token;
-      state.username = action.payload.username;
-    },
-    // new reducer for failed registration
-    registrationFailed(state) {
-      state.registrationStatus = "failed";
-    },
-    // Reducers for login
+    // Reducers for login and registration
     loginStarted(state) {
-      state.loginStatus = "loading";
+      state.isLoading = true;
+      state.error = null;
     },
-    loginSucceeded(state, action) {
-      state.loginStatus = "succeeded";
+    loginSucceeded(
+      state,
+      action: PayloadAction<{ username: string; token: string }>
+    ) {
+      state.isLoading = false;
       state.token = action.payload.token;
       state.username = action.payload.username;
+      state.error = null;
     },
-    loginFailed(state) {
-      state.loginStatus = "failed";
+    loginFailed(state, action: PayloadAction<string>) {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    registrationStarted(state) {
+      state.isLoading = true;
+      state.error = null;
+    },
+    registrationSucceeded(
+      state,
+      action: PayloadAction<{ username: string; token: string }>
+    ) {
+      state.isLoading = false;
+      state.token = action.payload.token;
+      state.username = action.payload.username;
+      state.error = null;
+    },
+    registrationFailed(state, action: PayloadAction<string>) {
+      state.isLoading = false;
+      state.error = action.payload;
     },
   },
 });
@@ -59,6 +84,8 @@ const userSlice = createSlice({
 export const {
   updateUser,
   updateToken,
+  setLoading,
+  setError,
   clearUser,
   registrationStarted,
   registrationSucceeded,

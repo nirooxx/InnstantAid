@@ -35,16 +35,22 @@ export const subscribeToMessages = (): AppThunk<() => void> => (dispatch) => {
     .collection("messages")
     .orderBy("createdAt", "asc")
     .onSnapshot((snapshot) => {
-      const messages = snapshot.docs.map((doc) => ({
-        _id: doc.id,
-        createdAt: convertFirestoreTimestampToDate(doc.data().createdAt),
-        ...doc.data(),
-      })) as Message[];
+      const messages = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          _id: doc.id,
+          createdAt: convertFirestoreTimestampToDate(data.createdAt),
+          text: data.text,
+          user: data.user,
+        };
+      }) as Message[];
       dispatch(setMessages(messages));
     });
 
-  // Rückgabe der Funktion, die das Abonnement aufhebt
-  return () => unsubscribe();
+  // Return the unsubscribe function
+  return () => {
+    unsubscribe();
+  };
 };
 
 export const sendMessage =

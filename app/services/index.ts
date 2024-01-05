@@ -1,4 +1,4 @@
-import {AxiosRequestHeaders} from 'axios';
+/*import {AxiosRequestHeaders} from 'axios';
 import apiClient from './api-client';
 const BASE_URL = 'http://10.0.2.2:4001';
 
@@ -41,4 +41,4 @@ const routes = {
 export {routes, get, post};
 
 export {login} from './auth';
-export {getNews} from './news';
+export {getNews} from './news';*/

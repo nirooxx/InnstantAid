@@ -7,7 +7,12 @@ export type RootStackParamList = {
     time: string;
     price: string;
   };
-  // Definieren Sie hier weitere Screens und deren Parameter
+  Chat: undefined;
+  Dashboard: undefined;
+  Settings: undefined;
+  Login: undefined; // Stellen Sie sicher, dass Sie diese Route hinzufügen
+  Register: undefined; // Und diese Route, wenn Sie eine Registrierungsseite haben
+  // ...andere Routen
 };
 
 // features/chat/types.ts
