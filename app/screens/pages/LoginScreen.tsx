@@ -14,7 +14,11 @@ import {
   loginFailed,
 } from "../../store/userSlice";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import auth from "@react-native-firebase/auth";
+import {
+  auth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "../../../firebase";
 import { RootState } from "../../store/store";
 import { RootStackParamList } from "../../routes/types";
 
@@ -28,12 +32,13 @@ const LoginScreen: React.FC = () => {
   const handleLogin = async () => {
     dispatch(loginStarted());
     try {
-      const response = await auth().signInWithEmailAndPassword(email, password);
+      const response = await signInWithEmailAndPassword(auth, email, password);
       const token = await response.user.getIdToken();
       dispatch(loginSucceeded({ username: email, token }));
       Alert.alert("Login erfolgreich!", "Willkommen zurück!");
     } catch (error: any) {
       dispatch(loginFailed(error.message));
+      console.log(error.message);
       Alert.alert("Login fehlgeschlagen", error.message);
     }
   };

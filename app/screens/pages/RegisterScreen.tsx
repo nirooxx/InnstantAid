@@ -14,7 +14,11 @@ import {
   registrationFailed,
 } from "../../store/userSlice";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import auth from "@react-native-firebase/auth";
+import {
+  auth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "../../../firebase";
 import { RootState } from "../../store/store";
 import { RootStackParamList } from "../../routes/types";
 
@@ -30,7 +34,8 @@ const RegisterScreen: React.FC = () => {
   const handleRegister = async () => {
     dispatch(registrationStarted());
     try {
-      const response = await auth().createUserWithEmailAndPassword(
+      const response = await createUserWithEmailAndPassword(
+        auth,
         email,
         password
       );
@@ -39,6 +44,7 @@ const RegisterScreen: React.FC = () => {
       Alert.alert("Registrierung erfolgreich!", "Sie sind nun registriert.");
     } catch (error: any) {
       dispatch(registrationFailed(error.message));
+      console.log(error.message);
       Alert.alert("Registrierung fehlgeschlagen", error.message);
     }
   };

@@ -1,4 +1,9 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import {
+  auth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "../../firebase"; // Importieren Sie auth aus Ihrer firebase.ts-Datei
 
 interface UserState {
   id: string;
@@ -17,6 +22,43 @@ const initialState: UserState = {
   isLoading: false,
   error: null,
 };
+
+// Async Thunks
+export const loginUser = createAsyncThunk(
+  "user/login",
+  async (
+    { email, password }: { email: string; password: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await signInWithEmailAndPassword(auth, email, password); // Geändert hier
+      const token = await response.user.getIdToken();
+      return { username: email, token };
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const registerUser = createAsyncThunk(
+  "user/register",
+  async (
+    { email, password }: { email: string; password: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      ); // Geändert hier
+      const token = await response.user.getIdToken();
+      return { username: email, token };
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const userSlice = createSlice({
   name: "user",
@@ -79,6 +121,35 @@ const userSlice = createSlice({
       state.error = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(loginUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.token = action.payload.token;
+        state.username = action.payload.username;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(registerUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.token = action.payload.token;
+        state.username = action.payload.username;
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      });
+  },
 });
 
 export const {
@@ -87,12 +158,12 @@ export const {
   setLoading,
   setError,
   clearUser,
-  registrationStarted,
-  registrationSucceeded,
-  registrationFailed,
   loginStarted,
   loginSucceeded,
   loginFailed,
+  registrationStarted,
+  registrationSucceeded,
+  registrationFailed,
 } = userSlice.actions;
 
 export default userSlice.reducer;

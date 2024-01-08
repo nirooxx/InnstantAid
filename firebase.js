@@ -1,11 +1,10 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import firebase from "firebase/compat/app";
-import { getAnalytics } from "firebase/analytics";
-import "firebase/compat/auth";
-import "firebase/compat/firestore";
+import { initializeApp, getApps } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -21,10 +20,16 @@ const firebaseConfig = {
   measurementId: "G-Z4LCBHEN3Y",
 };
 
-firebase.initializeApp(firebaseConfig);
-export default firebase.firestore();
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+console.log("Initialisierung der Firebase-App");
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
+  console.log("Firebase-App initialisiert");
+} else {
+  app = getApps()[0];
+  console.log("Verwende vorhandene Firebase-App");
+}
 
-export const db = getFirestore(app);
-export const auth = getAuth(app);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+export { db, auth, signInWithEmailAndPassword, createUserWithEmailAndPassword };

@@ -1,6 +1,5 @@
 // store.ts
 import { configureStore } from "@reduxjs/toolkit";
-import tasksSlice from "./tasksSlice";
 import userSlice from "./userSlice";
 import chatSlice from "./chatSlice";
 
@@ -17,7 +16,6 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 
 export const store = configureStore({
   reducer: {
-    todos: tasksSlice,
     user: userSlice,
     chat: chatSlice,
   },

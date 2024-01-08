@@ -1,9 +1,14 @@
-// features/chat/chatSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk } from "../store/store"; // Importieren Sie AppThunk
-import { RootState } from "../store/store";
-import db from "../../firebase";
+import {
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  addDoc,
+} from "firebase/firestore";
+import { db } from "../../firebase";
 import { Message, ChatState } from "../routes/types";
+import { AppThunk, RootState } from "../store/store";
 
 const initialState: ChatState = {
   messages: [],
@@ -31,21 +36,19 @@ const convertFirestoreTimestampToDate = (firestoreTimestamp: any) => {
 };
 
 export const subscribeToMessages = (): AppThunk<() => void> => (dispatch) => {
-  const unsubscribe = db
-    .collection("messages")
-    .orderBy("createdAt", "asc")
-    .onSnapshot((snapshot) => {
-      const messages = snapshot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          _id: doc.id,
-          createdAt: convertFirestoreTimestampToDate(data.createdAt),
-          text: data.text,
-          user: data.user,
-        };
-      }) as Message[];
-      dispatch(setMessages(messages));
-    });
+  const messagesQuery = query(
+    collection(db, "messages"),
+    orderBy("createdAt", "asc")
+  );
+  const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
+    const messages = snapshot.docs.map((doc) => ({
+      _id: doc.id,
+      createdAt: convertFirestoreTimestampToDate(doc.data().createdAt),
+      text: doc.data().text,
+      user: doc.data().user,
+    })) as Message[];
+    dispatch(setMessages(messages));
+  });
 
   // Return the unsubscribe function
   return () => {
@@ -56,8 +59,7 @@ export const subscribeToMessages = (): AppThunk<() => void> => (dispatch) => {
 export const sendMessage =
   (newMessage: Message): AppThunk =>
   async (dispatch, getState) => {
-    // Assuming `getState` is a function to access the current state
-    const userId = getState().user?.id || "default-user-id"; // Fallback to a default ID if not found
+    const userId = getState().user?.id || "default-user-id"; // Use a default ID if not found
 
     const messageToSend = {
       ...newMessage,
@@ -69,7 +71,7 @@ export const sendMessage =
     };
 
     try {
-      const docRef = await db.collection("messages").add(messageToSend);
+      const docRef = await addDoc(collection(db, "messages"), messageToSend);
       dispatch(addMessage({ ...messageToSend, _id: docRef.id }));
     } catch (error) {
       console.error("Error sending message: ", error);
