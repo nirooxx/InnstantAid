@@ -10,6 +10,7 @@ interface UserState {
   name: string;
   username: string;
   token: string;
+  role: string,
   isLoading: boolean;
   error: string | null;
 }
@@ -19,6 +20,7 @@ const initialState: UserState = {
   name: "",
   username: "",
   token: "",
+  role: "",
   isLoading: false,
   error: null,
 };
@@ -27,13 +29,13 @@ const initialState: UserState = {
 export const loginUser = createAsyncThunk(
   "user/login",
   async (
-    { email, password }: { email: string; password: string },
+    { email, password, role  }: { email: string; password: string; role: string},
     { rejectWithValue }
   ) => {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password); // Geändert hier
       const token = await response.user.getIdToken();
-      return { username: email, token };
+      return { username: email, token, role  };
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -43,7 +45,7 @@ export const loginUser = createAsyncThunk(
 export const registerUser = createAsyncThunk(
   "user/register",
   async (
-    { email, password }: { email: string; password: string },
+    { email, password, role  }: { email: string; password: string; role: string },
     { rejectWithValue }
   ) => {
     try {
@@ -53,7 +55,7 @@ export const registerUser = createAsyncThunk(
         password
       ); // Geändert hier
       const token = await response.user.getIdToken();
-      return { username: email, token };
+      return { username: email, token, role  };
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -109,11 +111,12 @@ const userSlice = createSlice({
     },
     registrationSucceeded(
       state,
-      action: PayloadAction<{ username: string; token: string }>
+      action: PayloadAction<{ username: string; token: string; role: string }>
     ) {
       state.isLoading = false;
       state.token = action.payload.token;
       state.username = action.payload.username;
+      state.role = action.payload.role;
       state.error = null;
     },
     registrationFailed(state, action: PayloadAction<string>) {
@@ -131,6 +134,7 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.token = action.payload.token;
         state.username = action.payload.username;
+        state.role = action.payload.role;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -144,6 +148,7 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.token = action.payload.token;
         state.username = action.payload.username;
+        state.role = action.payload.role;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;

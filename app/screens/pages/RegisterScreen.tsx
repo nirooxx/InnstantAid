@@ -5,8 +5,9 @@ import {
   Button,
   Text,
   ActivityIndicator,
-  Alert,
+  Alert, 
 } from "react-native";
+import { Picker } from '@react-native-picker/picker';
 import { useDispatch, useSelector } from "react-redux";
 import {
   registrationStarted,
@@ -19,12 +20,14 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "../../../firebase";
+
 import { RootState } from "../../store/store";
 import { RootStackParamList } from "../../routes/types";
 
 const RegisterScreen: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("guest");
   const loading = useSelector(
     (state: RootState) => state.user.isLoading === true
   );
@@ -40,7 +43,8 @@ const RegisterScreen: React.FC = () => {
         password
       );
       const token = await response.user.getIdToken();
-      dispatch(registrationSucceeded({ username: email, token }));
+    
+      dispatch(registrationSucceeded({ username: email, token, role  }));
       Alert.alert("Registrierung erfolgreich!", "Sie sind nun registriert.");
     } catch (error: any) {
       dispatch(registrationFailed(error.message));
@@ -57,12 +61,26 @@ const RegisterScreen: React.FC = () => {
     <View>
       <Text>Registrieren Sie sich für Ihren Aufenthalt</Text>
       <TextInput value={email} onChangeText={setEmail} placeholder="E-Mail" />
+     
       <TextInput
         value={password}
         onChangeText={setPassword}
         placeholder="Passwort"
         secureTextEntry
       />
+
+<Text>Rolle:</Text>
+      <Picker
+        selectedValue={role}
+        onValueChange={(itemValue:any) =>
+          setRole(itemValue)
+        }>
+        <Picker.Item label="Gast" value="guest" />
+        <Picker.Item label="Angestellter" value="employee" />
+        <Picker.Item label="Manager" value="manager" />
+        {/* Weitere Rollen können hier hinzugefügt werden */}
+      </Picker>
+
       {loading ? (
         <ActivityIndicator />
       ) : (

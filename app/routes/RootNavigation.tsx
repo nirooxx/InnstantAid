@@ -15,10 +15,12 @@ import { RootState } from "../store/store";
 import LoginScreen from "../screens/pages/LoginScreen";
 import RegisterScreen from "../screens/pages/RegisterScreen";
 import ChatScreen from "../screens/chat/ChatScreen";
-import DashboardScreen from "../screens/dashboard/Dashboard";
+import GuestDashboard from "../screens/dashboard/Dashboard";
 import SettingsScreen from "../screens/Settings";
 import ReservationPage from "../screens/reservation/ReservationPage";
 import BookingConfirmationPage from "../screens/reservation/components/BookingConfirmationPage";
+import EmployeeDashboard from "../screens/dashboard/EmployeeDashboard";
+
 
 const styles = StyleSheet.create({
   tabBar: {
@@ -53,6 +55,7 @@ export default function RootNavigation() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
   const { theme } = useTheme();
+  const userRole = user?.role;
 
   useEffect(() => {
     async function checkIsLoggedIn() {
@@ -64,17 +67,68 @@ export default function RootNavigation() {
 
   const isLoggedIn = Boolean(user?.token);
 
+  // EmployeeNavigator
+const EmployeeNavigator = () => {
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <SafeAreaView style={{ flex: 1 }}>
-          {!isLoggedIn ? (
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="Login" component={LoginScreen} />
-              <Stack.Screen name="Register" component={RegisterScreen} />
-            </Stack.Navigator>
-          ) : (
-            <Tab.Navigator
+    <Tab.Navigator
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ color, size }) => {
+        let iconName;
+        if (route.name === "Chat") {
+          iconName = "ios-list-sharp";
+        } else if (route.name === "Dashboard") {
+          iconName = "ios-home-sharp";
+        } else if (route.name === "Settings") {
+          iconName = "ios-settings-sharp";
+        }
+        return (
+          <Icon
+            name={iconName ? iconName : "ios-list-sharp"}
+            size={size}
+            color={color}
+          />
+        ); // Verwenden Sie die iconName Variable hier
+      },
+      tabBarStyle: {
+        ...styles.tabBar,
+        // Entfernen Sie bottom: 10 und fügen Sie die SafeArea-Unterstützung hinzu
+        height: 65, // Setzen Sie die Höhe der TabBar
+      },
+      tabBarActiveTintColor: "#4B76E4",
+      tabBarInactiveTintColor: "#A5A5A5",
+      tabBarLabelStyle: {
+        fontSize: 12,
+      },
+      tabBarButton: (props: any) => (
+        <TouchableOpacity
+          style={styles.tabButton}
+          onPress={() => {
+            if (props.onPress) {
+              props.onPress();
+            }
+          }}
+        >
+          {props.children}
+        </TouchableOpacity>
+      ),
+
+      tabBarShowLabel: false,
+      // Entfernen Sie headerMode, da es nicht zu BottomTabNavigationOptions gehört
+    })}
+  >
+    <Tab.Screen name="Chat" component={ChatScreen} />
+    <Tab.Screen name="Dashboard" component={EmployeeDashboard} />
+    <Tab.Screen name="Reservation" component={ReservationPage} />
+    <Tab.Screen name="Settings" component={SettingsScreen} />
+  </Tab.Navigator>
+
+  );
+}
+
+// GuestNavigator
+const GuestNavigator = () => {
+  return (
+    <Tab.Navigator
               screenOptions={({ route }) => ({
                 tabBarIcon: ({ color, size }) => {
                   let iconName;
@@ -121,10 +175,98 @@ export default function RootNavigation() {
               })}
             >
               <Tab.Screen name="Chat" component={ChatScreen} />
-              <Tab.Screen name="Dashboard" component={DashboardScreen} />
+              <Tab.Screen name="Dashboard" component={GuestDashboard} />
               <Tab.Screen name="Reservation" component={ReservationPage} />
               <Tab.Screen name="Settings" component={SettingsScreen} />
             </Tab.Navigator>
+          
+  );
+}
+
+const MainTabNavigator = () => {
+  return (
+    <Tab.Navigator
+              screenOptions={({ route }) => ({
+                tabBarIcon: ({ color, size }) => {
+                  let iconName;
+                  if (route.name === "Chat") {
+                    iconName = "ios-list-sharp";
+                  } else if (route.name === "Dashboard") {
+                    iconName = "ios-home-sharp";
+                  } else if (route.name === "Settings") {
+                    iconName = "ios-settings-sharp";
+                  }
+                  return (
+                    <Icon
+                      name={iconName ? iconName : "ios-list-sharp"}
+                      size={size}
+                      color={color}
+                    />
+                  ); // Verwenden Sie die iconName Variable hier
+                },
+                tabBarStyle: {
+                  ...styles.tabBar,
+                  // Entfernen Sie bottom: 10 und fügen Sie die SafeArea-Unterstützung hinzu
+                  height: 65, // Setzen Sie die Höhe der TabBar
+                },
+                tabBarActiveTintColor: "#4B76E4",
+                tabBarInactiveTintColor: "#A5A5A5",
+                tabBarLabelStyle: {
+                  fontSize: 12,
+                },
+                tabBarButton: (props: any) => (
+                  <TouchableOpacity
+                    style={styles.tabButton}
+                    onPress={() => {
+                      if (props.onPress) {
+                        props.onPress();
+                      }
+                    }}
+                  >
+                    {props.children}
+                  </TouchableOpacity>
+                ),
+
+                tabBarShowLabel: false,
+                // Entfernen Sie headerMode, da es nicht zu BottomTabNavigationOptions gehört
+              })}
+            >
+              <Tab.Screen name="Chat" component={ChatScreen} />
+              <Tab.Screen name="Dashboard" component={GuestDashboard} />
+              <Tab.Screen name="Reservation" component={ReservationPage} />
+              <Tab.Screen name="Settings" component={SettingsScreen} />
+            </Tab.Navigator>
+  );
+}
+
+
+
+
+  // Funktion zur Auswahl der korrekten Navigationsstruktur basierend auf der Rolle
+  const renderNavigationBasedOnRole = (role:String) => {
+    switch (role) {
+      case 'employee':
+        return <EmployeeNavigator />;
+      case 'guest':
+        return <GuestNavigator />;
+      // ... weitere Fälle
+      default:
+        return <MainTabNavigator />;
+    }
+  }
+
+  return (
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <SafeAreaView style={{ flex: 1 }}>
+          {!isLoggedIn ? (
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Register" component={RegisterScreen} />
+            </Stack.Navigator>
+          ) : (
+             // Navigationsstruktur basierend auf der Benutzerrolle
+             renderNavigationBasedOnRole(userRole)
           )}
         </SafeAreaView>
       </NavigationContainer>
