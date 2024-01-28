@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import Layout from "../../../components/Layout";
+import Layout from "../../../../components/Layout";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,

@@ -9,18 +9,18 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { clearUser } from "../store/userSlice";
-import { removeSecureValue } from "../utils/keyChain";
-import { useTheme } from "../theme/useTheme";
+import { clearUser } from "../../../store/userSlice";
+import { removeSecureValue } from "../../../utils/keyChain";
+import { useTheme } from "../../../theme/useTheme";
 import { useNavigation } from "@react-navigation/native";
-import Layout from "../components/Layout";
-import Card from "../components/Card";
-import MenuItem from "../components/MenuItem";
-import { RootState } from "../store/store";
-import type { RootStackParamList } from "../routes/types";
+import Layout from "../../../components/Layout";
+import Card from "../../../components/Card";
+import MenuItem from "../../../components/MenuItem";
+import { RootState } from "../../../store/store";
+import type { RootStackParamList } from "../../../routes/types";
 import type { StackNavigationProp } from "@react-navigation/stack";
 
-const avatar = require("../assets/images/avatar.png");
+const avatar = require("../../../assets/images/avatar.png");
 
 const Settings = () => {
   const { theme, toggleTheme } = useTheme();

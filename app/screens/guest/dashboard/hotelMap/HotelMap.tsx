@@ -8,7 +8,7 @@ import {
   Text,
 } from "react-native";
 
-const hotelMapImage = require("../../../assets/images/Gebäude_Architektur.jpg");
+const hotelMapImage = require("../../../../assets/images/Gebäude_Architektur.jpg");
 
 // Informationen zu den Bereichen des Hotels
 const hotelAreas = {

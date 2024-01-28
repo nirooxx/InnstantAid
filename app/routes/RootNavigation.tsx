@@ -14,12 +14,12 @@ import { RootState } from "../store/store";
 // Importieren Sie Ihre Bildschirmkomponenten
 import LoginScreen from "../screens/pages/LoginScreen";
 import RegisterScreen from "../screens/pages/RegisterScreen";
-import ChatScreen from "../screens/chat/ChatScreen";
-import GuestDashboard from "../screens/dashboard/GuestDashboard";
-import SettingsScreen from "../screens/Settings";
-import ReservationPage from "../screens/reservation/ReservationPage";
-import BookingConfirmationPage from "../screens/reservation/components/BookingConfirmationPage";
-import EmployeeDashboard from "../screens/dashboard/EmployeeDashboard";
+import ChatScreen from "../screens/guest/chat/ChatScreen";
+import GuestDashboard from "../screens/guest/dashboard/GuestDashboard";
+import SettingsScreen from "../screens/guest/settings/Settings";
+import ReservationPage from "../screens/guest/reservation/ReservationPage";
+import BookingConfirmationPage from "../screens/guest/reservation/components/BookingConfirmationPage";
+import EmployeeDashboard from "../screens/employee/dashboard/EmployeeDashboardScreen";
 
 
 const styles = StyleSheet.create({
@@ -65,7 +65,7 @@ export default function RootNavigation() {
     checkIsLoggedIn();
   }, [dispatch]);
 
-  const isLoggedIn = true//Boolean(user?.token);
+  const isLoggedIn = Boolean(user?.token);
 
   function ReservationStack() {
     return (
@@ -134,8 +134,8 @@ const EmployeeNavigator = () => {
       // Entfernen Sie headerMode, da es nicht zu BottomTabNavigationOptions gehört
     })}
   >
+      <Tab.Screen name="Dashboard" component={EmployeeDashboard} />
     <Tab.Screen name="Chat" component={ChatScreen} />
-    <Tab.Screen name="Dashboard" component={EmployeeDashboard} />
     <Tab.Screen name="Reservation" component={ReservationStack} />
     <Tab.Screen name="Settings" component={SettingsScreen} />
   </Tab.Navigator>
@@ -192,8 +192,8 @@ const GuestNavigator = () => {
                 // Entfernen Sie headerMode, da es nicht zu BottomTabNavigationOptions gehört
               })}
             >
+               <Tab.Screen name="Dashboard" component={GuestDashboard} />
               <Tab.Screen name="Chat" component={ChatScreen} />
-              <Tab.Screen name="Dashboard" component={GuestDashboard} />
               <Tab.Screen name="Reservation" component={ReservationStack} />
               <Tab.Screen name="Settings" component={SettingsScreen} />
             </Tab.Navigator>
@@ -249,8 +249,8 @@ const MainTabNavigator = () => {
                 // Entfernen Sie headerMode, da es nicht zu BottomTabNavigationOptions gehört
               })}
             >
-              <Tab.Screen name="Chat" component={ChatScreen} />
               <Tab.Screen name="Dashboard" component={GuestDashboard} />
+              <Tab.Screen name="Chat" component={ChatScreen} />
               <Tab.Screen name="Reservation" component={ReservationStack} />
               <Tab.Screen name="Settings" component={SettingsScreen} />
             </Tab.Navigator>

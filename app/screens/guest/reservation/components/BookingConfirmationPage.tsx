@@ -11,7 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRoute } from "@react-navigation/native";
 import { RouteProp } from "@react-navigation/native";
-import { RootStackParamList } from "../../../routes/types"; // Stellen Sie sicher, dass der Pfad korrekt ist
+import { RootStackParamList } from "../../../../routes/types"; // Stellen Sie sicher, dass der Pfad korrekt ist
 
 type BookingConfirmationScreenRouteProp = RouteProp<RootStackParamList, 'BookingConfirmationPage'>;
 

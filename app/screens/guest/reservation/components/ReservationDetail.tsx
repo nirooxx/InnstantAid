@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "../../../routes/types"; // Importieren Sie Ihre Typdefinitionen
+import { RootStackParamList } from "../../../../routes/types"; // Importieren Sie Ihre Typdefinitionen
 import { StackNavigationProp } from "@react-navigation/stack";
 
 type ReservationDetailNavigationProp = StackNavigationProp<

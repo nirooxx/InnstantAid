@@ -6,8 +6,8 @@ import {
   sendMessage,
   subscribeToMessages,
   selectMessages,
-} from "../../store/chatSlice";
-import { RootState, AppDispatch } from "../../store/store";
+} from "../../../store/chatSlice";
+import { RootState, AppDispatch } from "../../../store/store";
 
 const ChatScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
