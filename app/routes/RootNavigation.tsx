@@ -15,7 +15,7 @@ import { RootState } from "../store/store";
 import LoginScreen from "../screens/pages/LoginScreen";
 import RegisterScreen from "../screens/pages/RegisterScreen";
 import ChatScreen from "../screens/chat/ChatScreen";
-import GuestDashboard from "../screens/dashboard/Dashboard";
+import GuestDashboard from "../screens/dashboard/GuestDashboard";
 import SettingsScreen from "../screens/Settings";
 import ReservationPage from "../screens/reservation/ReservationPage";
 import BookingConfirmationPage from "../screens/reservation/components/BookingConfirmationPage";
@@ -65,7 +65,25 @@ export default function RootNavigation() {
     checkIsLoggedIn();
   }, [dispatch]);
 
-  const isLoggedIn = Boolean(user?.token);
+  const isLoggedIn = true//Boolean(user?.token);
+
+  function ReservationStack() {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Reservations"
+          component={ReservationPage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="BookingConfirmationPage"
+          component={BookingConfirmationPage}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    );
+  }
+  
 
   // EmployeeNavigator
 const EmployeeNavigator = () => {
@@ -118,7 +136,7 @@ const EmployeeNavigator = () => {
   >
     <Tab.Screen name="Chat" component={ChatScreen} />
     <Tab.Screen name="Dashboard" component={EmployeeDashboard} />
-    <Tab.Screen name="Reservation" component={ReservationPage} />
+    <Tab.Screen name="Reservation" component={ReservationStack} />
     <Tab.Screen name="Settings" component={SettingsScreen} />
   </Tab.Navigator>
 
@@ -176,7 +194,7 @@ const GuestNavigator = () => {
             >
               <Tab.Screen name="Chat" component={ChatScreen} />
               <Tab.Screen name="Dashboard" component={GuestDashboard} />
-              <Tab.Screen name="Reservation" component={ReservationPage} />
+              <Tab.Screen name="Reservation" component={ReservationStack} />
               <Tab.Screen name="Settings" component={SettingsScreen} />
             </Tab.Navigator>
           
@@ -233,7 +251,7 @@ const MainTabNavigator = () => {
             >
               <Tab.Screen name="Chat" component={ChatScreen} />
               <Tab.Screen name="Dashboard" component={GuestDashboard} />
-              <Tab.Screen name="Reservation" component={ReservationPage} />
+              <Tab.Screen name="Reservation" component={ReservationStack} />
               <Tab.Screen name="Settings" component={SettingsScreen} />
             </Tab.Navigator>
   );

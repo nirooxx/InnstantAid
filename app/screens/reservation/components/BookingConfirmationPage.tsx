@@ -9,16 +9,15 @@ import {
   Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRoute } from "@react-navigation/native";
 import { RouteProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../../routes/types"; // Stellen Sie sicher, dass der Pfad korrekt ist
 
-interface BookingConfirmationProps {
-  route: RouteProp<RootStackParamList, "BookingConfirmationPage">;
-}
+type BookingConfirmationScreenRouteProp = RouteProp<RootStackParamList, 'BookingConfirmationPage'>;
 
-const BookingConfirmationPage: React.FC<BookingConfirmationProps> = ({
-  route,
-}) => {
+
+const BookingConfirmationPage: React.FC = () => {
+  const route = useRoute<BookingConfirmationScreenRouteProp>();
   const { title, date, time, price } = route.params;
   const [guestName, setGuestName] = useState("");
   const [guestContact, setGuestContact] = useState("");
