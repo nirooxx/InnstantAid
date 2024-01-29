@@ -15,12 +15,14 @@ import {
 } from "../../store/userSlice";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import {
+  db,
   auth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "../../../firebase";
 import { RootState } from "../../store/store";
 import { RootStackParamList } from "../../routes/types";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 const LoginScreen: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -31,11 +33,24 @@ const LoginScreen: React.FC = () => {
 
   const handleLogin = async () => {
     dispatch(loginStarted());
+    
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
+      const userId = response.user.uid;
       const token = await response.user.getIdToken();
-      dispatch(loginSucceeded({ username: email, token }));
-      Alert.alert("Login erfolgreich!", "Willkommen zurück!");
+      const userDocRef = doc(db, 'users', userId);
+      const userDocSnap = await getDoc(userDocRef);
+  
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        const role = userData?.role || 'guest';
+        dispatch(loginSucceeded({ username: email, token, role }));
+        Alert.alert("Login erfolgreich!", "Willkommen zurück!");
+      } else {
+        dispatch(loginFailed('Benutzerdokument nicht gefunden'));
+        console.log('Benutzerdokument nicht gefunden');
+        // Geeignete Fehlerbehandlung hier
+      }
     } catch (error: any) {
       dispatch(loginFailed(error.message));
       console.log(error.message);

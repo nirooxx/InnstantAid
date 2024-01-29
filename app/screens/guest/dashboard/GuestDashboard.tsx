@@ -27,8 +27,9 @@ const MemoizedRoomDetails = React.memo(RoomDetails);
 const MemoizedHotelMap = React.memo(HotelMap);
 const MemoizedSlider = React.memo(slider);
 
-export default function Dashboard() {
+const Dashboard: React.FC = () => {
   const users = useSelector((state: RootState) => state.user);
+  console.log(users)
 
   useEffect(() => {
     console.log(users);
@@ -149,3 +150,5 @@ const styles = StyleSheet.create({
     padding: wp("2%"), // 2% der Bildschirmbreite
   },
 });
+
+export default Dashboard

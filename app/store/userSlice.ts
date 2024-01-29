@@ -94,11 +94,12 @@ const userSlice = createSlice({
     },
     loginSucceeded(
       state,
-      action: PayloadAction<{ username: string; token: string }>
+      action: PayloadAction<{ username: string; token: string; role: string }>
     ) {
       state.isLoading = false;
       state.token = action.payload.token;
       state.username = action.payload.username;
+      state.role = action.payload.role;
       state.error = null;
     },
     loginFailed(state, action: PayloadAction<string>) {

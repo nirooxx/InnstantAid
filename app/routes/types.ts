@@ -1,6 +1,7 @@
 // types.ts
 export type RootStackParamList = {
   Reservations: undefined;
+  ScheduleScreen:undefined;
   BookingConfirmationPage: {
     title: string;
     date: string;

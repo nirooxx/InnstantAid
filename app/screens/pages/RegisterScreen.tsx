@@ -16,10 +16,11 @@ import {
 } from "../../store/userSlice";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import {
+  db,
   auth,
-  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "../../../firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 import { RootState } from "../../store/store";
 import { RootStackParamList } from "../../routes/types";
@@ -42,9 +43,12 @@ const RegisterScreen: React.FC = () => {
         email,
         password
       );
+      const userId = response.user.uid;
       const token = await response.user.getIdToken();
-    
-      dispatch(registrationSucceeded({ username: email, token, role  }));
+      // Erstellen Sie ein neues Benutzerdokument in Firestore
+      await setDoc(doc(db, 'users', userId), { username: email, token, role, id: userId });
+
+      dispatch(registrationSucceeded({ username: email, token, role }));
       Alert.alert("Registrierung erfolgreich!", "Sie sind nun registriert.");
     } catch (error: any) {
       dispatch(registrationFailed(error.message));

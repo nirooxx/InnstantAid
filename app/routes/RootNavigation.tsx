@@ -19,7 +19,9 @@ import GuestDashboard from "../screens/guest/dashboard/GuestDashboard";
 import SettingsScreen from "../screens/guest/settings/Settings";
 import ReservationPage from "../screens/guest/reservation/ReservationPage";
 import BookingConfirmationPage from "../screens/guest/reservation/components/BookingConfirmationPage";
-import EmployeeDashboard from "../screens/employee/dashboard/EmployeeDashboardScreen";
+
+import EmployeeDashboardScreen from "../screens/employee/dashboard/EmployeeDashboardScreen"
+import ScheduleScreen from "../screens/employee/schedule/ScheduleScreen"
 
 
 const styles = StyleSheet.create({
@@ -83,6 +85,16 @@ export default function RootNavigation() {
       </Stack.Navigator>
     );
   }
+
+  function EmployeeStack() {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen name="Angestellten Dashboard" component={EmployeeDashboardScreen}  options={{ headerShown: false }}/>
+        <Stack.Screen name="ScheduleScreen" component={ScheduleScreen}  options={{ headerShown: false }}/>
+        {/* Weitere Bildschirme */}
+      </Stack.Navigator>
+    );
+  }
   
 
   // EmployeeNavigator
@@ -134,7 +146,7 @@ const EmployeeNavigator = () => {
       // Entfernen Sie headerMode, da es nicht zu BottomTabNavigationOptions gehört
     })}
   >
-      <Tab.Screen name="Dashboard" component={EmployeeDashboard} />
+      <Tab.Screen name="Angestellten Dashboard" component={EmployeeStack} />
     <Tab.Screen name="Chat" component={ChatScreen} />
     <Tab.Screen name="Reservation" component={ReservationStack} />
     <Tab.Screen name="Settings" component={SettingsScreen} />
