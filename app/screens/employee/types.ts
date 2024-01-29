@@ -1,8 +1,10 @@
 // Typdefinitionen
 export type Shift = {
     name: string;
-    startTime: string;
-    endTime: string;
+    startTime: Date;
+    endTime: Date;
+    employeeName: string,
+    role: string,
     // Andere Eigenschaften nach Bedarf
   };
   
@@ -19,5 +21,5 @@ export type Shift = {
   };
 
   
-  export type Role = 'maid' | 'receptionist' | 'waiter' | 'spa' | 'other'; // Erweitern Sie diese Aufzählung entsprechend Ihrer Anwendung
+  export type Role = 'maid' | 'receptionist' | 'waiter' | 'spa' | 'zimmermaedchen' | 'other'; // Erweitern Sie diese Aufzählung entsprechend Ihrer Anwendung
   
