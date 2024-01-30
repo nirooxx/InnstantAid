@@ -2,8 +2,11 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useDispatch } from 'react-redux';
+import { createShift } from '../../../../store/scheduleSlice';
 import {Shift, Role} from '../../types'
 import { Picker } from '@react-native-picker/picker';
+import { AppDispatch } from '../../../../store/store';
 
 interface ShiftCreationFormProps {
   onShiftCreated: (shift: Shift) => void;
@@ -18,6 +21,7 @@ const ShiftCreationForm: React.FC<ShiftCreationFormProps> = ({ onShiftCreated })
     const [isStartTimePickerVisible, setIsStartTimePickerVisible] = useState(false);
     const [isEndTimePickerVisible, setIsEndTimePickerVisible] = useState(false);
     const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+    const dispatch = useDispatch<AppDispatch>();
 
 
     const handleStartTimeChange = (event: any, selectedDate: Date | undefined) => {
@@ -61,14 +65,14 @@ const ShiftCreationForm: React.FC<ShiftCreationFormProps> = ({ onShiftCreated })
         }
       
         // Erstellen des Schicht-Objekts
-        const newShift: Shift = {
+        const newShift: Omit<Shift, 'id'> = {
           name: shiftName,
           employeeName,
           startTime: startDateTime,
           endTime: endDateTime,
           role: selectedRole,
         };
-      
+        dispatch(createShift(newShift));
         // Aufruf des Callbacks mit dem neuen Schicht-Objekt
         onShiftCreated(newShift);
       
