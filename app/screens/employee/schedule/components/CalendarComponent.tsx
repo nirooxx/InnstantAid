@@ -23,28 +23,35 @@ const dateToString = (date: Date) => {
 };
 
 
-const transformShiftsToAgendaFormat = (shifts: ShiftsForDay): { [date: string]: AgendaEntry[] } => {
+const transformShiftsToAgendaFormat = (role: Role, shifts: ShiftsForDay): { [date: string]: AgendaEntry[] } => {
   const agendaData: { [date: string]: AgendaEntry[] } = {};
 
-  Object.keys(shifts).forEach(date => {
-    agendaData[date] = shifts[date].map(shift => ({
-      name: shift.name,
-      employeeName: shift.employeeName,
-      height: 60, // Standardhöhe für Agenda-Einträge
-      day: dateToString(shift.startTime), // Datum als Zeichenkette
-      startTime: timeToString(shift.startTime), // Startzeit als String
-      endTime: timeToString(shift.endTime), // Endzeit als String
-      // Hier können Sie weitere Eigenschaften hinzufügen, falls erforderlich
-    }));
-  });
+  // Erstelle Start- und Enddatum für den betrachteten Zeitraum
+  const startDate = new Date();
+  startDate.setMonth(startDate.getMonth() - 1); // Ein Monat in die Vergangenheit
+  const endDate = new Date();
+  endDate.setMonth(endDate.getMonth() + 1); // Ein Monat in die Zukunft
+
+  // Generiere für jeden Tag im Zeitraum einen Eintrag im agendaData
+  for(let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)){
+    const dateString = dateToString(d);
+    agendaData[dateString] = shifts[dateString] && shifts[dateString].some(shift => shift.role === role)
+      ? shifts[dateString].filter(shift => shift.role === role).map(shift => ({
+        name: shift.name,
+        employeeName: shift.employeeName,
+        height: 60,
+        day: dateString,
+        startTime: timeToString(shift.startTime),
+        endTime: timeToString(shift.endTime),
+      })) 
+      : [];
+  }
 
   return agendaData;
 };
 
   
 const CalendarComponent: React.FC<CalendarComponentProps> = ({ role, shifts }) => {
-console.log(transformShiftsToAgendaFormat(shifts))
-console.log(shifts)
       const renderItem = (item:any, isFirst:Boolean) => {
         return (
           <View style={styles.itemContainer}>
@@ -66,7 +73,7 @@ console.log(shifts)
   
     return (
       <Agenda
-        items={transformShiftsToAgendaFormat(shifts)}
+        items={transformShiftsToAgendaFormat(role,shifts)}
         renderItem={renderItem}
         renderEmptyDate={renderEmptyDate}
         theme={{
@@ -79,7 +86,7 @@ console.log(shifts)
       />
     );
   };
-  
+  export default CalendarComponent;
 
     const styles = StyleSheet.create({
         itemContainer: {
@@ -103,5 +110,5 @@ console.log(shifts)
     
    
   
-  export default CalendarComponent;
+ 
   

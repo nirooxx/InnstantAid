@@ -3,15 +3,16 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {Shift, Role} from '../../types'
+import { Picker } from '@react-native-picker/picker';
 
 interface ShiftCreationFormProps {
   onShiftCreated: (shift: Shift) => void;
-  role: Role;
 }
 
-const ShiftCreationForm: React.FC<ShiftCreationFormProps> = ({ onShiftCreated, role }) => {
+const ShiftCreationForm: React.FC<ShiftCreationFormProps> = ({ onShiftCreated }) => {
     const [shiftName, setShiftName] = useState('');
     const [employeeName, setEmployeeName] = useState('');
+    const [selectedRole, setSelectedRole] = useState<Role>('receptionist');
     const [startTime, setStartTime] = useState(new Date());
     const [endTime, setEndTime] = useState(new Date());
     const [isStartTimePickerVisible, setIsStartTimePickerVisible] = useState(false);
@@ -65,7 +66,7 @@ const ShiftCreationForm: React.FC<ShiftCreationFormProps> = ({ onShiftCreated, r
           employeeName,
           startTime: startDateTime,
           endTime: endDateTime,
-          role,
+          role: selectedRole,
         };
       
         // Aufruf des Callbacks mit dem neuen Schicht-Objekt
@@ -127,10 +128,23 @@ const ShiftCreationForm: React.FC<ShiftCreationFormProps> = ({ onShiftCreated, r
           onChange={handleEndTimeChange}
         />
       )}
+      {/* Rollenauswahl */}
+      <Picker
+        selectedValue={selectedRole}
+        onValueChange={(itemValue) => setSelectedRole(itemValue as Role)}
+        style={styles.picker}>
+        <Picker.Item label="Rezeptionist" value="receptionist" />
+        <Picker.Item label="Zimmermädchen" value="maid" />
+        {/* Weitere Rollen */}
+      </Picker>
+
+      
       <Button title="Schicht erstellen" onPress={handleSubmit} />
     </View>
   );
 };
+
+export default ShiftCreationForm;
 
 const styles = StyleSheet.create({
   formContainer: {
@@ -143,6 +157,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingHorizontal: 10,
   },
+  picker: {
+    marginBottom: 20,
+  }
 });
 
-export default ShiftCreationForm;
+

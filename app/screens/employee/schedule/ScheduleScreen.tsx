@@ -4,6 +4,7 @@ import { View, StyleSheet, Button } from "react-native";
 import ShiftCreationForm from '../schedule/components/ShiftCreationForm';
 import CalendarComponent from '../schedule/components/CalendarComponent'; // Pfad anpassen
 import { Shift, ShiftsForDay, Role } from '../types'; // Pfad anpassen
+import { Picker } from '@react-native-picker/picker';
 
 const ScheduleScreen: React.FC = () => {
   const [selectedRole, setSelectedRole] = useState<Role>('receptionist');
@@ -41,17 +42,26 @@ const ScheduleScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
+       {/* Rollen-Auswahl */}
+       <Picker
+        selectedValue={selectedRole}
+        onValueChange={(itemValue) => setSelectedRole(itemValue as Role)}
+        style={styles.picker}>
+        <Picker.Item label="Rezeptionist" value="receptionist" />
+        <Picker.Item label="Zimmermädchen" value="maid" />
+        {/* Weitere Rollen */}
+      </Picker>
       <Button 
         title={isFormVisible ? "Schichtformular verbergen" : "Schicht erstellen"}
         onPress={() => setIsFormVisible(!isFormVisible)} 
       />
-      {isFormVisible && <ShiftCreationForm onShiftCreated={handleShiftCreated} role={selectedRole} />}
+      {isFormVisible && <ShiftCreationForm onShiftCreated={handleShiftCreated}  />}
 
       <CalendarComponent role={selectedRole} shifts={shifts} />
     </View>
   );
 };
-
+export default ScheduleScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -70,4 +80,4 @@ const styles = StyleSheet.create({
   // ...weitere Stile
 });
 
-export default ScheduleScreen;
+
