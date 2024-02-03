@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import userSlice from "./userSlice";
 import chatSlice from "./chatSlice";
 import scheduleReducer from "./scheduleSlice";
+import taskReducer from "./taskSlice";
 
 // store.ts oder ein separater Typ-Definitionsfile
 import { ThunkAction } from "redux-thunk";
@@ -20,6 +21,7 @@ export const store = configureStore({
     user: userSlice,
     chat: chatSlice,
     schedule: scheduleReducer,
+    task: taskReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ immutableCheck: false, serializableCheck: false }),

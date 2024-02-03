@@ -7,6 +7,11 @@ export type Shift = {
     role: string,
     // Andere Eigenschaften nach Bedarf
   };
+
+  export type FirestoreTimestamp = {
+    seconds: number;
+    nanoseconds: number;
+  }
   
   export type AgendaEntry = {
     name: string;
@@ -22,4 +27,6 @@ export type Shift = {
 
   
   export type Role = 'maid' | 'receptionist' | 'waiter' | 'spa' | 'zimmermaedchen' | 'other'; // Erweitern Sie diese Aufzählung entsprechend Ihrer Anwendung
+  
+
   

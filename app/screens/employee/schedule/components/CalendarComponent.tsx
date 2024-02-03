@@ -53,10 +53,11 @@ const transformShiftsToAgendaFormat = (role: Role, shifts: ShiftsForDay): { [dat
   
 const CalendarComponent: React.FC<CalendarComponentProps> = ({ role, shifts }) => {
       const renderItem = (item:any, isFirst:Boolean) => {
+        const itemStyle = isFirst ? styles.firstItem : styles.item;
         return (
-          <View style={styles.itemContainer}>
-            <Text style={styles.itemText}>{item.name}</Text>
-            <Text style={styles.itemText}>{item.employeeName}</Text>
+          <View style={itemStyle}>
+            <Text style={styles.taskTitle}>{item.name}</Text>
+            <Text style={styles.priorityLabel}>{item.employeeName}</Text>
             <Text style={styles.itemText}>{`Beginn: ${item.startTime}`}</Text>
             <Text style={styles.itemText}>{`Ende: ${item.endTime}`}</Text>
           </View>
@@ -104,6 +105,49 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ role, shifts }) =
             height: 15,
             flex:1,
             paddingTop: 30,
+          },
+          firstItem: {
+            backgroundColor: '#1A1A1A',
+            borderRadius: 15,
+            padding: 15,
+            marginRight: 10,
+            marginTop: 17,
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          },
+          item: {
+            backgroundColor: '#1A1A1A',
+            borderRadius: 15,
+            padding: 15,
+            marginRight: 10,
+            marginTop: 10,
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          },
+          priorityLabel: {
+            backgroundColor: '#00BFFF', // Passen Sie diese Farbe an die im Screenshot gezeigte Farbe an
+            borderRadius: 10,
+            paddingVertical: 3,
+            paddingHorizontal: 10,
+            color: 'white',
+            fontWeight: 'bold',
+            alignSelf: 'flex-start',
+            shadowColor: '#000', // Schattenfarbe
+            shadowOffset: { width: 0, height: 2 }, // Schattenposition
+            shadowOpacity: 0.25, // Schatten Transparenz
+            shadowRadius: 3.84, // Schatten Radius
+            elevation: 5, // Für Android-Schatten
+          },
+          taskTitle: {
+            color: 'white',
+            fontSize: 16,
+            fontWeight: 'bold',
+            flexShrink: 1,
+            // ...other text styles
           },
       });
       

@@ -22,6 +22,7 @@ import BookingConfirmationPage from "../screens/guest/reservation/components/Boo
 
 import EmployeeDashboardScreen from "../screens/employee/dashboard/EmployeeDashboardScreen"
 import ScheduleScreen from "../screens/employee/schedule/ScheduleScreen"
+import TaskListScreen from "../screens/employee/tasks/TaskListScreen";
 
 
 const styles = StyleSheet.create({
@@ -91,6 +92,7 @@ export default function RootNavigation() {
       <Stack.Navigator>
         <Stack.Screen name="Angestellten Dashboard" component={EmployeeDashboardScreen}  options={{ headerShown: false }}/>
         <Stack.Screen name="ScheduleScreen" component={ScheduleScreen}  options={{ headerShown: false }}/>
+        <Stack.Screen name="TaskListScreen" component={TaskListScreen}  options={{ headerShown: false }}/>
         {/* Weitere Bildschirme */}
       </Stack.Navigator>
     );
@@ -146,7 +148,7 @@ const EmployeeNavigator = () => {
       // Entfernen Sie headerMode, da es nicht zu BottomTabNavigationOptions gehört
     })}
   >
-      <Tab.Screen name="Angestellten Dashboard" component={EmployeeStack} />
+      <Tab.Screen name="Dashboard" component={EmployeeStack} />
     <Tab.Screen name="Chat" component={ChatScreen} />
     <Tab.Screen name="Reservation" component={ReservationStack} />
     <Tab.Screen name="Settings" component={SettingsScreen} />
