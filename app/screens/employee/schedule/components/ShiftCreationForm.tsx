@@ -8,6 +8,7 @@ import {Shift, Role} from '../../types'
 import { Picker } from '@react-native-picker/picker';
 import { AppDispatch } from '../../../../store/store';
 import Icon from 'react-native-vector-icons/FontAwesome'; 
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 interface ShiftCreationFormProps {
   onShiftCreated: () => void;
@@ -96,7 +97,7 @@ const ShiftCreationForm: React.FC<ShiftCreationFormProps> = ({ onShiftCreated })
       return (
         <ScrollView style={styles.formContainer} contentContainerStyle={styles.contentContainer}>
         {/* Eingabefeld für Schichtname */}
-       
+        <KeyboardAwareScrollView>
           <Text style={styles.label}>Schichtname</Text>
           <TextInput
             style={styles.input}
@@ -195,6 +196,8 @@ const ShiftCreationForm: React.FC<ShiftCreationFormProps> = ({ onShiftCreated })
           <Text style={styles.buttonText}>Schicht erstellen</Text>
         </TouchableOpacity>
         </View>
+        
+        </KeyboardAwareScrollView>
       </ScrollView>
       );
 };

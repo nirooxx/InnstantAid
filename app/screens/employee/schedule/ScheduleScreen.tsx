@@ -11,6 +11,7 @@ import { Picker } from '@react-native-picker/picker';
 import { AppDispatch } from '../../../store/store';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+
 const ScheduleScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const shiftsFromStore = useSelector((state: RootState) => state.schedule.shifts);
@@ -79,18 +80,24 @@ const ScheduleScreen: React.FC = () => {
     <TouchableOpacity style={styles.addButton} onPress={toggleFormModal}>
         <Icon name="add" size={24} color="#fff" />
       </TouchableOpacity>
-
+     
       {/* Shift Creation Form Modal */}
+    
       <Modal
         animationType="slide"
         transparent={true}
         visible={isFormVisible}
         onRequestClose={toggleFormModal}
       >
+      
         <View style={styles.centeredView}>
+      
           <ShiftCreationForm onShiftCreated={toggleFormModal} />
+        
         </View>
+     
       </Modal>
+    
 </View>
 
   );

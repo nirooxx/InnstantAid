@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Modal, StyleSheet, TouchableOpacity, Text, TextInput,  } from 'react-native';
+import { View, Modal, StyleSheet, TouchableOpacity, Text, TextInput,KeyboardAvoidingView , Platform  } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTasks, createTask } from '../../../store/taskSlice';
@@ -8,7 +8,7 @@ import { AppDispatch } from '../../../store/store';
 import { Task } from './models/Task';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const TaskListScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -78,8 +78,10 @@ const [notes, setNotes] = useState<string[]>([]);
         visible={modalVisible}
         onRequestClose={closeModal}
       >
-     
+    
         <View style={styles.modalView}>
+        <KeyboardAwareScrollView
+  >
           <TextInput
             placeholder="Titel der Aufgabe"
             value={title}
@@ -153,8 +155,9 @@ const [notes, setNotes] = useState<string[]>([]);
           >
             <Text style={styles.buttonText}>Abbrechen</Text>
           </TouchableOpacity>
+          </KeyboardAwareScrollView>
         </View>
-    
+       
       </Modal>
      
     </View>
