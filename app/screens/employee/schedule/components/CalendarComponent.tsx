@@ -1,8 +1,9 @@
 // CalendarComponent.tsx
 import React from 'react';
-import { Agenda } from 'react-native-calendars';
-import { Shift, ShiftsForDay, Role, AgendaEntry } from '../../types'; // Pfad anpassen
-import { View, Text, StyleSheet } from 'react-native';
+import { Agenda,  } from 'react-native-calendars';
+import { Shift, ShiftsForDay, Role, AgendaEntry,  } from '../../types'; // Pfad anpassen
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from "@react-navigation/native";
 
 interface CalendarComponentProps {
   role: Role;
@@ -32,35 +33,56 @@ const transformShiftsToAgendaFormat = (role: Role, shifts: ShiftsForDay): { [dat
   const endDate = new Date();
   endDate.setMonth(endDate.getMonth() + 1); // Ein Monat in die Zukunft
 
-  // Generiere für jeden Tag im Zeitraum einen Eintrag im agendaData
+  // Durchgehen aller Tage im Zeitraum
   for(let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)){
     const dateString = dateToString(d);
-    agendaData[dateString] = shifts[dateString] && shifts[dateString].some(shift => shift.role === role)
-      ? shifts[dateString].filter(shift => shift.role === role).map(shift => ({
-        name: shift.name,
-        employeeName: shift.employeeName,
-        height: 60,
-        day: dateString,
-        startTime: timeToString(shift.startTime),
-        endTime: timeToString(shift.endTime),
-      })) 
-      : [];
+    // Überprüfen, ob für den aktuellen Tag Shifts vorhanden sind
+    if (shifts[dateString]) {
+      // Filtern der Shifts basierend auf der Rolle und Umwandeln in das Agenda-Format
+      agendaData[dateString] = shifts[dateString]
+        .filter(shift => shift.role === role)
+        .map(shift => ({
+          name: shift.name,
+          employeeName: shift.employeeName,
+          height: 60,
+          day: dateString,
+          startTime: timeToString(new Date(shift.startTime)),
+          endTime: timeToString(new Date(shift.endTime)),
+          id: shift.id, // Hinzufügen der Shift-ID
+          role: shift.role // Hinzufügen der Rolle
+        }));
+    } else {
+      // Keine Shifts für diesen Tag vorhanden
+      agendaData[dateString] = [];
+    }
   }
 
   return agendaData;
 };
 
+
   
 const CalendarComponent: React.FC<CalendarComponentProps> = ({ role, shifts }) => {
+  const navigation = useNavigation();
+
+  const handleShiftSelected = (item: any) => {
+    console.log(item)
+    // Stellen Sie sicher, dass item ein Shift-Objekt mit id und role ist
+    if ('id' in item && 'role' in item) {
+      navigation.navigate('ShiftDetailScreen', { shiftId: item.id, role: item.role });
+    }
+  };
+  
+
       const renderItem = (item:any, isFirst:Boolean) => {
         const itemStyle = isFirst ? styles.firstItem : styles.item;
         return (
-          <View style={itemStyle}>
-            <Text style={styles.taskTitle}>{item.name}</Text>
-            <Text style={styles.priorityLabel}>{item.employeeName}</Text>
-            <Text style={styles.itemText}>{`Beginn: ${item.startTime}`}</Text>
-            <Text style={styles.itemText}>{`Ende: ${item.endTime}`}</Text>
-          </View>
+          <TouchableOpacity style={itemStyle} onPress={() => handleShiftSelected(item)}>
+          <Text style={styles.taskTitle}>{item.name}</Text>
+          <Text style={styles.priorityLabel}>{item.employeeName}</Text>
+          <Text style={styles.itemText}>{`Beginn: ${item.startTime}`}</Text>
+          <Text style={styles.itemText}>{`Ende: ${item.endTime}`}</Text>
+        </TouchableOpacity>
         );
       };
   

@@ -23,6 +23,7 @@ import BookingConfirmationPage from "../screens/guest/reservation/components/Boo
 import EmployeeDashboardScreen from "../screens/employee/dashboard/EmployeeDashboardScreen"
 import ScheduleScreen from "../screens/employee/schedule/ScheduleScreen"
 import TaskListScreen from "../screens/employee/tasks/TaskListScreen";
+import ShiftDetailScreen from "../screens/employee/schedule/components/ShiftDetailScreen";
 
 
 const styles = StyleSheet.create({
@@ -93,6 +94,7 @@ export default function RootNavigation() {
         <Stack.Screen name="Angestellten Dashboard" component={EmployeeDashboardScreen}  options={{ headerShown: false }}/>
         <Stack.Screen name="ScheduleScreen" component={ScheduleScreen}  options={{ headerShown: false }}/>
         <Stack.Screen name="TaskListScreen" component={TaskListScreen}  options={{ headerShown: false }}/>
+        <Stack.Screen name="ShiftDetailScreen" component={ShiftDetailScreen} initialParams={{ shiftId: '', role: '' }}  options={{ headerShown: false }}/>
         {/* Weitere Bildschirme */}
       </Stack.Navigator>
     );

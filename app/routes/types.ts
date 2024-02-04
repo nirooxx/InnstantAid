@@ -3,6 +3,7 @@ export type RootStackParamList = {
   Reservations: undefined;
   ScheduleScreen:undefined;
   TaskListScreen:undefined;
+  ShiftDetailScreen:undefined;
   BookingConfirmationPage: {
     title: string;
     date: string;

@@ -1,5 +1,6 @@
 // Typdefinitionen
 export type Shift = {
+    id: string;
     name: string;
     startTime: Date;
     endTime: Date;
@@ -7,6 +8,8 @@ export type Shift = {
     role: string,
     // Andere Eigenschaften nach Bedarf
   };
+
+
 
   export type FirestoreTimestamp = {
     seconds: number;

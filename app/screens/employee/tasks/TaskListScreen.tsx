@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Modal, StyleSheet, TouchableOpacity, Text, TextInput,KeyboardAvoidingView , Platform  } from 'react-native';
+import { View, Modal, StyleSheet, TouchableOpacity, Text, TextInput, FlatList, Image  } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchShifts } from '../../../store/scheduleSlice';
 import { fetchTasks, createTask } from '../../../store/taskSlice';
 import { RootState } from '../../../store/store'; // Pfad anpassen
 import { AppDispatch } from '../../../store/store';
@@ -9,10 +10,14 @@ import { Task } from './models/Task';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import TaskItem from './components/TaskList';
+import ShiftItem from '../schedule/components/ShiftItem';
+
 
 const TaskListScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { tasks, loading, error } = useSelector((state: RootState) => state.task);
+  const shiftsFromStore = useSelector((state: RootState) => state.schedule.shifts);
   const [modalVisible, setModalVisible] = useState(false);
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [title, setTitle] = useState<string>('');
@@ -21,7 +26,7 @@ const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('low');
 const [dueDate, setDueDate] = useState<string>(new Date().toISOString());
 const [status, setStatus] = useState<'new' | 'in progress' | 'completed'>('new');
 const [assignedTo, setAssignedTo] = useState<string>('');
-const [roleRequired, setRoleRequired] = useState<string>('Rezeptionist');
+const [roleRequired, setRoleRequired] = useState<string>('receptionist');
 const [notes, setNotes] = useState<string[]>([]);
 
   const handleDateChange = (event: any, selectedDate: Date | undefined) => {
@@ -35,6 +40,10 @@ const [notes, setNotes] = useState<string[]>([]);
 
     setModalVisible(false);
   };
+
+  useEffect(() => {
+    dispatch(fetchShifts());
+  }, [dispatch]);
   
   useEffect(() => {
     dispatch(fetchTasks());
@@ -57,11 +66,26 @@ const [notes, setNotes] = useState<string[]>([]);
   };
 
   
-  
+  console.log(shiftsFromStore)
   return (
     <View style={{ flex: 1 }}>
-      {loading && <Text>Laden...</Text>}
-      {error && <Text>{error}</Text>}
+      
+      <View style={styles.container}>
+      {loading && <Text>Loading...</Text>}
+      {error && <Text>Error: {error}</Text>}
+      <FlatList
+        data={shiftsFromStore}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <ShiftItem shift={item} />}
+        horizontal={true} // Ermöglicht das horizontale Scrollen
+        showsHorizontalScrollIndicator={false} // Versteckt die horizontale Scrollleiste
+      />
+      <FlatList
+        data={tasks}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <TaskItem task={item} />}
+      />
+    </View>
          {/* Floating Action Button */}
          <TouchableOpacity
         style={styles.fab}
@@ -252,6 +276,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+  },
+  taskItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 6,
+    padding: 16,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+  },
+  taskDetails: {
+    marginLeft: 10,
+    flex: 1,
+  },
+  taskTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333333',
+  },
+  taskDate: {
+    fontSize: 14,
+    color: '#666666',
   },
 });
 
