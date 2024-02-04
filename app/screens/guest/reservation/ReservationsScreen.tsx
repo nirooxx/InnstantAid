@@ -1,9 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from "../../../routes/types"; // Import your type definitions
+import { StackNavigationProp } from "@react-navigation/stack";
+
+type ReservationsNavigationProp = StackNavigationProp<
+  RootStackParamList
+>;
 
 const ReservationsScreen: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<ReservationsNavigationProp>();
 
   const handleSpaBookingPress = () => {
     navigation.navigate('SpaBookingScreen');

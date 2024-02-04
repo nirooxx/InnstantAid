@@ -24,6 +24,7 @@ import TableReservationScreen from "../screens/guest/reservation/reservationScre
 import SpaBookingScreen from "../screens/guest/reservation/spaBookingScreen/SpaBookingScreen";
 import BookingScreen from "../screens/guest/reservation/reservationScreen/tableReservation/bookingScreen/BookingScreen";
 import ConfirmationScreen from "../screens/guest/reservation/reservationScreen/tableReservation/bookingScreen/ConfirmationScreen";
+import TableReservationsList from "../screens/guest/reservation/reservationScreen/tableReservation/bookingScreen/TableReservationsList";
 
 import EmployeeDashboardScreen from "../screens/employee/dashboard/EmployeeDashboardScreen"
 import ScheduleScreen from "../screens/employee/schedule/ScheduleScreen"
@@ -105,6 +106,12 @@ export default function RootNavigation() {
           component={ConfirmationScreen}
           options={{ headerShown: false }}
           initialParams={{ reservationId: '' }}
+        />
+         <Stack.Screen
+          name="TableReservationsList"
+          component={TableReservationsList}
+          options={{ headerShown: false }}
+          
         />
         <Stack.Screen
           name="RoomServiceOrderScreen"

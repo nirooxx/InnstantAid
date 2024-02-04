@@ -4,7 +4,18 @@ export type RootStackParamList = {
   Reservations: undefined;
   ScheduleScreen:undefined;
   SpaBookingScreen:undefined;
+  BookingScreen: {
+    date: string;
+    time: string;
+    peopleCount: number;
+    name: string;
+    roomNumber: string;
+  };
   TableReservationScreen:undefined;
+  TableReservationsList:undefined;
+  ConfirmationScreen: {
+    reservationId: string;
+  };
   RoomServiceOrderScreen:undefined;
   TaskListScreen:undefined;
   ShiftDetailScreen:undefined;

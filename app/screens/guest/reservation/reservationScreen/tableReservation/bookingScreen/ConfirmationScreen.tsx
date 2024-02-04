@@ -5,12 +5,19 @@ import { useDispatch } from 'react-redux';
 import { deleteReservation } from '../../../../../../store/tableReservationSlice'; // Pfad anpassen
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { AppDispatch } from '../../../../../../store/store';
+import { RootStackParamList } from "../../../../../../routes/types"; // Import your type definitions
+import { StackNavigationProp } from "@react-navigation/stack";
+
+type ConfirmationNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "TableReservationsList"
+>;
 
 type ConfirmScreenRouteProp = RouteProp<{ params: { reservationId: string;} }, 'params'>;
 // Typdefinitionen und Props entsprechend anpassen
 const ConfirmationScreen = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const navigation = useNavigation();
+  const navigation = useNavigation<ConfirmationNavigationProp>();
   const route = useRoute<ConfirmScreenRouteProp>();
 
   // Hier wäre die ID der Reservierung, die du zum Stornieren brauchst
@@ -32,6 +39,9 @@ const handleCancelBooking = async () => {
   return (
     <View style={styles.container}>
     <Text style={styles.confirmationText}>Ihre Buchung wurde erfolgreich vorgenommen!</Text>
+    <TouchableOpacity style={styles.viewBookingButton} onPress={() => navigation.navigate('TableReservationsList')}>
+  <Text style={styles.viewBookingButtonText}>Buchung ansehen</Text>
+</TouchableOpacity>
     <TouchableOpacity style={styles.cancelButton} onPress={handleCancelBooking}>
       <Text style={styles.cancelButtonText}>Buchung stornieren</Text>
     </TouchableOpacity>
@@ -49,6 +59,16 @@ const styles = StyleSheet.create({
       confirmationText: {
         fontSize: 18,
         marginBottom: 20,
+      },
+      viewBookingButton: {
+        backgroundColor: '#000', // Schwarze Hintergrundfarbe für den Button
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 10,
+      },
+      viewBookingButtonText: {
+        color: 'white',
+        fontSize: 16,
       },
       cancelButton: {
         backgroundColor: 'red',

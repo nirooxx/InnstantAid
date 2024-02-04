@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { db } from '../../firebase'; // Stelle sicher, dass der Pfad korrekt ist
 import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { RootState } from '../store/store';
 
 interface TableReservation {
   id?: string;
@@ -9,6 +10,8 @@ interface TableReservation {
   peopleCount: number;
   name: string;
   roomNumber: string;
+  table: string;
+  reservierung: string;
 }
 
 interface TableReservationState {
@@ -23,6 +26,8 @@ const initialState: TableReservationState = {
   error: null,
 };
 
+const MAX_CAPACITY = 40;
+
 // Fetch reservations
 export const fetchReservations = createAsyncThunk('tableReservations/fetchReservations', async () => {
   const querySnapshot = await getDocs(collection(db, 'tableReservations'));
@@ -31,16 +36,31 @@ export const fetchReservations = createAsyncThunk('tableReservations/fetchReserv
 
 // Add a new reservation
 export const addReservation = createAsyncThunk(
-    'tableReservations/addReservation',
-    async (newReservation: TableReservation, { rejectWithValue }) => {
-      try {
-        const docRef = await addDoc(collection(db, 'tableReservations'), newReservation);
-        return { id: docRef.id, ...newReservation };
-      } catch (error) {
-        return rejectWithValue(error);
+  'tableReservations/addReservation',
+  async (newReservation: TableReservation, { getState, rejectWithValue }) => {
+    try {
+      // Hole den aktuellen Zustand der Anwendung
+      const state = getState() as RootState;
+      const reservations = state.tableReservation.reservations;
+      // Berechne die Gesamtanzahl der bereits reservierten Plätze für das gewählte Datum und Uhrzeit
+      const totalReserved = reservations.reduce((acc:any, curr:any) => {
+        return curr.date === newReservation.date && curr.time === newReservation.time ? acc + curr.peopleCount : acc;
+      }, 0);
+
+      // Prüfe, ob die Kapazität überschritten wird
+      if (totalReserved + newReservation.peopleCount > MAX_CAPACITY) {
+        return rejectWithValue('Die maximale Kapazität wurde erreicht.');
       }
+
+      // Füge die neue Reservierung hinzu, wenn die Kapazität nicht überschritten wird
+      const docRef = await addDoc(collection(db, 'tableReservations'), newReservation);
+      return { id: docRef.id, ...newReservation };
+    } catch (error) {
+      return rejectWithValue(error);
     }
-  );
+  }
+);
+
   
 
 // Update a reservation
@@ -99,4 +119,4 @@ const tableReservationSlice = createSlice({
   },
 });
 
-export const { reducer } = tableReservationSlice;
+export default tableReservationSlice.reducer

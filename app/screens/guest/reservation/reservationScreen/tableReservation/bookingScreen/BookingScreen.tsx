@@ -1,18 +1,28 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, {useEffect} from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
-import { addReservation } from '../../../../../../store/tableReservationSlice'; 
+import { useDispatch, useSelector  } from 'react-redux';
+import { addReservation, fetchReservations  } from '../../../../../../store/tableReservationSlice'; 
 import { AppDispatch } from '../../../../../../store/store';
+import { RootState } from '../../../../../../store/store';
+import { RootStackParamList } from "../../../../../../routes/types"; // Import your type definitions
+import { StackNavigationProp } from "@react-navigation/stack";
+
+type BookingNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'ConfirmationScreen'
+>;
 
 type BookingScreenRouteProp = RouteProp<{ params: { date: string; time: string; peopleCount: number; name: string, roomNumber: string} }, 'params'>;
 
 const BookingScreen: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<BookingNavigationProp>();
   const route = useRoute<BookingScreenRouteProp>();
   const dispatch = useDispatch<AppDispatch>();
   const { date, time, peopleCount, name, roomNumber } = route.params;
+ 
+
 
   const handleConfirmBooking = async () => {
     const reservationDetails = {
@@ -21,6 +31,8 @@ const BookingScreen: React.FC = () => {
       peopleCount,
       name,
       roomNumber,
+      reservierung: 'Tischreservierung',
+      table: 'T4'
       // hier könntest du noch weitere Details hinzufügen, wie z.B. die Tischnummer
     };
   
@@ -30,11 +42,15 @@ const BookingScreen: React.FC = () => {
       // Navigation zur Bestätigungsseite mit der ID der neu erstellten Reservierung
       navigation.navigate('ConfirmationScreen', { reservationId: reservation.id });
     } catch (error) {
-      console.error("Fehler beim Erstellen der Reservierung:", error);
+      Alert.alert("Fehler beim Erstellen der Reservierung: " + error);
       // Hier könntest du eine Fehlermeldung anzeigen
     }
   };
-  
+  useEffect(() => {
+    dispatch(fetchReservations());
+  }, [dispatch]);
+
+ 
 
   return (
     <View style={styles.container}>

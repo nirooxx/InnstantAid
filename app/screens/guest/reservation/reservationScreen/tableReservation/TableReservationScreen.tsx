@@ -4,6 +4,13 @@ import { View, Text, Button, StyleSheet, ScrollView, Image, TouchableOpacity, Te
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from "../../../../../routes/types"; // Import your type definitions
+import { StackNavigationProp } from "@react-navigation/stack";
+
+type BookingNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "BookingScreen"
+>;
 
 const TableReservationScreen = () => {
   const [date, setDate] = useState(new Date());
@@ -13,7 +20,7 @@ const TableReservationScreen = () => {
   const [roomNumber, setRoomNumber] = useState('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
-  const navigation = useNavigation();
+  const navigation = useNavigation<BookingNavigationProp>();
   // Diese Funktionen müssen vervollständigt werden, um die Logik für die Auswahl der Personenanzahl zu implementieren
   const increasePeopleCount = () => {
     setPeopleCount(prevCount => prevCount + 1);
