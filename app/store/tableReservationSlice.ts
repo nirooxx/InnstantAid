@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { db } from '../../firebase'; // Stelle sicher, dass der Pfad korrekt ist
-import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc,query, where } from 'firebase/firestore';
 import { RootState } from '../store/store';
 
 interface TableReservation {
@@ -12,6 +12,7 @@ interface TableReservation {
   roomNumber: string;
   table: string;
   reservierung: string;
+  userId: string;
 }
 
 interface TableReservationState {
@@ -33,6 +34,20 @@ export const fetchReservations = createAsyncThunk('tableReservations/fetchReserv
   const querySnapshot = await getDocs(collection(db, 'tableReservations'));
   return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() as TableReservation }));
 });
+
+export const fetchGuestReservations = createAsyncThunk(
+  'tableReservations/fetchReservations',
+  async (userId: string, { getState, rejectWithValue }) => {
+    try {
+      // Erstelle eine Abfrage, die nach Reservierungen filtert, die der gegebenen userId entsprechen
+      const reservationsQuery = query(collection(db, 'tableReservations'), where('userId', '==', userId));
+      const querySnapshot = await getDocs(reservationsQuery);
+      return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() as TableReservation }));
+    } catch (error) {
+      return rejectWithValue('Fehler beim Abrufen der Reservierungen: ' + error);
+    }
+  }
+);
 
 // Add a new reservation
 export const addReservation = createAsyncThunk(
@@ -60,6 +75,8 @@ export const addReservation = createAsyncThunk(
     }
   }
 );
+
+
 
   
 

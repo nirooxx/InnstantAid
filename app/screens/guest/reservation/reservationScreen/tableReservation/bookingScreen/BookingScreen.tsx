@@ -20,9 +20,11 @@ const BookingScreen: React.FC = () => {
   const navigation = useNavigation<BookingNavigationProp>();
   const route = useRoute<BookingScreenRouteProp>();
   const dispatch = useDispatch<AppDispatch>();
+  const userId = useSelector((state: RootState) => state.user.id);
+
   const { date, time, peopleCount, name, roomNumber } = route.params;
  
-
+console.log('userID: ' + userId)
 
   const handleConfirmBooking = async () => {
     const reservationDetails = {
@@ -32,7 +34,8 @@ const BookingScreen: React.FC = () => {
       name,
       roomNumber,
       reservierung: 'Tischreservierung',
-      table: 'T4'
+      table: 'T4',
+      userId
       // hier könntest du noch weitere Details hinzufügen, wie z.B. die Tischnummer
     };
   

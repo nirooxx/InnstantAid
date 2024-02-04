@@ -28,6 +28,7 @@ import { RootStackParamList } from "../../routes/types";
 const RegisterScreen: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [roomNumber, setRoomNumber] = useState('');
   const [role, setRole] = useState("guest");
   const loading = useSelector(
     (state: RootState) => state.user.isLoading === true
@@ -46,9 +47,9 @@ const RegisterScreen: React.FC = () => {
       const userId = response.user.uid;
       const token = await response.user.getIdToken();
       // Erstellen Sie ein neues Benutzerdokument in Firestore
-      await setDoc(doc(db, 'users', userId), { username: email, token, role, id: userId });
+      await setDoc(doc(db, 'users', userId), { username: email, token, role, id: userId, roomNumber });
 
-      dispatch(registrationSucceeded({ username: email, token, role }));
+      dispatch(registrationSucceeded({ username: email, token, role, roomNumber, id: userId }));
       Alert.alert("Registrierung erfolgreich!", "Sie sind nun registriert.");
     } catch (error: any) {
       dispatch(registrationFailed(error.message));
@@ -73,6 +74,7 @@ const RegisterScreen: React.FC = () => {
         secureTextEntry
       />
 
+
 <Text>Rolle:</Text>
       <Picker
         selectedValue={role}
@@ -84,6 +86,14 @@ const RegisterScreen: React.FC = () => {
         <Picker.Item label="Manager" value="manager" />
         {/* Weitere Rollen können hier hinzugefügt werden */}
       </Picker>
+
+     {role === 'guest' ? <TextInput
+        value={roomNumber}
+        onChangeText={(text) => setRoomNumber(text)}
+        placeholder="Zimmernummer"
+        keyboardType="numeric"
+      /> : ''}
+
 
       {loading ? (
         <ActivityIndicator />

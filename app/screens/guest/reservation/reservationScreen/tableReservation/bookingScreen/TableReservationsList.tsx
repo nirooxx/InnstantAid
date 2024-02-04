@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchReservations, deleteReservation } from '../../../../../../store/tableReservationSlice'; // Pfad anpassen
+import {fetchGuestReservations , deleteReservation } from '../../../../../../store/tableReservationSlice'; // Pfad anpassen
 import { RootState, AppDispatch } from '../../../../../../store/store'; // Pfad anpassen
 
 
 const TableReservationsList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { reservations, status } = useSelector((state: RootState) => state.tableReservation);
-console.log(reservations)
-  useEffect(() => {
-    dispatch(fetchReservations());
-  }, [dispatch]);
+  const userId = useSelector((state: RootState) => state.user.id); // Hole die userId aus dem Benutzerzustand
 
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchGuestReservations(userId));
+    }
+  }, [dispatch, userId]);
+  console.log(reservations, userId)
   const handleCancelReservation = async (reservationId: string) => {
     // Stornierung der Reservierung
     const resultAction = await dispatch(deleteReservation(reservationId));

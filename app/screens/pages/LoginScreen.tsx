@@ -44,7 +44,8 @@ const LoginScreen: React.FC = () => {
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data();
         const role = userData?.role || 'guest';
-        dispatch(loginSucceeded({ username: email, token, role }));
+        const roomNumber = userData?.roomNumber;
+        dispatch(loginSucceeded({ username: email, token, role, roomNumber, id: userId }));
         Alert.alert("Login erfolgreich!", "Willkommen zurück!");
       } else {
         dispatch(loginFailed('Benutzerdokument nicht gefunden'));
