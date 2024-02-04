@@ -17,8 +17,13 @@ import RegisterScreen from "../screens/pages/RegisterScreen";
 import ChatScreen from "../screens/guest/chat/ChatScreen";
 import GuestDashboard from "../screens/guest/dashboard/GuestDashboard";
 import SettingsScreen from "../screens/guest/settings/Settings";
-import ReservationPage from "../screens/guest/reservation/ReservationPage";
-import BookingConfirmationPage from "../screens/guest/reservation/components/BookingConfirmationPage";
+
+import ReservationsScreen from "../screens/guest/reservation/ReservationsScreen";
+import RoomServiceOrderScreen from "../screens/guest/reservation/reservationScreen/roomServiceOrder/RoomServiceOrderScreen";
+import TableReservationScreen from "../screens/guest/reservation/reservationScreen/tableReservation/TableReservationScreen";
+import SpaBookingScreen from "../screens/guest/reservation/spaBookingScreen/SpaBookingScreen";
+import BookingScreen from "../screens/guest/reservation/reservationScreen/tableReservation/bookingScreen/BookingScreen";
+import ConfirmationScreen from "../screens/guest/reservation/reservationScreen/tableReservation/bookingScreen/ConfirmationScreen";
 
 import EmployeeDashboardScreen from "../screens/employee/dashboard/EmployeeDashboardScreen"
 import ScheduleScreen from "../screens/employee/schedule/ScheduleScreen"
@@ -76,12 +81,34 @@ export default function RootNavigation() {
       <Stack.Navigator>
         <Stack.Screen
           name="Reservations"
-          component={ReservationPage}
+          component={ReservationsScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="BookingConfirmationPage"
-          component={BookingConfirmationPage}
+          name="SpaBookingScreen"
+          component={SpaBookingScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TableReservationScreen"
+          component={TableReservationScreen}
+          options={{ headerShown: false }}
+        />
+         <Stack.Screen
+          name="BookingScreen"
+          component={BookingScreen}
+          options={{ headerShown: false }}
+          initialParams={{ date: '', time: '', peopleCount: 1, name: '', roomNumber:'' }}
+        />
+         <Stack.Screen
+          name="ConfirmationScreen"
+          component={ConfirmationScreen}
+          options={{ headerShown: false }}
+          initialParams={{ reservationId: '' }}
+        />
+        <Stack.Screen
+          name="RoomServiceOrderScreen"
+          component={RoomServiceOrderScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

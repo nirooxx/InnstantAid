@@ -1,15 +1,13 @@
 // types.ts
 export type RootStackParamList = {
+  Reservation: undefined;
   Reservations: undefined;
   ScheduleScreen:undefined;
+  SpaBookingScreen:undefined;
+  TableReservationScreen:undefined;
+  RoomServiceOrderScreen:undefined;
   TaskListScreen:undefined;
   ShiftDetailScreen:undefined;
-  BookingConfirmationPage: {
-    title: string;
-    date: string;
-    time: string;
-    price: string;
-  };
   Chat: undefined;
   Dashboard: undefined;
   Settings: undefined;
