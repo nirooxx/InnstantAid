@@ -26,6 +26,10 @@ import BookingScreen from "../screens/guest/reservation/reservationScreen/tableR
 import ConfirmationScreen from "../screens/guest/reservation/reservationScreen/tableReservation/bookingScreen/ConfirmationScreen";
 import TableReservationsList from "../screens/guest/reservation/reservationScreen/tableReservation/bookingScreen/TableReservationsList";
 
+import MenuItemDetailsScreen from "../screens/guest/reservation/reservationScreen/roomServiceOrder/MenuItemDetailsScreen";
+import MenuScreen from "../screens/guest/reservation/reservationScreen/roomServiceOrder/MenuScreen";
+import CartScreen from "../screens/guest/reservation/reservationScreen/roomServiceOrder/CartScreen";
+
 import EmployeeDashboardScreen from "../screens/employee/dashboard/EmployeeDashboardScreen"
 import ScheduleScreen from "../screens/employee/schedule/ScheduleScreen"
 import TaskListScreen from "../screens/employee/tasks/TaskListScreen";
@@ -94,6 +98,21 @@ export default function RootNavigation() {
           name="TableReservationScreen"
           component={TableReservationScreen}
           options={{ headerShown: false }}
+        />
+         <Stack.Screen
+          name="MenuItemDetailsScreen"
+          component={MenuItemDetailsScreen}
+          options={{ title: 'Menu' }}
+        />
+        <Stack.Screen
+          name="MenuScreen"
+          component={MenuScreen}
+          options={{ title: 'Menu' }}
+        />
+        <Stack.Screen
+          name="CartScreen"
+          component={CartScreen}
+          options={{ title: 'Cart' }}
         />
          <Stack.Screen
           name="BookingScreen"

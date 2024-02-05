@@ -20,7 +20,7 @@ const ReservationsScreen: React.FC = () => {
   };
 
   const handleRoomServiceOrderPress = () => {
-    navigation.navigate('RoomServiceOrderScreen');
+    navigation.navigate('MenuScreen');
   };
 
   return (
