@@ -58,6 +58,4 @@ export interface Message {
   };
 }
 
-export interface ChatState {
-  messages: Message[];
-}
+

@@ -4,16 +4,27 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "../../firebase"; // Importieren Sie auth aus Ihrer firebase.ts-Datei
+import { collection, query, where , doc, getDocs, getDoc } from 'firebase/firestore';
+import { db } from '../../firebase'; 
+
+interface User {
+  id: string;
+  name: string;
+  username: string;
+  role: string;
+  roomNumber: string;
+}
 
 interface UserState {
   id: string;
   name: string;
   username: string;
   token: string;
-  role: string,
+  role: string;
   isLoading: boolean;
   error: string | null;
   roomNumber: string;
+
 }
 
 const initialState: UserState = {
@@ -25,6 +36,7 @@ const initialState: UserState = {
   roomNumber: "",
   isLoading: false,
   error: null,
+
 };
 
 // Async Thunks
@@ -63,6 +75,9 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
+
+
+
 
 const userSlice = createSlice({
   name: "user",

@@ -36,7 +36,7 @@ import EmployeeDashboardScreen from "../screens/employee/dashboard/EmployeeDashb
 import ScheduleScreen from "../screens/employee/schedule/ScheduleScreen"
 import TaskListScreen from "../screens/employee/tasks/TaskListScreen";
 import ShiftDetailScreen from "../screens/employee/schedule/components/ShiftDetailScreen";
-
+import EmployeeChatScreen from "../screens/employee/chat/EmployeeChatScreen";
 
 const styles = StyleSheet.create({
   tabBar: {
@@ -218,7 +218,7 @@ const EmployeeNavigator = () => {
     })}
   >
       <Tab.Screen name="Dashboard" component={EmployeeStack} />
-    <Tab.Screen name="Chat" component={ChatScreen} />
+    <Tab.Screen name="Chat" component={EmployeeChatScreen} />
     <Tab.Screen name="Reservation" component={ReservationStack} />
     <Tab.Screen name="Settings" component={SettingsScreen} />
   </Tab.Navigator>
