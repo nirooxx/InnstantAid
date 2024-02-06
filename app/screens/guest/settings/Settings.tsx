@@ -51,6 +51,11 @@ const Settings = () => {
     navigation.navigate("TableReservationsList");
   };
 
+  const handleOrders = () => {
+    // Navigiere zur TableReservationsList Komponente
+    navigation.navigate("OrderedList");
+  };
+
   return (
     <Layout>
       <ScrollView
@@ -71,6 +76,10 @@ const Settings = () => {
           <MenuItem
             label="Reservierungen"
             onPress={handleReservations}
+          />
+           <MenuItem
+            label="Bestellungen"
+            onPress={handleOrders}
           />
           <MenuItem
             label={userState.token ? "Logout" : "Login / Register"}

@@ -5,6 +5,8 @@ import {
   orderBy,
   onSnapshot,
   addDoc,
+  serverTimestamp ,
+  doc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import { Message, ChatState } from "../routes/types";
@@ -18,28 +20,47 @@ const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
+    resetMessages: (state) => {
+      state.messages = [];
+    },
     setMessages: (state, action: PayloadAction<Message[]>) => {
-      state.messages = action.payload;
+      // Filtern Sie Duplikate heraus, indem Sie sicherstellen, dass nur eindeutige _id's hinzugefügt werden
+      const uniqueMessages = action.payload.filter((newMessage) =>
+        !state.messages.some((existingMessage) => existingMessage._id === newMessage._id)
+      );
+      state.messages = [...state.messages, ...uniqueMessages];
     },
     addMessage: (state, action: PayloadAction<Message>) => {
-      state.messages.unshift(action.payload);
+      // Stellen Sie sicher, dass die Nachricht nicht bereits vorhanden ist, bevor Sie sie hinzufügen
+      if (!state.messages.find((message) => message._id === action.payload._id)) {
+        state.messages.unshift(action.payload);
+      }
     },
   },
 });
 
-export const { setMessages, addMessage } = chatSlice.actions;
+export const { resetMessages, setMessages, addMessage } = chatSlice.actions;
 
 export const selectMessages = (state: RootState) => state.chat.messages;
 
 const convertFirestoreTimestampToDate = (firestoreTimestamp: any) => {
-  return firestoreTimestamp.toDate();
+  // Überprüfen, ob firestoreTimestamp existiert und die Methode toDate hat
+  if (firestoreTimestamp && typeof firestoreTimestamp.toDate === 'function') {
+    return firestoreTimestamp.toDate();
+  } else {
+    // Fallback-Wert, falls kein gültiger Timestamp vorhanden ist
+    return new Date();
+  }
 };
 
-export const subscribeToMessages = (): AppThunk<() => void> => (dispatch) => {
+
+// Anpassen, um channelId zu akzeptieren
+export const subscribeToMessages = (userId: string, channelId: string): AppThunk<() => void> => (dispatch) => {
   const messagesQuery = query(
-    collection(db, "messages"),
+    collection(db, `channels/${userId}/channel/${channelId}/messages`),
     orderBy("createdAt", "asc")
   );
+
   const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
     const messages = snapshot.docs.map((doc) => ({
       _id: doc.id,
@@ -50,32 +71,30 @@ export const subscribeToMessages = (): AppThunk<() => void> => (dispatch) => {
     dispatch(setMessages(messages));
   });
 
-  // Return the unsubscribe function
   return () => {
     unsubscribe();
   };
 };
 
+
+// Anpassen, um channelId zu akzeptieren
 export const sendMessage =
-  (newMessage: Message): AppThunk =>
-  async (dispatch, getState) => {
-    const userId = getState().user?.id || "default-user-id"; // Use a default ID if not found
-
-    const messageToSend = {
-      ...newMessage,
-      user: {
-        ...newMessage.user,
-        _id: userId, // Ensure this is not undefined
-      },
-      createdAt: new Date(), // Make sure this is also set properly
-    };
-
+  (userId: string, channelId: string, newMessage: Message): AppThunk =>
+  async (dispatch) => {
     try {
-      const docRef = await addDoc(collection(db, "messages"), messageToSend);
-      dispatch(addMessage({ ...messageToSend, _id: docRef.id }));
+      await addDoc(collection(db, `channels/${userId}/channel/${channelId}/messages`), {
+        ...newMessage,
+        createdAt: serverTimestamp(), // Verwenden Sie serverTimestamp für den createdAt-Wert
+      });
+      // Kein Dispatch notwendig, wenn onSnapshot aktiv ist, da es automatisch neue Nachrichten hinzufügt
     } catch (error) {
       console.error("Error sending message: ", error);
     }
   };
 
+
+
+ 
+
+  
 export default chatSlice.reducer;

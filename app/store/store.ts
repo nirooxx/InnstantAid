@@ -5,6 +5,7 @@ import chatSlice from "./chatSlice";
 import scheduleReducer from "./scheduleSlice";
 import taskReducer from "./taskSlice";
 import tableReservationReducer from "./tableReservationSlice"
+import orderingReducer from "./orderingSlice";
 
 // store.ts oder ein separater Typ-Definitionsfile
 import { ThunkAction } from "redux-thunk";
@@ -23,7 +24,8 @@ export const store = configureStore({
     chat: chatSlice,
     schedule: scheduleReducer,
     task: taskReducer,
-    tableReservation: tableReservationReducer
+    tableReservation: tableReservationReducer,
+    order: orderingReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ immutableCheck: false, serializableCheck: false }),

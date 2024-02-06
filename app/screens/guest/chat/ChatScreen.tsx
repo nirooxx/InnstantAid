@@ -1,48 +1,66 @@
-// features/chat/ChatScreen.tsx
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { GiftedChat } from "react-native-gifted-chat";
+import React, { useState, useEffect } from 'react';
+import { View, Button } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { GiftedChat } from 'react-native-gifted-chat';
 import {
   sendMessage,
   subscribeToMessages,
   selectMessages,
-} from "../../../store/chatSlice";
-import { RootState, AppDispatch } from "../../../store/store";
+  resetMessages
+} from '../../../store/chatSlice';
+import { RootState, AppDispatch } from '../../../store/store';
+import ChannelSelector from './components/ChannelSelector'; // Stellen Sie sicher, dass der Pfad korrekt ist
 
 const ChatScreen: React.FC = () => {
+  const userId = useSelector((state: RootState) => state.user.id);
+  const [channelId, setChannelId] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const messages = useSelector(selectMessages);
 
   useEffect(() => {
-    const unsubscribe = dispatch(subscribeToMessages());
-
-    return () => {
-      unsubscribe(); // Diese Zeile sollte nun korrekt funktionieren
-    };
-  }, [dispatch]);
+    dispatch(resetMessages());
+    let unsubscribe = () => {};
+    if (userId && channelId) {
+      unsubscribe = dispatch(subscribeToMessages(userId, channelId));
+    }
+    return () => unsubscribe(); // Diese Funktion wird aufgerufen, wenn die Komponente unmountet wird oder wenn sich userId/channelId ändert.
+  }, [userId, channelId, dispatch]);
+  
 
   const onSend = (messages: any[] = []) => {
-    messages.forEach((message) => {
-      dispatch(sendMessage(message));
-    });
+    if (userId && channelId) {
+      messages.forEach((message) => {
+        dispatch(sendMessage(userId, channelId, {
+          _id: message._id,
+          text: message.text,
+          createdAt: new Date(),
+          user: message.user,
+        }));
+      });
+    }
   };
 
-  const uniqueMessages = messages.reduce((unique: any, item: any) => {
-    return unique.find((msg: any) => msg._id === item._id)
-      ? unique
-      : [...unique, item];
-  }, []);
+  // Funktion, um zum Kanalauswahlbildschirm zurückzukehren
+  const handleChannelExit = () => {
+    setChannelId(null); // Setzt channelId zurück und zeigt den Kanalauswahlbildschirm an
+  };
+
+  if (!channelId) {
+    return <ChannelSelector onSelectChannel={setChannelId} />;
+  }
 
   return (
-    <GiftedChat
-      key={uniqueMessages._id}
-      messages={uniqueMessages}
-      onSend={(messages) => onSend(messages)}
-      user={{
-        _id: uniqueMessages._id, // Der ID Ihres Benutzers
-        name: "Benutzername", // Der Name Ihres Benutzers
-      }}
-    />
+    <View style={{ flex: 1 }}>
+      <Button title="Kanal wechseln" onPress={handleChannelExit} />
+      <GiftedChat
+        messages={messages}
+        onSend={(messages) => onSend(messages)}
+        user={{
+          _id: userId, // Die tatsächliche Benutzer-ID hier einfügen
+          name: "Gast", // Optional: Benutzername einfügen
+        }}
+      />
+    </View>
   );
 };
 

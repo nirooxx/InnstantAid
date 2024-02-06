@@ -19,7 +19,6 @@ import GuestDashboard from "../screens/guest/dashboard/GuestDashboard";
 import SettingsScreen from "../screens/guest/settings/Settings";
 
 import ReservationsScreen from "../screens/guest/reservation/ReservationsScreen";
-import RoomServiceOrderScreen from "../screens/guest/reservation/reservationScreen/roomServiceOrder/RoomServiceOrderScreen";
 import TableReservationScreen from "../screens/guest/reservation/reservationScreen/tableReservation/TableReservationScreen";
 import SpaBookingScreen from "../screens/guest/reservation/spaBookingScreen/SpaBookingScreen";
 import BookingScreen from "../screens/guest/reservation/reservationScreen/tableReservation/bookingScreen/BookingScreen";
@@ -29,6 +28,9 @@ import TableReservationsList from "../screens/guest/reservation/reservationScree
 import MenuItemDetailsScreen from "../screens/guest/reservation/reservationScreen/roomServiceOrder/MenuItemDetailsScreen";
 import MenuScreen from "../screens/guest/reservation/reservationScreen/roomServiceOrder/MenuScreen";
 import CartScreen from "../screens/guest/reservation/reservationScreen/roomServiceOrder/CartScreen";
+import CheckoutScreen from "../screens/guest/reservation/reservationScreen/roomServiceOrder/CheckoutScreen";
+import ConfirmCheckoutScreen from "../screens/guest/reservation/reservationScreen/roomServiceOrder/ConfirmCheckoutScreen"
+import OrderedList from "../screens/guest/reservation/reservationScreen/roomServiceOrder/OrderedList";
 
 import EmployeeDashboardScreen from "../screens/employee/dashboard/EmployeeDashboardScreen"
 import ScheduleScreen from "../screens/employee/schedule/ScheduleScreen"
@@ -115,6 +117,23 @@ export default function RootNavigation() {
           options={{ title: 'Cart' }}
         />
          <Stack.Screen
+          name="CheckoutScreen"
+          component={CheckoutScreen}
+          options={{ title: 'Checkout' }}
+        />
+         <Stack.Screen
+          name="ConfirmCheckoutScreen"
+          component={ConfirmCheckoutScreen}
+          options={{ headerShown: false }}
+          initialParams={{ firstName: '', lastName: '', address: '', note: '', roomNumber:'' }}
+        />
+         <Stack.Screen
+          name="OrderedList"
+          component={OrderedList}
+          options={{ headerShown: false }}
+          
+        />
+         <Stack.Screen
           name="BookingScreen"
           component={BookingScreen}
           options={{ headerShown: false }}
@@ -131,11 +150,6 @@ export default function RootNavigation() {
           component={TableReservationsList}
           options={{ headerShown: false }}
           
-        />
-        <Stack.Screen
-          name="RoomServiceOrderScreen"
-          component={RoomServiceOrderScreen}
-          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     );

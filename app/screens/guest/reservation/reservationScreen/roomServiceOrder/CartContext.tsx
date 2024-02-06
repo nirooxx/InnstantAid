@@ -8,18 +8,34 @@ interface CartItem {
   quantity: number;
 }
 
+interface Order {
+  id?: string; // Die ID der Bestellung aus der Datenbank
+  cartItems: CartItem[];
+  roomNumber: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  note:string;
+}
+
 interface CartContextData {
   cartItems: CartItem[];
+
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: string) => void;
   updateCartItem: (id: string, quantityChange: number) => void;
+  calculateTotal: () => number;
+  resetCart: () => void;
 }
 
 const CartContext = createContext<CartContextData>({
   cartItems: [],
+  resetCart: () => {},
   addToCart: () => {},
   removeFromCart: () => {},
   updateCartItem: () => {},
+  calculateTotal: () => 0,
+
 });
 
 interface CartProviderProps {
@@ -29,6 +45,7 @@ interface CartProviderProps {
 // Erstellen Sie einen Provider, um den Zustand und die Updater-Funktionen bereitzustellen
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
 
   const addToCart = (newItem: CartItem) => {
     setCartItems(currentItems => {
@@ -65,8 +82,16 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     });
   };
 
+  const calculateTotal = () => {
+    return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  };
+
+  const resetCart = () => {
+    setCartItems([]); // Leert den Warenkorb
+  };
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateCartItem }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateCartItem, calculateTotal, resetCart  }}>
       {children}
     </CartContext.Provider>
   );

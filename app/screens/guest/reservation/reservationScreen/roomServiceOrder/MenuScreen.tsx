@@ -38,7 +38,7 @@ const MenuScreen: React.FC = () => {
       id: '1',
       title: 'Margherita Pizza',
       price: 8.99,
-      imageUrl: 'https://example.com/image.jpg',
+      imageUrl: 'https://img.freepik.com/free-vector/flat-design-ui-ux-background-illustrated_23-2149054879.jpg?size=626&ext=jpg&ga=GA1.1.1431687763.1706920305&semt=ais',
       category: 'Food',
       description: 'akshdkahsdkfahsdkflaksjdlfjalsdjfklasdjflasd'
     },
@@ -46,7 +46,7 @@ const MenuScreen: React.FC = () => {
         id: '2',
         title: 'Fungi Pizza',
         price: 5.89,
-        imageUrl: 'https://example.com/image.jpg',
+        imageUrl: 'https://img.freepik.com/free-vector/isometric-ui-ux-background_23-2149047259.jpg?size=626&ext=jpg&ga=GA1.1.1431687763.1706920305&semt=ais',
         category: 'Food',
         description: 'akshdkahsdkfahsdkflaksjdlfjalsdjfklasdjflasd'
       },
@@ -71,7 +71,7 @@ const MenuScreen: React.FC = () => {
   const filteredItems = menuItems.filter(
     (item) => item.category === activeCategory
   );
-console.log(cartItems)
+
   // renderItem für FlatList
   const renderItem = ({ item }: { item: any }) => (
     <View style={styles.menuItem}>

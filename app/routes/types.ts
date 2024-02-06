@@ -6,6 +6,15 @@ export type RootStackParamList = {
   SpaBookingScreen:undefined;
   MenuScreen:undefined;
   CartScreen:undefined;
+  CheckoutScreen:undefined;
+  OrderedList:undefined;
+  ConfirmCheckoutScreen:{ 
+     roomNumber:string;
+      firstName:string;
+       lastName:string;
+       address:string;
+        note:string;
+       };
   MenuItemDetailsScreen: {
     id: string;
     title: string;

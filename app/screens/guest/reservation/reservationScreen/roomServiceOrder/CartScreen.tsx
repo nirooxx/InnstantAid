@@ -2,10 +2,18 @@ import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useCart } from './CartContext'; // Stelle sicher, dass der Pfad korrekt ist
+import { RootStackParamList } from "../../../../../routes/types"; // Import your type definitions
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from '@react-navigation/native';
+
+type CartNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "CheckoutScreen"
+>;
 
 const CartScreen: React.FC = () => {
     const { cartItems, removeFromCart, updateCartItem } = useCart();
-
+    const navigation = useNavigation<CartNavigationProp>();
   // Funktion zum Erhöhen der Anzahl eines Artikels im Warenkorb
   const incrementQuantity = (id: string) => {
     updateCartItem(id, 1);
@@ -50,7 +58,7 @@ const CartScreen: React.FC = () => {
         />
         <View style={styles.totalContainer}>
           <Text style={styles.total}>Total: €{calculateTotal().toFixed(2)}</Text>
-          <TouchableOpacity style={styles.checkoutButton}>
+          <TouchableOpacity onPress={() => navigation.navigate('CheckoutScreen')} style={styles.checkoutButton}>
             <Text style={styles.checkoutButtonText}>Checkout</Text>
           </TouchableOpacity>
         </View>

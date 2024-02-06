@@ -15,7 +15,7 @@ const TableReservationsList: React.FC = () => {
       dispatch(fetchGuestReservations(userId));
     }
   }, [dispatch, userId]);
-  console.log(reservations, userId)
+
   const handleCancelReservation = async (reservationId: string) => {
     // Stornierung der Reservierung
     const resultAction = await dispatch(deleteReservation(reservationId));
