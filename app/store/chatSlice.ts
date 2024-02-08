@@ -25,6 +25,7 @@ interface ChatState {
   channelUsers?: User[];
   guestMessages?: GuestMessages[]; // Hinzufügen der guestMessages Eigenschaft
   guests?: User[];
+  lastVisited: { [channelId: string]: number };
 }
 
 const initialState: ChatState = {
@@ -32,7 +33,8 @@ const initialState: ChatState = {
   // Initialisieren von channelUsers als undefiniert oder leeres Array, je nach Vorliebe
   channelUsers: [],
   guestMessages: [],
-  guests:[]
+  guests:[],
+  lastVisited: {},
 };
 
 interface User {
@@ -41,6 +43,7 @@ interface User {
   username: string;
   role: string;
   roomNumber: string;
+  lastVisited: {};
 }
 
 const chatSlice = createSlice({
@@ -62,6 +65,10 @@ const chatSlice = createSlice({
       if (!state.messages.find((message) => message._id === action.payload._id)) {
         state.messages.unshift(action.payload);
       }
+    },
+    updateLastVisited: (state, action: PayloadAction<{ channelId: string; timestamp: number }>) => {
+      const { channelId, timestamp } = action.payload;
+      state.lastVisited[channelId] = timestamp;
     },
   },
   extraReducers: (builder) => {
@@ -92,7 +99,7 @@ const chatSlice = createSlice({
   
 });
 
-export const { resetMessages, setMessages, addMessage } = chatSlice.actions;
+export const { resetMessages, setMessages, addMessage, updateLastVisited  } = chatSlice.actions;
 
 export const selectMessages = (state: RootState) => state.chat.messages;
 
@@ -107,7 +114,6 @@ const convertFirestoreTimestampToDate = (firestoreTimestamp: any) => {
 };
 
 
-// Anpassen, um channelId zu akzeptieren
 export const subscribeToMessages = (userId: string, channelId: string): AppThunk<() => void> => (dispatch) => {
   const messagesQuery = query(
     collection(db, `channels/${userId}/channel/${channelId}/messages`),
@@ -120,14 +126,17 @@ export const subscribeToMessages = (userId: string, channelId: string): AppThunk
       createdAt: convertFirestoreTimestampToDate(doc.data().createdAt),
       text: doc.data().text,
       user: doc.data().user,
-    })) as Message[];
-    dispatch(setMessages(messages));
+    })).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()); // Stellen Sie sicher, dass Nachrichten in der richtigen Reihenfolge sind
+    
+    // Aktualisieren Sie den lokalen Zustand mit den neuen Nachrichten
+    dispatch(setMessages(messages)); // Hier könnten Sie einen eigenen Zustand verwenden, wenn `setMessages` nicht Teil des Redux-Zustandes ist
   });
 
   return () => {
     unsubscribe();
   };
 };
+
 
 
 // Anpassen, um channelId zu akzeptieren
