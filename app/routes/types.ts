@@ -4,10 +4,17 @@ export type RootStackParamList = {
   Reservations: undefined;
   ScheduleScreen:undefined;
   SpaBookingScreen:undefined;
+  SpaServiceDetail:{
+    title: string;
+    image: string;
+    price: string;
+    duration: string;
+  };
   MenuScreen:undefined;
   CartScreen:undefined;
   CheckoutScreen:undefined;
   OrderedList:undefined;
+  SpaBookingsList:undefined;
   ConfirmCheckoutScreen:{ 
      roomNumber:string;
       firstName:string;

@@ -56,6 +56,11 @@ const Settings = () => {
     navigation.navigate("OrderedList");
   };
 
+  const handleSpaBookings = () => {
+    // Navigiere zur TableReservationsList Komponente
+    navigation.navigate("SpaBookingsList");
+  };
+
   return (
     <Layout>
       <ScrollView
@@ -80,6 +85,10 @@ const Settings = () => {
            <MenuItem
             label="Bestellungen"
             onPress={handleOrders}
+          />
+            <MenuItem
+            label="Buchungen"
+            onPress={handleSpaBookings}
           />
           <MenuItem
             label={userState.token ? "Logout" : "Login / Register"}

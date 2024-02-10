@@ -1,89 +1,121 @@
 import React from 'react';
 import { View, StyleSheet, Image, ScrollView, Text, TouchableOpacity } from 'react-native';
 import { Card, Title } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from "../../../../routes/types"; // Import your type definitions
+import { StackNavigationProp } from "@react-navigation/stack";
 
-const categories = [
-  { title: 'Body', image: require('../../../../assets/images/Gebäude_Architektur.jpg') },
-  { title: 'Mind', image: require('../../../../assets/images/Gebäude_Architektur.jpg') },
-  { title: 'Nutrition', image: require('../../../../assets/images/Gebäude_Architektur.jpg') },
-  { title: 'Experiences', image: require('../../../../assets/images/Gebäude_Architektur.jpg') },
+type SpaBookingNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "SpaServiceDetail"
+>;
+
+const spaServices = [
+  { title: 'Thai Massage', image: require('../../../../assets/images/Thai-Message.webp'), price: '99€', duration: '60 min' },
+  { title: 'Swedish Massage', image: require('../../../../assets/images/Thai-Message.webp'), price: '89€', duration: '60 min' },
+  { title: 'Hot Stone Massage', image: require('../../../../assets/images/Thai-Message.webp'), price: '109€', duration: '75 min' },
+  { title: 'Aromatherapy Massage', image: require('../../../../assets/images/Thai-Message.webp'), price: '79€', duration: '60 min' },
 ];
 
 const SpaBookingScreen = () => {
+  const navigation = useNavigation<SpaBookingNavigationProp>();
+  
+
+  const handleSpaBooking = (service:any) => {
+    // Übergabe der Reservierungsdaten an die BookingScreen Komponente
+    navigation.navigate('SpaServiceDetail',{
+      title: service.title,
+      image: service.image,
+      price: service.price,
+      duration: service.duration,
+    } );
+  };
   return (
     <ScrollView style={styles.container}>
-    <View style={styles.topSection}>
-      <Text style={styles.heading}>Connect with experts instantaneously, no matter where you are.</Text>
-      <Text style={styles.subheading}>Which one would you like to focus on?</Text>
-    </View>
-    <View style={styles.cardContainer}>
-      {categories.map((category, index) => (
-        <TouchableOpacity key={index} style={styles.card}>
-          <Image source={category.image} style={styles.cardImage} />
-          <View style={styles.cardTitleContainer}>
-            <Text style={styles.cardTitle}>{category.title}</Text>
-            <Icon name="chevron-right" size={24} color="#000" />
-          </View>
-        </TouchableOpacity>
-      ))}
-    </View>
-  </ScrollView>
+      <View style={styles.topSection}>
+        <Image source={require('../../../../assets/images/Thai-Message.webp')} style={styles.backgroundImage} />
+        <View style={styles.overlay}>
+          <Text style={styles.heading}>Indulge in Serenity</Text>
+          <Text style={styles.subheading}>Select your preferred treatment and relax</Text>
+        </View>
+      </View>
+      <View style={styles.cardContainer}>
+        {spaServices.map((service, index) => (
+         <TouchableOpacity key={index} onPress={() => handleSpaBooking(service)}>
+         <Card style={styles.card}>
+           <Card.Cover source={service.image} style={styles.cardImage} />
+           <Card.Content style={styles.cardContent}>
+             <Title style={styles.cardTitle}>{service.title}</Title>
+             <Text style={styles.cardPrice}>{service.price} - {service.duration}</Text>
+           </Card.Content>
+         </Card>
+       </TouchableOpacity>
+        ))}
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
   },
   topSection: {
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 250,
     paddingHorizontal: 20,
-    paddingTop: 60,
-    paddingBottom: 20,
-    backgroundColor: '#f0f0f0',
+  },
+  backgroundImage: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    borderRadius: 8,
+    padding: 20,
   },
   heading: {
-    fontSize: 22,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#000',
-    marginBottom: 10,
+    color: '#fff',
+    textAlign: 'center',
+    marginBottom: 8,
   },
   subheading: {
-    fontSize: 16,
-    color: '#000',
+    fontSize: 20,
+    color: '#fff',
+    textAlign: 'center',
   },
   cardContainer: {
     paddingHorizontal: 20,
+    paddingTop: 20,
   },
   card: {
-    backgroundColor: '#ffffff',
     borderRadius: 8,
     overflow: 'hidden',
-    marginBottom: 10,
-    elevation: 4, // for Android shadow
-    shadowColor: '#000', // for iOS shadow
-    shadowOffset: { width: 0, height: 2 }, // for iOS shadow
-    shadowOpacity: 0.1, // for iOS shadow
-    shadowRadius: 4, // for iOS shadow
+    marginBottom: 20,
+    elevation: 4,
   },
   cardImage: {
     height: 150,
-    width: '100%',
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
   },
-  cardTitleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 15,
-    backgroundColor: 'rgba(0, 0, 0, 0.02)', // slight overlay
+  cardContent: {
+    padding: 16,
   },
   cardTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#000',
+  },
+  cardPrice: {
+    fontSize: 16,
+    color: '#666',
+    paddingTop: 8,
   },
 });
 
