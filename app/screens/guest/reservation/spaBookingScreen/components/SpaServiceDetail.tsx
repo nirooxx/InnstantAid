@@ -5,9 +5,10 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView,
 import { RootStackParamList } from "../../../../../routes/types"; // Import your type definitions
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootState } from '../../../../../store/store';
-import { bookSpa } from '../../../../../store/SpaBookingSlice';
+import { addSpaBooking } from '../../../../../store/SpaBookingSlice';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { AppDispatch } from '../../../../../store/store';
 
 type SpaBookingNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -42,7 +43,7 @@ const SpaServiceDetail: React.FC = () => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
 
   const handleBooking = () => {
@@ -72,8 +73,8 @@ const SpaServiceDetail: React.FC = () => {
   
   const confirmBooking = () => {
     // Hier die Logik zur Verarbeitung der Buchung einfügen
-    const newBooking: SpaBooking = {
-      id: Math.random().toString(36).substr(2, 9), // Einfache ID-Generierung für das Beispiel
+    const newBooking = {
+    // Einfache ID-Generierung für das Beispiel
       title,
       price,
       duration,
@@ -83,10 +84,15 @@ const SpaServiceDetail: React.FC = () => {
       userId,
       userRoomNumber
     };
-  
-    dispatch(bookSpa(newBooking));
+    try {
+      console.log(newBooking)
+    dispatch(addSpaBooking(newBooking));
     Alert.alert("Buchung erfolgreich!", "Deine Buchung wurde bestätigt.");
     navigation.goBack();
+  } catch (error) {
+    Alert.alert("Fehler beim Erstellen der Buchung: " + error);
+    // Hier könntest du eine Fehlermeldung anzeigen
+  }
   };
   
 
@@ -123,7 +129,7 @@ const SpaServiceDetail: React.FC = () => {
     <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSub7i7li7OKf9SdCEc-YKUVrvTH_FGYQgjNRJxj7riwokoXB30b-9yMkv0_XYqwGCAAwc&usqp=CAU' }} style={styles.image} />
     <View style={styles.detailsContainer}>
       <View style={styles.titlePriceContainer}>
-        <Icon name="times" size={28} color="#5A67D8" style={styles.icon} />
+        <Icon name="calendar" size={28} color="#5A67D8" style={styles.icon} />
         <View style={styles.titlePriceTextContainer}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.price}>{price} - {duration}</Text>
