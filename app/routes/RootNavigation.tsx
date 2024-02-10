@@ -3,13 +3,15 @@ import { TouchableOpacity, View, StyleSheet, SafeAreaView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaProvider, useSafeAreaInsets  } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from "react-redux";
 import { useTheme } from "../theme/useTheme";
 import { getSecureValue } from "../utils/keyChain";
 import { updateToken } from "../store/userSlice";
 import { RootState } from "../store/store";
+import { KeyboardAvoidingView, Platform } from 'react-native';
+
 
 // Importieren Sie Ihre Bildschirmkomponenten
 import LoginScreen from "../screens/pages/LoginScreen";
@@ -40,29 +42,41 @@ import TaskListScreen from "../screens/employee/tasks/TaskListScreen";
 import ShiftDetailScreen from "../screens/employee/schedule/components/ShiftDetailScreen";
 import EmployeeChatScreen from "../screens/employee/chat/EmployeeChatScreen";
 
-const styles = StyleSheet.create({
+const globalStyles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#f7f7f7', // Hintergrundfarbe der gesamten App
+  },
+});
+
+// Styles für die Tab Bar
+const tabBarStyles = StyleSheet.create({
   tabBar: {
-    position: "relative",
-    elevation: 20,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 25,
-    height: 65,
-    shadowColor: "#333",
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
+    position: 'absolute',
+    bottom: 0,  // Setzen Sie bottom auf 0, um sicherzustellen, dass keine Lücke besteht.
+    left: 0,
+    right: 0,
+    elevation: 0,
+    backgroundColor: '#ffffff',
+    borderRadius: 0,  // Entfernen Sie den borderRadius, wenn Sie wollen, dass die TabBar bis zum Bildschirmrand geht.
+    height: 60, // oder jede andere Höhe für Ihre TabBar
+    shadowColor: '#333',
+    shadowOffset: { width: 0, height: -1 }, // Negative Y-Offset, um den Schatten oben zu zeichnen
+    shadowOpacity: 0.25,
+    shadowRadius: 3.5,
   },
   tabButton: {
-    flex: 2,
-    justifyContent: "center",
-    alignItems: "center",
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   icon: {
     width: 30,
     height: 30,
+  },
+  label: {
+    fontSize: 12,
+    marginBottom: 5, // Abstand von Icon zu Label
   },
 });
 
@@ -183,9 +197,17 @@ export default function RootNavigation() {
 
   // EmployeeNavigator
 const EmployeeNavigator = () => {
+  const insets = useSafeAreaInsets();
   return (
+ 
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+       <SafeAreaView style={{ flex: 1 }}>
     <Tab.Navigator
     screenOptions={({ route }) => ({
+      keyboardHidesTabBar: false,
       tabBarIcon: ({ color, size }) => {
         let iconName;
         if (route.name === "Chat") {
@@ -204,7 +226,7 @@ const EmployeeNavigator = () => {
         ); // Verwenden Sie die iconName Variable hier
       },
       tabBarStyle: {
-        ...styles.tabBar,
+        ...tabBarStyles.tabBar,
         // Entfernen Sie bottom: 10 und fügen Sie die SafeArea-Unterstützung hinzu
         height: 65, // Setzen Sie die Höhe der TabBar
       },
@@ -215,7 +237,7 @@ const EmployeeNavigator = () => {
       },
       tabBarButton: (props: any) => (
         <TouchableOpacity
-          style={styles.tabButton}
+          style={tabBarStyles.tabButton}
           onPress={() => {
             if (props.onPress) {
               props.onPress();
@@ -235,6 +257,8 @@ const EmployeeNavigator = () => {
     <Tab.Screen name="Reservation" options={{ headerShown: false }} component={ReservationStack} />
     <Tab.Screen name="Settings" options={{ headerShown: false }} component={SettingsScreen} />
   </Tab.Navigator>
+  </SafeAreaView>
+  </KeyboardAvoidingView>
 
   );
 }
@@ -242,8 +266,15 @@ const EmployeeNavigator = () => {
 // GuestNavigator
 const GuestNavigator = () => {
   return (
+    <NavigationContainer>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
     <Tab.Navigator
+     
               screenOptions={({ route }) => ({
+                tabBarHideOnKeyboard: false,
                 tabBarIcon: ({ color, size }) => {
                   let iconName;
                   if (route.name === "Chat") {
@@ -262,7 +293,7 @@ const GuestNavigator = () => {
                   ); // Verwenden Sie die iconName Variable hier
                 },
                 tabBarStyle: {
-                  ...styles.tabBar,
+                  ...tabBarStyles.tabBar,
                   // Entfernen Sie bottom: 10 und fügen Sie die SafeArea-Unterstützung hinzu
                   height: 65, // Setzen Sie die Höhe der TabBar
                 },
@@ -273,7 +304,7 @@ const GuestNavigator = () => {
                 },
                 tabBarButton: (props: any) => (
                   <TouchableOpacity
-                    style={styles.tabButton}
+                    style={tabBarStyles.tabButton}
                     onPress={() => {
                       if (props.onPress) {
                         props.onPress();
@@ -287,12 +318,15 @@ const GuestNavigator = () => {
                 tabBarShowLabel: false,
                 // Entfernen Sie headerMode, da es nicht zu BottomTabNavigationOptions gehört
               })}
+              
             >
                <Tab.Screen name="Dashboard" options={{ headerShown: false }} component={GuestDashboard} />
               <Tab.Screen name="Chat" options={{ headerShown: false }} component={ChatScreen} />
               <Tab.Screen name="Reservation" options={{ headerShown: false }} component={ReservationStack} />
               <Tab.Screen name="Settings" options={{ headerShown: false }} component={SettingsScreen} />
             </Tab.Navigator>
+            </KeyboardAvoidingView>
+    </NavigationContainer>
           
   );
 }
@@ -319,7 +353,7 @@ const MainTabNavigator = () => {
                   ); // Verwenden Sie die iconName Variable hier
                 },
                 tabBarStyle: {
-                  ...styles.tabBar,
+                  ...tabBarStyles.tabBar,
                   // Entfernen Sie bottom: 10 und fügen Sie die SafeArea-Unterstützung hinzu
                   height: 65, // Setzen Sie die Höhe der TabBar
                 },
@@ -330,7 +364,7 @@ const MainTabNavigator = () => {
                 },
                 tabBarButton: (props: any) => (
                   <TouchableOpacity
-                    style={styles.tabButton}
+                    style={tabBarStyles.tabButton}
                     onPress={() => {
                       if (props.onPress) {
                         props.onPress();
@@ -373,7 +407,7 @@ const MainTabNavigator = () => {
     <SafeAreaProvider>
       <NavigationContainer>
     
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={globalStyles.safeArea}>
   
           {!isLoggedIn ? (
             <Stack.Navigator screenOptions={{ headerShown: false }}>

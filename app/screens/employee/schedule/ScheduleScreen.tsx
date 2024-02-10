@@ -1,6 +1,6 @@
 // ScheduleScreen.tsx
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet,Text, Modal, TouchableOpacity } from "react-native";
+import { View, StyleSheet,ScrollView, Modal, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchShifts } from '../../../store/scheduleSlice';
 import ShiftCreationForm from '../schedule/components/ShiftCreationForm';
@@ -10,6 +10,7 @@ import { Shift, ShiftsForDay, Role, FirestoreTimestamp } from '../types'; // Pfa
 import { Picker } from '@react-native-picker/picker';
 import { AppDispatch } from '../../../store/store';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 const ScheduleScreen: React.FC = () => {
@@ -17,6 +18,7 @@ const ScheduleScreen: React.FC = () => {
   const shiftsFromStore = useSelector((state: RootState) => state.schedule.shifts);
   const [selectedRole, setSelectedRole] = useState<Role>('receptionist');
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     dispatch(fetchShifts());
@@ -57,49 +59,52 @@ const ScheduleScreen: React.FC = () => {
   }, {} as ShiftsForDay);
 
   return (
-    <View style={styles.container}>
-  {/* Role Selection */}
-  <View style={styles.pickerContainer}>
-    <Picker
-      selectedValue={selectedRole}
-      onValueChange={(itemValue) => setSelectedRole(itemValue as Role)}
-      style={styles.picker}
+    <>
+      <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={{ paddingBottom: insets.bottom }} // Fügen Sie genug Padding hinzu, um die TabBar und den Button zu berücksichtigen
+      style={styles.scrollView}
     >
-      <Picker.Item label="Rezeptionist" value="receptionist" />
-      <Picker.Item label="Zimmermädchen" value="maid" />
-      {/* More roles... */}
-    </Picker>
-  </View>
-
-  {/* Calendar Component Container */}
-  
-    <CalendarComponent role={selectedRole} shifts={shiftsForCalendar} />
- 
-
-    {/* Add Button */}
-    <TouchableOpacity style={styles.addButton} onPress={toggleFormModal}>
-        <Icon name="add" size={24} color="#fff" />
-      </TouchableOpacity>
-     
-      {/* Shift Creation Form Modal */}
     
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isFormVisible}
-        onRequestClose={toggleFormModal}
-      >
-      
-        <View style={styles.centeredView}>
-      
-          <ShiftCreationForm onShiftCreated={toggleFormModal} />
-        
+        {/* Role Selection */}
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={selectedRole}
+            onValueChange={(itemValue) => setSelectedRole(itemValue as Role)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Rezeptionist" value="receptionist" />
+            <Picker.Item label="Zimmermädchen" value="maid" />
+            {/* Weitere Rollenoptionen... */}
+          </Picker>
         </View>
-     
-      </Modal>
-    
-</View>
 
+        {/* Calendar Component */}
+        <CalendarComponent role={selectedRole} shifts={shiftsForCalendar} />
+        </ScrollView>
+   
+
+
+    {/* "Hinzufügen"-Button */}
+    <TouchableOpacity
+      style={[styles.addButton, { bottom: insets.bottom + 80 }]}  // Positionieren Sie den Button über der TabBar
+      onPress={toggleFormModal}
+    >
+      <Icon name="add" size={24} color="#fff" />
+    </TouchableOpacity>
+    </View>
+    {/* Shift Creation Form Modal */}
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={isFormVisible}
+      onRequestClose={toggleFormModal}
+    >
+      <View style={styles.centeredView}>
+        <ShiftCreationForm onShiftCreated={toggleFormModal} />
+      </View>
+    </Modal>
+  </>
   );
 };
 export default ScheduleScreen;
@@ -107,7 +112,10 @@ export default ScheduleScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white', // A black background for the entire screen
+    backgroundColor: '#f7f7f7', // Hintergrundfarbe der App
+  },
+  scrollView: {
+    flex: 1,
   },
   pickerContainer: {
     margin: 20,
@@ -143,9 +151,11 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: 'absolute',
-    right: 25,
-    bottom: 25,
-    backgroundColor: '#2ecc71', // Green background for the add button
+    right: 20,
+    padding: 10,
+    zIndex: 10,
+    // bottom: wird dynamisch von insets.bottom + 10 gesetzt
+    backgroundColor: '#2ecc71', // Ihre bevorzugte Button-Farbe
     width: 60,
     height: 60,
     borderRadius: 30,
