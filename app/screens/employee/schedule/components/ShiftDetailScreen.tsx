@@ -75,7 +75,7 @@ const ShiftDetailScreen: React.FC = () => {
   useEffect(() => {
     // Aufgaben filtern
   
-    const filteredTasks = allTasks.filter(task => {
+    const filteredTasks = allTasks.filter((task) => {
       // Umwandlung des dueDate von Task in ein Date-Objekt
       const taskDueDate = new Date(task.dueDate);
    

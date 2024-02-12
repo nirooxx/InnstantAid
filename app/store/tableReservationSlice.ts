@@ -3,7 +3,7 @@ import { db } from '../../firebase'; // Stelle sicher, dass der Pfad korrekt ist
 import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc,query, where } from 'firebase/firestore';
 import { RootState } from '../store/store';
 
-interface TableReservation {
+export interface TableReservation {
   id?: string;
   date: string;
   time: string;
@@ -75,9 +75,6 @@ export const addReservation = createAsyncThunk(
     }
   }
 );
-
-
-
   
 
 // Update a reservation
@@ -130,6 +127,12 @@ const tableReservationSlice = createSlice({
       .addCase(deleteReservation.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message || null;
+      })
+      .addCase(updateReservation.fulfilled, (state, action: PayloadAction<TableReservation>) => {
+        const index = state.reservations.findIndex(reservation => reservation.id === action.payload.id);
+        if (index !== -1) {
+          state.reservations[index] = action.payload;
+        }
       });
       // Implementiere die Logik für updateReservation und deleteReservation
       // ...

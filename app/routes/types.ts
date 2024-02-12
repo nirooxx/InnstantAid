@@ -5,6 +5,8 @@ export type RootStackParamList = {
   ScheduleScreen:undefined;
   LandingPage:undefined;
   SpaBookingScreen:undefined;
+  ReservationManagementScreen:undefined;
+  EmployeeSettingsScreen:undefined;
   SpaServiceDetail:{
     title: string;
     image: string;

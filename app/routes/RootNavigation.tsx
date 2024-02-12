@@ -37,6 +37,8 @@ import ConfirmCheckoutScreen from "../screens/guest/reservation/reservationScree
 import OrderedList from "../screens/guest/reservation/reservationScreen/roomServiceOrder/OrderedList";
 
 import LandingPage from "../screens/employee/schedule/LandingPage";
+import ReservationManagementScreen from "../screens/employee/reservations/ReservationManagementScreen";
+import EmployeeSettingsScreen from "../screens/employee/settings/EmployeeSettingsScreen";
 
 import EmployeeDashboardScreen from "../screens/employee/dashboard/EmployeeDashboardScreen"
 import ScheduleScreen from "../screens/employee/schedule/ScheduleScreen"
@@ -190,6 +192,7 @@ export default function RootNavigation() {
         <Stack.Screen name="Angestellten Dashboard" component={EmployeeDashboardScreen}  options={{ headerShown: false }}/>
         <Stack.Screen name="ScheduleScreen" component={ScheduleScreen}  options={{ headerShown: false }}/>
         <Stack.Screen name="TaskListScreen" component={TaskListScreen}  options={{ headerShown: false }}/>
+        <Stack.Screen name="ReservationManagementScreen" component={ReservationManagementScreen}  options={{ headerShown: false }}/>
         <Stack.Screen name="ShiftDetailScreen" component={ShiftDetailScreen} initialParams={{ shiftId: '', role: '' }}  options={{ headerShown: false }}/>
         {/* Weitere Bildschirme */}
       </Stack.Navigator>
@@ -269,7 +272,7 @@ const EmployeeNavigator = () => {
       <Tab.Screen name="Dashboard" options={{ headerShown: false }} component={EmployeeStack} />
     <Tab.Screen name="Chat" options={{ headerShown: false }} component={EmployeeChatScreen} />
     <Tab.Screen name="Reservation" options={{ headerShown: false }} component={EmployeeScheduleStack} />
-    <Tab.Screen name="Settings" options={{ headerShown: false }} component={SettingsScreen} />
+    <Tab.Screen name="Settings" options={{ headerShown: false }} component={EmployeeSettingsScreen} />
   </Tab.Navigator>
   </SafeAreaView>
   </KeyboardAvoidingView>
