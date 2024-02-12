@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList,ScrollView, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useCart } from './CartContext'; // Stelle sicher, dass der Pfad korrekt ist
 import { RootStackParamList } from "../../../../../routes/types"; // Import your type definitions
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type CartNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -14,6 +15,7 @@ type CartNavigationProp = StackNavigationProp<
 const CartScreen: React.FC = () => {
     const { cartItems, removeFromCart, updateCartItem } = useCart();
     const navigation = useNavigation<CartNavigationProp>();
+    const insets = useSafeAreaInsets();
   // Funktion zum Erhöhen der Anzahl eines Artikels im Warenkorb
   const incrementQuantity = (id: string) => {
     updateCartItem(id, 1);
@@ -31,6 +33,10 @@ const CartScreen: React.FC = () => {
 
     return (
         <View style={styles.container}>
+          <ScrollView
+      contentContainerStyle={{ paddingBottom: insets.bottom +70}} // Fügen Sie genug Padding hinzu, um die TabBar und den Button zu berücksichtigen
+      
+    >
         <FlatList
           data={cartItems}
           keyExtractor={item => item.id}
@@ -62,6 +68,7 @@ const CartScreen: React.FC = () => {
             <Text style={styles.checkoutButtonText}>Checkout</Text>
           </TouchableOpacity>
         </View>
+        </ScrollView>
       </View>
     );
 };

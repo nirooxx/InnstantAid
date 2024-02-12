@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Modal, StyleSheet, TouchableOpacity, Text, TextInput, FlatList, Image  } from 'react-native';
+import { View, Modal, StyleSheet, TouchableOpacity, ScrollView, Text, TextInput, FlatList, Image  } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchShifts } from '../../../store/scheduleSlice';
@@ -12,6 +12,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import TaskItem from './components/TaskList';
 import ShiftItem from '../schedule/components/ShiftItem';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 const TaskListScreen: React.FC = () => {
@@ -28,6 +29,7 @@ const [status, setStatus] = useState<'new' | 'in progress' | 'completed'>('new')
 const [assignedTo, setAssignedTo] = useState<string>('');
 const [roleRequired, setRoleRequired] = useState<string>('receptionist');
 const [notes, setNotes] = useState<string[]>([]);
+const insets = useSafeAreaInsets();
 
   const handleDateChange = (event: any, selectedDate: Date | undefined) => {
     const currentDate = selectedDate || dueDate;
@@ -65,11 +67,14 @@ const [notes, setNotes] = useState<string[]>([]);
     closeModal();
   };
 
-  
-  console.log(shiftsFromStore)
+  const fabStyle = {
+    ...styles.fab,
+    bottom: insets.bottom + 70, // Bottom inset plus zusätzlicher Abstand
+    right: 20, // Rechter Rand des Bildschirms
+  };
   return (
     <View style={{ flex: 1 }}>
-      
+     
       <View style={styles.container}>
       {loading && <Text>Loading...</Text>}
       {error && <Text>Error: {error}</Text>}
@@ -86,13 +91,7 @@ const [notes, setNotes] = useState<string[]>([]);
         renderItem={({ item }) => <TaskItem task={item} />}
       />
     </View>
-         {/* Floating Action Button */}
-         <TouchableOpacity
-        style={styles.fab}
-        onPress={() => setModalVisible(true)}
-      >
-        <Icon name="add" size={30} color="#fff" />
-      </TouchableOpacity>
+        
 
       {/* Modal für das Erstellen einer neuen Aufgabe */}
       
@@ -183,7 +182,14 @@ const [notes, setNotes] = useState<string[]>([]);
         </View>
        
       </Modal>
-     
+       {/* Floating Action Button */}
+       <TouchableOpacity
+        style={fabStyle} 
+        onPress={() => setModalVisible(true)}
+      >
+        <Icon name="add" size={30} color="#fff" />
+      </TouchableOpacity>
+  
     </View>
   );
 };
@@ -199,6 +205,24 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     padding: 16,
 
+  },
+  addButton: {
+    position: 'absolute',
+    right: 20,
+    padding: 10,
+    zIndex: 10,
+    // bottom: wird dynamisch von insets.bottom + 10 gesetzt
+    backgroundColor: '#2ecc71', // Ihre bevorzugte Button-Farbe
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
   modalContent: {
     backgroundColor: '#2C2C2E',
@@ -263,12 +287,10 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: 'absolute',
-    width: 56,
-    height: 56,
     alignItems: 'center',
     justifyContent: 'center',
-    right: 20,
-    bottom: 20,
+    width: 56,
+    height: 56,
     backgroundColor: '#03A9F4',
     borderRadius: 28,
     elevation: 8,

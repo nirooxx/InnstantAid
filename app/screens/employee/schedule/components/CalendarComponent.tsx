@@ -4,6 +4,13 @@ import { Agenda,  } from 'react-native-calendars';
 import { Shift, ShiftsForDay, Role, AgendaEntry,  } from '../../types'; // Pfad anpassen
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../../../../routes/types"; // Import your type definitions
+import { StackNavigationProp } from "@react-navigation/stack";
+
+type CalendarNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'ConfirmationScreen'
+>;
 
 interface CalendarComponentProps {
   role: Role;
@@ -63,7 +70,7 @@ const transformShiftsToAgendaFormat = (role: Role, shifts: ShiftsForDay): { [dat
 
   
 const CalendarComponent: React.FC<CalendarComponentProps> = ({ role, shifts }) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<CalendarNavigationProp>();
 
   const handleShiftSelected = (item: any) => {
     console.log(item)
@@ -119,58 +126,63 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ role, shifts }) =
           marginVertical: 5,
           // Weitere Styles...
         },
+        item: {
+          backgroundColor: '#ffffff',
+          borderRadius: 15,
+          padding: 20,
+          marginRight: 10,
+          marginTop: 17,
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 3,
+        },
+        firstItem: {
+          backgroundColor: '#ffffff',
+          borderRadius: 15,
+          padding: 20,
+          marginRight: 10,
+          marginTop: 17,
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 3,
+        },
         itemText: {
           fontSize: 16,
-          // Weitere Styles...
+          color: '#333333',
+          marginBottom: 4,
+        },
+        priorityLabel: {
+          backgroundColor: '#4B76E4',
+          borderRadius: 5,
+          paddingVertical: 5,
+          paddingHorizontal: 10,
+          color: 'white',
+          fontWeight: '600',
+          alignSelf: 'flex-start',
+          marginBottom: 4,
+        },
+        taskTitle: {
+          color: '#333333',
+          fontSize: 18,
+          fontWeight: '700',
+          marginBottom: 4,
         },
         emptyDate: {
-            height: 15,
-            flex:1,
-            paddingTop: 30,
-          },
-          firstItem: {
-            backgroundColor: '#1A1A1A',
-            borderRadius: 15,
-            padding: 15,
-            marginRight: 10,
-            marginTop: 17,
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          },
-          item: {
-            backgroundColor: '#1A1A1A',
-            borderRadius: 15,
-            padding: 15,
-            marginRight: 10,
-            marginTop: 10,
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          },
-          priorityLabel: {
-            backgroundColor: '#00BFFF', // Passen Sie diese Farbe an die im Screenshot gezeigte Farbe an
-            borderRadius: 10,
-            paddingVertical: 3,
-            paddingHorizontal: 10,
-            color: 'white',
-            fontWeight: 'bold',
-            alignSelf: 'flex-start',
-            shadowColor: '#000', // Schattenfarbe
-            shadowOffset: { width: 0, height: 2 }, // Schattenposition
-            shadowOpacity: 0.25, // Schatten Transparenz
-            shadowRadius: 3.84, // Schatten Radius
-            elevation: 5, // Für Android-Schatten
-          },
-          taskTitle: {
-            color: 'white',
-            fontSize: 16,
-            fontWeight: 'bold',
-            flexShrink: 1,
-            // ...other text styles
-          },
+          height: 15,
+          flex: 1,
+          paddingTop: 30,
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+       
       });
       
     

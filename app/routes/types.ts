@@ -3,6 +3,7 @@ export type RootStackParamList = {
   Reservation: undefined;
   Reservations: undefined;
   ScheduleScreen:undefined;
+  LandingPage:undefined;
   SpaBookingScreen:undefined;
   SpaServiceDetail:{
     title: string;
@@ -44,7 +45,10 @@ export type RootStackParamList = {
   };
   RoomServiceOrderScreen:undefined;
   TaskListScreen:undefined;
-  ShiftDetailScreen:undefined;
+  ShiftDetailScreen:{
+    shiftId: string;
+    role: string;
+  };
   Chat: undefined;
   Dashboard: undefined;
   Settings: undefined;

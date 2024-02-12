@@ -205,93 +205,91 @@ const ShiftCreationForm: React.FC<ShiftCreationFormProps> = ({ onShiftCreated })
 export default ShiftCreationForm;
 
 const styles = StyleSheet.create({
- 
   formContainer: {
-    flex: 1,
- 
     backgroundColor: '#2C2C2E',
     borderRadius: 20,
     padding: 20,
-    maxHeight: '80%', // Adjust this to control how much of the screen the form should take up
+    maxHeight: '80%',
+    marginHorizontal: 20,
+    marginTop: 50,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   dateButton: {
-    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#333333',
+    backgroundColor: '#414141',
+    paddingVertical: 12,
     paddingHorizontal: 20,
-    paddingVertical: 10,
     borderRadius: 10,
     marginBottom: 15,
-    width: '80%', // Stellen Sie sicher, dass die Breite zu Ihrem Design passt
+    width: '100%',
   },
   datePickerGroup: {
-    // Stellen Sie sicher, dass diese Gruppe alle DatePicker-Felder umfasst
-    width: '100%',
-    alignItems: 'center', // Zentriert die Kinder horizontal
+    alignItems: 'center',
   },
   buttonGroup: {
-
     flexDirection: 'row',
-    justifyContent: 'flex-start', // Erzeugt Platz zwischen den Buttons
-    width: '100%', // Nimmt die volle Breite des Elternelements ein
-    paddingVertical: 10,
+    justifyContent: 'space-between',
   },
   cancelButton: {
-    backgroundColor: '#999', // Graue Farbe für den Abbrechen-Button
+    backgroundColor: '#999',
     borderRadius: 20,
     padding: 15,
-    flexGrow: 1,
-    marginRight: 10, // Fügt einen rechten Rand hinzu, um Platz zum Submit-Button zu schaffen
+    flex: 1,
+    marginRight: 10,
   },
   submitButton: {
-    backgroundColor: '#0A84FF', // Blaue Farbe für den Submit-Button
+    backgroundColor: '#0A84FF',
     borderRadius: 20,
     padding: 15,
-    flexGrow: 1,
+    flex: 1,
   },
   buttonText: {
     textAlign: 'center',
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
   dateText: {
     color: '#FFFFFF',
-    marginRight: 10,
+    fontSize: 16,
+    fontWeight: '500',
   },
   contentContainer: {
+    flexGrow: 1,
     justifyContent: 'center',
-    alignItems: 'stretch',
   },
   label: {
-    alignSelf: 'flex-start',
     color: '#FFFFFF',
     fontSize: 16,
-    marginBottom: 5,
+    fontWeight: '500',
+    marginBottom: 8,
   },
   input: {
-    width: '100%',
-    backgroundColor: '#1C1C1E',
-    color: '#FFFFFF',
+    backgroundColor: '#333333',
     borderRadius: 10,
     fontSize: 16,
     padding: 15,
+    color: '#FFFFFF',
     marginBottom: 15,
   },
   pickerContainer: {
-    width: '100%',
+    backgroundColor: '#333333',
     borderRadius: 10,
     marginBottom: 15,
   },
   picker: {
-    width: '100%',
+    backgroundColor: '#333333',
     color: '#FFFFFF',
   },
   dateTimePicker: {
-    width: '100%',
-    backgroundColor: '#1C1C1E',
+    backgroundColor: '#333333',
     borderRadius: 10,
     padding: 15,
     marginBottom: 15,

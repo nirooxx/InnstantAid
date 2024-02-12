@@ -51,56 +51,51 @@ const isFirestoreTimestamp = (object: any): object is FirestoreTimestamp => {
 export default ShiftItem
 
 const styles = StyleSheet.create({
-    shiftItem: {
-        backgroundColor: '#5D5DFF', // Dunkelblaue Hintergrundfarbe
-        borderRadius: 20, // Abgerundete Ecken
-        padding: 20, // Innenabstand
-        marginHorizontal: 10, // Horizontaler Abstand zu benachbarten Elementen
-        marginVertical: 10, // Vertikaler Abstand zu benachbarten Elementen
-        minWidth: 250, // Minimale Breite eines Shift-Elements
-        maxHeight: 150, // Maximale Höhe eines Shift-Elements
-        alignItems: 'center', // Zentriert die Inhalte vertikal
-        justifyContent: 'center', // Zentriert die Inhalte horizontal
-        shadowColor: '#000', // Schattenfarbe
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3, // Transparenz des Schattens
-        shadowRadius: 4.65, // Radius des Schattens
-        elevation: 8, // Elevation für Android
-        flexDirection: 'row', // Horizontale Ausrichtung der Inhalte
+  shiftItem: {
+    backgroundColor: '#5D5DFF', // Ein hellerer Farbton könnte ansprechender sein
+    borderRadius: 12, // Subtile Rundungen wirken moderner
+    padding: 16, // Passende Polsterung für Inhalte
+    marginHorizontal: 12, // Gleichmäßiger horizontaler Abstand
+    marginVertical: 8, // Gleichmäßiger vertikaler Abstand
+    minWidth: 250, // Minimale Breite eines Shift-Elements
+    flexDirection: 'row', // Horizontale Ausrichtung der Inhalte
+    alignItems: 'center', // Zentriert die Inhalte vertikal
+    justifyContent: 'space-between', // Platz zwischen den Elementen
+    shadowColor: '#000', // Schattenfarbe
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15, // Weicher Schatten
+    shadowRadius: 8, // Größerer Schattenradius
+    elevation: 6, // Elevation für Android
+  },
+  shiftDetails: {
+    flex: 1,
+  },
+  shiftTitle: {
+    color: '#FFFFFF', // Weiße Schriftfarbe
+    fontSize: 18, // Angepasste Schriftgröße
+    fontWeight: '600', // Halbfett statt fett für eine feinere Darstellung
+  },
+  shiftDate: {
+    color: '#E6E6FF', // Ein helleres Weiß für das Datum könnte besser lesbar sein
+    fontSize: 14, // Angepasste Schriftgröße
+    marginTop: 4, // Reduzierter Abstand zum Titel
+  },
+  shiftEmployee: {
+    color: '#E6E6FF', // Ein helleres Weiß für den Mitarbeiter
+    fontSize: 14, // Angepasste Schriftgröße
+    fontStyle: 'normal', // Weg von Kursivschrift, um eine klarere Darstellung zu erreichen
+    marginTop: 4, // Reduzierter Abstand zum Datum
+  },
+  iconRight: {
+    color: '#FFFFFF', // Weiße Farbe für das Icon
+    marginRight: 12, // Angepasster rechter Rand
+  },
+    
+  icon: {
+      position: 'absolute', // Absolute Positionierung
+        // Abstand vom linken Rand
     },
-    shiftDetails: {
-      flex: 1,
-      marginLeft: 10,
-      justifyContent: 'space-between', // Verteilt den Raum gleichmäßig vertikal
-      alignItems: 'flex-start', // Ausrichtung der Elemente am Anfang (links)
-      alignSelf: 'stretch', // Streckt die Details über die volle Breite der Karte
-    },
-    shiftTitle: {
-      color: '#FFFFFF', // Weiße Schriftfarbe
-      fontSize: 22, // Schriftgröße für den Titel
-      fontWeight: 'bold', // Fette Schrift
-    },
-    shiftDate: {
-      color: '#FFFFFF', // Weiße Schriftfarbe
-      fontSize: 16, // Schriftgröße für das Datum
-      opacity: 0.7, // Leicht transparent für einen dezenten Look
-      marginTop: 5, // Etwas Abstand zum Titel
-    },
-    shiftEmployee: {
-      color: '#FFFFFF', // Weiße Schriftfarbe
-      fontSize: 16, // Schriftgröße für den Mitarbeiter
-      fontStyle: 'italic', // Kursive Schrift für den Mitarbeiternamen
-      marginTop: 5, // Etwas Abstand zum Datum
-    },
-    icon: {
-        position: 'absolute', // Absolute Positionierung
-         // Abstand vom linken Rand
-      },
-      iconRight: {
-        position: 'absolute', // Absolute Positionierung
-        right: 16, // Abstand vom rechten Rand
-      },
-    // Fügen Sie weitere Stile hinzu, wie sie benötigt werden
+
   });
   
   

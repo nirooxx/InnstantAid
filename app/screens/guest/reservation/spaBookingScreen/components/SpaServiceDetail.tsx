@@ -9,6 +9,7 @@ import { addSpaBooking } from '../../../../../store/SpaBookingSlice';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { AppDispatch } from '../../../../../store/store';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type SpaBookingNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -42,7 +43,7 @@ const SpaServiceDetail: React.FC = () => {
   const [selectedTime, setSelectedTime] = useState(new Date());
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
-
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
 
 
@@ -125,7 +126,9 @@ const SpaServiceDetail: React.FC = () => {
 // Wenn du `title` verwendest, stelle sicher, dass es ein gültiger Schlüssel ist oder verwende einen Fallback
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
+    <ScrollView  contentContainerStyle={{ paddingBottom: insets.bottom + 70}} // Fügen Sie genug Padding hinzu, um die TabBar und den Button zu berücksichtigen
+      >
     <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSub7i7li7OKf9SdCEc-YKUVrvTH_FGYQgjNRJxj7riwokoXB30b-9yMkv0_XYqwGCAAwc&usqp=CAU' }} style={styles.image} />
     <View style={styles.detailsContainer}>
       <View style={styles.titlePriceContainer}>
@@ -186,6 +189,7 @@ const SpaServiceDetail: React.FC = () => {
         </TouchableOpacity>
       </View>
     </ScrollView>
+    </View>
   );
 };
 
@@ -198,6 +202,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  
   titlePriceContainer: {
     flexDirection: 'row',
     alignItems: 'center',

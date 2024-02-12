@@ -7,7 +7,7 @@ import { useCart } from './CartContext';
 import { RootStackParamList } from "../../../../../routes/types"; // Import your type definitions
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from '@react-navigation/native';
-
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type ConfirmNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -24,7 +24,7 @@ const CheckoutScreen: React.FC = () => {
   const { cartItems, calculateTotal  } = useCart();
   const navigation = useNavigation<ConfirmNavigationProp>();
   const userId = useSelector((state: RootState) => state.user.id);
-
+  const insets = useSafeAreaInsets();
 
   const handleCheckout = () => {
     if (cartItems.length > 0 && roomNumber) {
@@ -61,7 +61,8 @@ const CheckoutScreen: React.FC = () => {
   const total = subtotal + shippingFee;
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom +100}}
+    style={styles.container}>
     <View style={styles.inputGroup}>
       <Text style={styles.label}>Vorname</Text>
       <TextInput

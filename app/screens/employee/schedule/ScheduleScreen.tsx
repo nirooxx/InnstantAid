@@ -109,22 +109,60 @@ const ScheduleScreen: React.FC = () => {
 };
 export default ScheduleScreen;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f7f7f7', // Hintergrundfarbe der App
+const styles = StyleSheet.create({container: {
+  flex: 1,
+  backgroundColor: '#f7f7f7',
+},
+scrollView: {
+  padding: 20,
+},
+pickerContainer: {
+  backgroundColor: '#fff',
+  borderRadius: 10,
+  marginBottom: 20,
+  borderWidth: 1,
+  borderColor: '#ddd',
+  overflow: 'hidden',
+},
+picker: {
+  color: '#444',
+},
+addButton: {
+  position: 'absolute',
+  right: 20,
+  backgroundColor: '#5e60ce',
+  width: 60,
+  height: 60,
+  borderRadius: 30,
+  justifyContent: 'center',
+  alignItems: 'center',
+  shadowColor: '#5e60ce',
+  shadowOffset: { width: 0, height: 4 },
+  shadowOpacity: 0.3,
+  shadowRadius: 4.65,
+  elevation: 8,
+},
+centeredView: {
+  justifyContent: 'flex-end',
+  flex: 1,
+},
+modalView: {
+  backgroundColor: 'white',
+  borderTopLeftRadius: 20,
+  borderTopRightRadius: 20,
+  paddingVertical: 35,
+  paddingHorizontal: 20,
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 0,
+    height: 2
   },
-  scrollView: {
-    flex: 1,
-  },
-  pickerContainer: {
-    margin: 20,
-    backgroundColor: 'grey', // Dark grey background for the picker
-    borderRadius: 10,
-  },
-  picker: {
-    color: 'white', // White color for the picker text
-  },
+  shadowOpacity: 0.25,
+  shadowRadius: 4,
+  elevation: 5,
+},
+
+ 
   header: {
     paddingTop: 50, // This accounts for the status bar height on some devices
     paddingBottom: 20,
@@ -149,24 +187,7 @@ const styles = StyleSheet.create({
     flex: 1, // Take up all available space
     marginTop: 20, // Space from the header or date container
   },
-  addButton: {
-    position: 'absolute',
-    right: 20,
-    padding: 10,
-    zIndex: 10,
-    // bottom: wird dynamisch von insets.bottom + 10 gesetzt
-    backgroundColor: '#2ecc71', // Ihre bevorzugte Button-Farbe
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
-  },
+ 
   addIcon: {
     fontSize: 30,
     color: 'white',
@@ -179,29 +200,7 @@ const styles = StyleSheet.create({
   pickerItem: {
     color: 'white', // White color for the picker items
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dim the background
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    width: '90%',
-    maxHeight: '80%',
-  },
+ 
   closeButton: {
     position: 'absolute',
     right: 25,
