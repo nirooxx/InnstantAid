@@ -24,13 +24,14 @@ interface SpaBooking {
   price: string;
   duration: string;
   date: string;
+  time:string;
   name: string;
   email: string;
   userId: string;
   userRoomNumber:string;
 }
 
-
+//Zeit wird nicht richtig gepsoeichert
 const SpaServiceDetail: React.FC = () => {
   const navigation = useNavigation<SpaBookingNavigationProp>();
   const route = useRoute<SpaBookingScreenRouteProp>();
@@ -80,6 +81,7 @@ const SpaServiceDetail: React.FC = () => {
       price,
       duration,
       date: selectedDate.toISOString(),
+      time: selectedTime.toISOString(),
       name,
       email,
       userId,
@@ -106,6 +108,7 @@ const SpaServiceDetail: React.FC = () => {
   };
 
   const handleConfirmDate = (date: Date) => {
+    console.log(date)
     setSelectedDate(date);
     hideDatePicker();
   };
@@ -119,6 +122,7 @@ const SpaServiceDetail: React.FC = () => {
   };
 
   const handleConfirmTime = (time: Date) => {
+
     setSelectedTime(time);
     hideTimePicker();
   };

@@ -1,14 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { db } from '../../firebase'; // Pfad anpassen
 import { RootState } from './store';
-import { collection, addDoc, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, doc, getDocs, query, where, updateDoc } from 'firebase/firestore';
 
-interface SpaBooking {
+export interface SpaBooking {
   id?: string; // Optional, da beim Erstellen eines neuen Dokuments noch keine ID vorhanden ist
   userId: string;
   title: string;
   price: string;
   duration: string;
+  time:string;
   date: string;
   name: string;
   email: string;
@@ -26,6 +27,21 @@ const initialState: SpaBookingState = {
   status: 'idle',
   error: null,
 };
+
+export const updateSpaBooking = createAsyncThunk(
+  'spaBooking/updateSpaBooking',
+  async (updatedBooking: SpaBooking, { rejectWithValue }) => {
+    try {
+      const { id, ...updateData } = updatedBooking;
+      if (!id) throw new Error('Booking ID missing');
+      const docRef = doc(db, 'spaBookings', id);
+      await updateDoc(docRef, updateData);
+      return updatedBooking;
+    } catch (error) {
+      return rejectWithValue('Failed to update booking: ' + error);
+    }
+  }
+);
 
 export const addSpaBooking = createAsyncThunk(
   'spaBooking/addSpaBooking',
@@ -124,6 +140,20 @@ const spaBookingSlice = createSlice({
       state.bookings = state.bookings.filter(booking => booking.id !== action.payload);
     })
     .addCase(cancelSpaBooking.rejected, (state, action) => {
+      state.status = 'failed';
+      state.error = action.error.message || null;
+    })
+    .addCase(updateSpaBooking.pending, (state) => {
+      state.status = 'loading';
+    })
+    .addCase(updateSpaBooking.fulfilled, (state, action: PayloadAction<SpaBooking>) => {
+      const index = state.bookings.findIndex(booking => booking.id === action.payload.id);
+      if (index !== -1) {
+        state.bookings[index] = action.payload;
+      }
+      state.status = 'succeeded';
+    })
+    .addCase(updateSpaBooking.rejected, (state, action) => {
       state.status = 'failed';
       state.error = action.error.message || null;
     });

@@ -39,6 +39,7 @@ import OrderedList from "../screens/guest/reservation/reservationScreen/roomServ
 import LandingPage from "../screens/employee/schedule/LandingPage";
 import ReservationManagementScreen from "../screens/employee/reservations/ReservationManagementScreen";
 import EmployeeSettingsScreen from "../screens/employee/settings/EmployeeSettingsScreen";
+import SpaBookingManagementScreen from "../screens/employee/spabookings/SpaBookingManagementScreen";
 
 import EmployeeDashboardScreen from "../screens/employee/dashboard/EmployeeDashboardScreen"
 import ScheduleScreen from "../screens/employee/schedule/ScheduleScreen"
@@ -193,6 +194,7 @@ export default function RootNavigation() {
         <Stack.Screen name="ScheduleScreen" component={ScheduleScreen}  options={{ headerShown: false }}/>
         <Stack.Screen name="TaskListScreen" component={TaskListScreen}  options={{ headerShown: false }}/>
         <Stack.Screen name="ReservationManagementScreen" component={ReservationManagementScreen}  options={{ headerShown: false }}/>
+        <Stack.Screen name="SpaBookingManagementScreen" component={SpaBookingManagementScreen}  options={{ headerShown: false }}/>
         <Stack.Screen name="ShiftDetailScreen" component={ShiftDetailScreen} initialParams={{ shiftId: '', role: '' }}  options={{ headerShown: false }}/>
         {/* Weitere Bildschirme */}
       </Stack.Navigator>
@@ -283,7 +285,7 @@ const EmployeeNavigator = () => {
 // GuestNavigator
 const GuestNavigator = () => {
   return (
-    <NavigationContainer>
+ 
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
@@ -343,7 +345,7 @@ const GuestNavigator = () => {
               <Tab.Screen name="Settings" options={{ headerShown: false }} component={SettingsScreen} />
             </Tab.Navigator>
             </KeyboardAvoidingView>
-    </NavigationContainer>
+
           
   );
 }

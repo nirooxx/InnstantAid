@@ -58,7 +58,7 @@ const EmployeeSettingsScreen = () => {
 
   const handleSpaBookings = () => {
     // Navigiere zur TableReservationsList Komponente
-    navigation.navigate("SpaBookingsList");
+    navigation.navigate("SpaBookingManagementScreen");
   };
 
   return (
