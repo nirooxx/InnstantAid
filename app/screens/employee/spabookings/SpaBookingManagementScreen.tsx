@@ -51,27 +51,36 @@ const SpaBookingManagementScreen: React.FC = () => {
     setIsEditModalVisible(false);
   };
 
-  const renderBookingItem = ({ item }: { item: SpaBooking }) => (
-    <TouchableOpacity style={styles.bookingItem} onPress={() => handleEditBooking(item)}>
-      <View>
-        <Text style={styles.bookingDetailTitle}>{item.title}</Text>
-        <Text>Date: {moment(item.date).locale('de').format('LL')}</Text>
-        {/**Zei wird nicht richtig geliefert */}
+  const renderBookingItem = ({ item }:any) => (
+    <View style={styles.bookingItem}>
+    <View style={styles.bookingContent}>
+      <TouchableOpacity 
+        style={styles.editIcon} 
+        onPress={() => handleEditBooking(item)}
+      >
+        <Icon name="pencil-outline" size={24} color="#5D5DFF" />
+      </TouchableOpacity>
+  
+        <Text style={styles.detailText}>Titel: {item.title}</Text>
+        <Text style={styles.detailText}>Datum: {moment(item.date).format('LL')}</Text>
+        <Text style={styles.detailText}>Uhrzeit: {moment(item.time, 'HH:mm').format('HH:mm')} Uhr</Text>
         <Text>Time: {moment(item.time, 'HH:mm').format('HH:mm')} Uhr</Text>
-        <Text>Duration: {item.duration} mins</Text>
-        <Text>Price: ${item.price}</Text>
-        <Text>Name: {item.name}</Text>
-        <Text>Email: {item.email}</Text>
-        <Text>Room: {item.userRoomNumber}</Text>
+  <Text>Duration: {item.duration} mins</Text>
+  <Text>Price: ${item.price}</Text>
+  <Text>Name: {item.name}</Text>
+  <Text>Email: {item.email}</Text>
+  <Text>Room: {item.userRoomNumber}</Text>
       </View>
-      <View style={styles.icons}>
-        <Icon name="pencil-outline" size={24} color="#5D5DFF" onPress={() => handleEditBooking(item)} />
-      </View>
-      <View style={styles.icons}>
-        <Icon name="delete-outline" size={24} color="#FF5252" onPress={() => handleCancelBooking(item.id!)} />
-      </View>
+  
+      <TouchableOpacity 
+      style={styles.deleteButton}
+      onPress={() => handleCancelBooking(item.id)}
+    >
+      <Text style={styles.deleteButtonText}>Löschen</Text>
     </TouchableOpacity>
+  </View>
   );
+  
 
   return (
     <ScrollView style={styles.container}>
@@ -97,86 +106,101 @@ const SpaBookingManagementScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-        backgroundColor: '#f4f4f8', // Leichter Hintergrund für den gesamten Screen
-      },
-      bookingItem: {
-        backgroundColor: '#ffffff',
-        padding: 16,
-        borderRadius: 12,
-        marginVertical: 8,
-        flexDirection: 'row',
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-        elevation: 4,
-      },
-      bookingDetail: {
+  container: {
+    flex: 1,
+    backgroundColor: '#F0F0F7',
+    padding: 16,
+  },
+  bookingItem: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    marginVertical: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+    marginBottom: 16, // Abstand zum nächsten Element
+  },
+  bookingContent: {
+    padding: 20,
+    position: 'relative', // Für die absolute Positionierung des Edit-Icons
+  },
+  editIcon: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
+  deleteButton: {
+    backgroundColor: '#FF5252',
+    padding: 15,
+    alignItems: 'center',
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+  },
+  deleteButtonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  detailText: {
+    fontSize: 16,
+    color: '#666666',
+    marginBottom: 4,
+  },
+  deleteButtonContainer: {
+    backgroundColor: '#FF5252',
+    padding: 15,
+    alignItems: 'center',
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    color: '#333333',
+  },
+  bookingDetailTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333333',
+  },
+  icons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconButton: {
+    marginLeft: 12,
+  },
+  editButton: {
+    marginLeft: 12,
+    backgroundColor: '#5D5DFF',
+    padding: 6,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    flex: 1,
+    borderRadius: 20,
+    padding: 20,
+    backgroundColor: '#ffffff',
+    marginHorizontal: 10,
+    marginTop: 50,
+    marginBottom: 50,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+    bookingDetail: {
         flex: 1,
         marginLeft: 12,
-      },
-      bookingDetailTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#333333',
-        marginBottom: 4,
-      },
-      detailText: {
-        fontSize: 14,
-        color: '#666666',
-        marginTop: 2,
-      },
-      icons: {
-        flexDirection: 'row',
-        alignItems: 'center',
-      },
-      iconButton: {
-        marginLeft: 12,
-      },
-      sectionTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginTop: 24,
-        marginBottom: 16,
-        color: '#333333',
       },
       // Button-Styling, falls benötigt
       buttonText: {
         color: '#5D5DFF',
         fontWeight: 'bold',
-      },
-      deleteButton: {
-        backgroundColor: '#FF5252', // Rotes Design für den Löschen-Button
-        borderRadius: 8,
-        padding: 6,
-        marginLeft: 10,
-      },
-      editButton: {
-        backgroundColor: '#5D5DFF', // Blaues Design für den Bearbeiten-Button
-        borderRadius: 8,
-        padding: 6,
-      },
-      // Modal-Design-Anpassungen
-      modalContent: {
-        flex: 1,
-        borderRadius: 20,
-        padding: 20,
-        backgroundColor: '#ffffff',
-        marginHorizontal: 10,
-        marginTop: 50, // Abstand von oben, um das Modal zentrierter erscheinen zu lassen
-        marginBottom: 50, // Abstand von unten
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
       },
   bookingTitle: {
     fontWeight: 'bold',

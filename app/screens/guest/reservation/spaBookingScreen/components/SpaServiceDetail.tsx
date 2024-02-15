@@ -47,14 +47,24 @@ const SpaServiceDetail: React.FC = () => {
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
 
+  const formatDate = (date:Date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    // Monate in JavaScript beginnen bei 0, deshalb +1
+    const month = `${d.getMonth() + 1}`.padStart(2, '0');
+    const day = `${d.getDate()}`.padStart(2, '0');
+    return [year, month, day].join('-');
+  };
 
   const handleBooking = () => {
+    const formattedTime = `${selectedTime.getHours().toString().padStart(2, '0')}:${selectedTime.getMinutes().toString().padStart(2, '0')}`;
+   
     // Formatierung des Datums und der Uhrzeit für die Anzeige
-    const bookingDate = `${selectedDate.toISOString().split('T')[0]} ${selectedTime.getHours()}:${selectedTime.getMinutes()}`;
-  
+    const bookingDate = formatDate(selectedDate);
+    console.log(formatDate(selectedDate))
     // Erstellung des Buchungsdetails String
-    const bookingDetails = `Service: ${title}\nPreis: ${price}\nDauer: ${duration}\nDatum: ${bookingDate}\nName: ${name}\nEmail: ${email}`;
-  
+    const bookingDetails = `Service: ${title}\nPreis: ${price}\nDauer: ${duration}\nDatum: ${bookingDate}\nZeit: ${formattedTime}Uhr\nName: ${name}\nEmail: ${email}`;
+
     // Anzeigen des Bestätigungsdialoges
     Alert.alert(
       "Buchung bestätigen",
@@ -74,28 +84,29 @@ const SpaServiceDetail: React.FC = () => {
   };
   
   const confirmBooking = () => {
-    // Hier die Logik zur Verarbeitung der Buchung einfügen
+    // Verwendung der formatDate Funktion für das Datum
+    const formattedDate = formatDate(selectedDate);
+    const formattedTime = `${selectedTime.getHours().toString().padStart(2, '0')}:${selectedTime.getMinutes().toString().padStart(2, '0')}`;
+  
     const newBooking = {
-    // Einfache ID-Generierung für das Beispiel
       title,
       price,
       duration,
-      date: selectedDate.toISOString(),
-      time: selectedTime.toISOString(),
+      date: formattedDate, // Nutze das korrekt formatierte Datum
+      time: formattedTime,
       name,
       email,
       userId,
       userRoomNumber
     };
+  
     try {
-      console.log(newBooking)
-    dispatch(addSpaBooking(newBooking));
-    Alert.alert("Buchung erfolgreich!", "Deine Buchung wurde bestätigt.");
-    navigation.goBack();
-  } catch (error) {
-    Alert.alert("Fehler beim Erstellen der Buchung: " + error);
-    // Hier könntest du eine Fehlermeldung anzeigen
-  }
+      dispatch(addSpaBooking(newBooking));
+      Alert.alert("Buchung erfolgreich!", "Deine Buchung wurde bestätigt.");
+      navigation.goBack();
+    } catch (error) {
+      Alert.alert("Fehler beim Erstellen der Buchung: " + error);
+    }
   };
   
 
@@ -164,7 +175,7 @@ const SpaServiceDetail: React.FC = () => {
        {/* Date Picker */}
        <TouchableOpacity style={styles.dateTimeButton} onPress={showDatePicker}>
   <Icon name="calendar" size={24} color="#5A67D8" />
-  <Text style={styles.dateTimeText}>{`Datum: ${selectedDate.toISOString().split('T')[0]}`}</Text>
+  <Text style={styles.dateTimeText}>{`Datum: ${formatDate(selectedDate)}`}</Text>
 </TouchableOpacity>
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
