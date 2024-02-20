@@ -28,9 +28,9 @@ const RoomCleanFrequencyScreen: React.FC = () => {
   const handleSchedule = () => {
     // Annahme: Die ID und das Datum werden serverseitig generiert oder sind in diesem Kontext nicht erforderlich
     dispatch(submitRoomCleanRequest({
-      id: '', // Die ID wird im Thunk generiert oder serverseitig hinzugefügt
       userId: user.id,
       roomNumber: user.roomNumber,
+      date: new Date().toLocaleDateString('de-DE'),
       frequency: selectedFrequency,
       notes,
     }))

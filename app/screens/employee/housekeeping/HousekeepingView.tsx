@@ -1,13 +1,34 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Button, Alert, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRoomCleanRequests, fetchMaintenanceRequests } from '../../../store/houseKeepingSlice'; // Passe den Importpfad an deinen Store an
-import { AppDispatch } from '../../../store/store';
-import { RootState } from '../../../store/store';
+import { deleteRoomCleanRequest, deleteMaintenanceRequest, fetchRoomCleanRequests, fetchMaintenanceRequests } from '../../../store/houseKeepingSlice';
+import { AppDispatch, RootState } from '../../../store/store';
+
+// Typdefinitionen (falls noch nicht definiert)
+interface RoomCleanRequest {
+
+  roomNumber: string;
+  userId: string;
+  description?: string;
+  frequency: string; // Anpassung an tatsächliche Typen erforderlich
+  date?: string;
+  time?: string;
+  imageUri?: string;
+  notes: string;
+}
+
+interface MaintenanceRequest {
+
+  roomNumber: string;
+  userId: string;
+  description: string;
+  date?: string;
+  imageUri?: string;
+  notes: string;
+}
 
 const HousekeepingView: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-
   const roomCleanRequests = useSelector((state: RootState) => state.houseKeeping.roomCleanRequests);
   const maintenanceRequests = useSelector((state: RootState) => state.houseKeeping.maintenanceRequests);
 
@@ -16,29 +37,52 @@ const HousekeepingView: React.FC = () => {
     dispatch(fetchMaintenanceRequests());
   }, [dispatch]);
 
+  // Funktion zum Anzeigen des Lösch-Bestätigungsdialogs
+  const confirmDelete = (type: 'clean' | 'maintenance', id: string) => {
+    Alert.alert("Delete Request", "Are you sure you want to delete this request?", [
+      { text: "Cancel", style: "cancel" },
+      { text: "OK", onPress: () => type === 'clean' ? dispatch(deleteRoomCleanRequest(id)) : dispatch(deleteMaintenanceRequest(id)) }
+    ]);
+  };
+
+  // Funktion zum Sortieren der Anfragen nach Datum
+  const sortRequestsByDate = (requests: (any)[]) => {
+    return requests.sort((a, b) => {
+      const dateA = a.date ? new Date(a.date).getTime() : 0;
+      const dateB = b.date ? new Date(b.date).getTime() : 0;
+      return dateA - dateB;
+    });
+  };
+
+  // Vorbereitete sortierte Anfragen
+  const sortedRoomCleanRequests = sortRequestsByDate(roomCleanRequests);
+  const sortedMaintenanceRequests = sortRequestsByDate(maintenanceRequests);
+
   return (
     <ScrollView style={styles.container}>
-    <Text style={styles.header}>Room Clean Requests</Text>
-    {roomCleanRequests.map((request, index) => (
-      <View key={`clean-${index}`} style={styles.requestItem}>
-        <Text style={styles.requestDetail}>Room Number: {request.roomNumber}</Text>
-        <Text style={styles.requestDetail}>Frequency: {request.frequency}</Text>
-        {request.date && <Text style={styles.requestDetail}>Date: {request.date}</Text>}
-        {request.time && <Text style={styles.requestDetail}>Time: {request.time}</Text>}
-        <Text style={styles.requestDetail}>Notes: {request.notes}</Text>
-      </View>
-    ))}
+      <Text style={styles.header}>Room Clean Requests</Text>
+      {sortedRoomCleanRequests.map((request, index) => (
+        <View key={index} style={styles.requestItem}>
+          <Text>Room Number: {request.roomNumber}</Text>
+          <Text>Date: {request.date || 'N/A'}</Text>
+          <Text>Time: {request.time || 'N/A'}</Text>
+          <Text>Notes: {request.notes}</Text>
+          <Button title="Delete" onPress={() => confirmDelete('clean', request.id)} />
+        </View>
+      ))}
 
-    <Text style={styles.header}>Maintenance Requests</Text>
-    {maintenanceRequests.map((request, index) => (
-      <View key={`maintenance-${index}`} style={styles.requestItem}>
-        <Text style={styles.requestDetail}>Room Number: {request.roomNumber}</Text>
-        <Text style={styles.requestDetail}>Description: {request.description}</Text>
-        {request.imageUri && <Image source={{ uri: request.imageUri }} style={styles.image} />}
-        <Text style={styles.requestDetail}>Notes: {request.notes}</Text>
-      </View>
-    ))}
-  </ScrollView>
+      <Text style={styles.header}>Maintenance Requests</Text>
+      {sortedMaintenanceRequests.map((request, index) => (
+        <View key={index} style={styles.requestItem}>
+          <Text>Room Number: {request.roomNumber}</Text>
+          <Text>Description: {request.description}</Text>
+          <Text>Date: {request.date || 'N/A'}</Text>
+          {request.imageUri && <Image source={{ uri: request.imageUri }} style={styles.image} />}
+          <Text>Notes: {request.notes}</Text>
+          <Button title="Delete" onPress={() => confirmDelete('maintenance', request.id)} />
+        </View>
+      ))}
+    </ScrollView>
   );
 };
 

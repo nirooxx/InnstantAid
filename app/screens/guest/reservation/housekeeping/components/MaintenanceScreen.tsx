@@ -47,9 +47,10 @@ const MaintenanceScreen: React.FC = () => {
 
     // Dispatch the submitMaintenanceRequest action with the form data
     dispatch(submitMaintenanceRequest({
-      id: '', // ID will be generated in the async thunk
+    
       userId: user.id,
       roomNumber: user.roomNumber,
+      date: new Date().toLocaleDateString('de-DE'),
       description,
       imageUri: image ? image : '', // Assuming imageUri should be populated with the image state
       notes,

@@ -47,12 +47,11 @@ const RequestRoomCleanScreen: React.FC = () => {
 
    
       dispatch(submitRoomCleanRequest({
-        id: '', // Die ID wird im Thunk generiert
+     
         userId: user.id,
         roomNumber: user.roomNumber,
-        frequency: 'NONE', // Annahme basierend auf dem Kontext; passe dies entsprechend an
-        date: date.toLocaleDateString('de-DE'),
-        time: time.toLocaleTimeString('de-DE'),
+        date: selectedTimeOption === 'NOW' ? new Date().toLocaleDateString('de-DE') : date.toLocaleDateString('de-DE'),
+        time: selectedTimeOption === 'NOW' ? new Date().toLocaleTimeString('de-DE') : time.toLocaleTimeString('de-DE'),
         notes,
       }))
       .unwrap()

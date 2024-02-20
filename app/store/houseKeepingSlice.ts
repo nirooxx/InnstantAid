@@ -10,7 +10,7 @@ interface RoomCleanRequest {
   id: string;
   roomNumber: string;
   userId: string;
-  frequency: CleanFrequencyOption;
+  frequency?: CleanFrequencyOption;
   date?: string; // optional, nur wenn 'ANOTHER_TIME' ausgewählt ist
   time?: string; // optional, nur wenn 'ANOTHER_TIME' ausgewählt ist
   notes: string;
@@ -20,6 +20,7 @@ interface MaintenanceRequest {
     id: string;
     roomNumber: string;
     userId: string;
+    date?: string;
   description: string;
   imageUri?: string; // optional, nur wenn ein Bild hochgeladen wurde
   notes: string;
@@ -42,7 +43,7 @@ const initialState: HouseKeepingState = {
 // Asynchrone Thunks
 export const submitRoomCleanRequest = createAsyncThunk(
   'houseKeeping/submitRoomCleanRequest',
-  async (request: RoomCleanRequest, { rejectWithValue }) => {
+  async (request: Omit<RoomCleanRequest, 'id'>, { rejectWithValue }) => {
     try {
       const docRef = await addDoc(collection(db, 'roomCleanRequests'), request);
       return { ...request, id: docRef.id };
@@ -54,7 +55,7 @@ export const submitRoomCleanRequest = createAsyncThunk(
 
 export const submitMaintenanceRequest = createAsyncThunk(
   'houseKeeping/submitMaintenanceRequest',
-  async (request: MaintenanceRequest, { rejectWithValue }) => {
+  async (request: Omit<MaintenanceRequest, 'id'>, { rejectWithValue }) => {
     try {
       const docRef = await addDoc(collection(db, 'maintenanceRequests'), request);
       return { ...request, id: docRef.id };
