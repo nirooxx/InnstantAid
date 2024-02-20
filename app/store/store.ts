@@ -7,6 +7,7 @@ import taskReducer from "./taskSlice";
 import tableReservationReducer from "./tableReservationSlice"
 import orderingReducer from "./orderingSlice";
 import spaBookingReducer from './SpaBookingSlice';
+import houseKeepingReducer from "./houseKeepingSlice";
 // store.ts oder ein separater Typ-Definitionsfile
 import { ThunkAction } from "redux-thunk";
 import { Action } from "redux";
@@ -27,6 +28,7 @@ export const store = configureStore({
     tableReservation: tableReservationReducer,
     order: orderingReducer,
     spaBooking: spaBookingReducer,
+    houseKeeping: houseKeepingReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ immutableCheck: false, serializableCheck: false }),

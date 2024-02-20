@@ -23,6 +23,10 @@ const ReservationsScreen: React.FC = () => {
     navigation.navigate('MenuScreen');
   };
 
+  const handleHouseKeepingPress = () => {
+    navigation.navigate('HousekeepingScreen');
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={handleTableReservationPress}>
@@ -33,6 +37,9 @@ const ReservationsScreen: React.FC = () => {
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={handleRoomServiceOrderPress}>
         <Text style={styles.buttonText}>Zimmerservice-Bestellung</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handleHouseKeepingPress}>
+        <Text style={styles.buttonText}>Housekeeping</Text>
       </TouchableOpacity>
     </View>
   );

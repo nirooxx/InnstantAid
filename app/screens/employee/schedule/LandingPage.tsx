@@ -20,6 +20,10 @@ const LandingPage: React.FC = () => {
       navigation.navigate('TaskListScreen');
     };
 
+    const handleHouseKeepingPress = () => {
+      navigation.navigate('HousekeepingView');
+    };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -36,6 +40,11 @@ const LandingPage: React.FC = () => {
         <TouchableOpacity style={styles.menuItem} onPress={handleTableReservationPress}>
           <Icon name="list" size={24} color="#fff" />
           <Text style={styles.menuItemText}>Aufgaben</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.menuItem} onPress={handleHouseKeepingPress}>
+          <Icon name="list" size={24} color="#fff" />
+          <Text style={styles.menuItemText}>Housekeeping anfragen</Text>
         </TouchableOpacity>
       </View>
     </View>

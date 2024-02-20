@@ -8,6 +8,8 @@ export type RootStackParamList = {
   ReservationManagementScreen:undefined;
   SpaBookingManagementScreen:undefined;
   EmployeeSettingsScreen:undefined;
+  MaintenanceScreen:undefined;
+  HousekeepingView:undefined;
   SpaServiceDetail:{
     title: string;
     image: string;
@@ -17,6 +19,8 @@ export type RootStackParamList = {
   MenuScreen:undefined;
   CartScreen:undefined;
   CheckoutScreen:undefined;
+  RoomCleanFrequencyScreen:undefined;
+  HousekeepingScreen:undefined;
   OrderedList:undefined;
   SpaBookingsList:undefined;
   ConfirmCheckoutScreen:{ 
@@ -54,6 +58,7 @@ export type RootStackParamList = {
   };
   Chat: undefined;
   Dashboard: undefined;
+  RequestRoomCleanScreen:undefined;
   Settings: undefined;
   Login: undefined; // Stellen Sie sicher, dass Sie diese Route hinzufügen
   Register: undefined; // Und diese Route, wenn Sie eine Registrierungsseite haben

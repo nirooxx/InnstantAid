@@ -28,6 +28,10 @@ import ConfirmationScreen from "../screens/guest/reservation/reservationScreen/t
 import TableReservationsList from "../screens/guest/reservation/reservationScreen/tableReservation/bookingScreen/TableReservationsList";
 import SpaServiceDetail from "../screens/guest/reservation/spaBookingScreen/components/SpaServiceDetail";
 import SpaBookingsList from "../screens/guest/reservation/spaBookingScreen/components/SpaBookingsList";
+import HousekeepingScreen from "../screens/guest/reservation/housekeeping/HousekeepingScreen";
+import RequestRoomCleanScreen from "../screens/guest/reservation/housekeeping/components/RequestRoomCleanScreen";
+import RoomCleanFrequencyScreen from "../screens/guest/reservation/housekeeping/components/RoomCleanFrequencyScreen";
+import MaintenanceScreen from "../screens/guest/reservation/housekeeping/components/MaintenanceScreen";
 
 import MenuItemDetailsScreen from "../screens/guest/reservation/reservationScreen/roomServiceOrder/MenuItemDetailsScreen";
 import MenuScreen from "../screens/guest/reservation/reservationScreen/roomServiceOrder/MenuScreen";
@@ -40,6 +44,7 @@ import LandingPage from "../screens/employee/schedule/LandingPage";
 import ReservationManagementScreen from "../screens/employee/reservations/ReservationManagementScreen";
 import EmployeeSettingsScreen from "../screens/employee/settings/EmployeeSettingsScreen";
 import SpaBookingManagementScreen from "../screens/employee/spabookings/SpaBookingManagementScreen";
+import HousekeepingView from "../screens/employee/housekeeping/HousekeepingView";
 
 import EmployeeDashboardScreen from "../screens/employee/dashboard/EmployeeDashboardScreen"
 import ScheduleScreen from "../screens/employee/schedule/ScheduleScreen"
@@ -183,6 +188,23 @@ export default function RootNavigation() {
           options={{ headerShown: false }}
           
         />
+         <Stack.Screen
+          name="HousekeepingScreen"
+          component={HousekeepingScreen}
+        />
+         <Stack.Screen
+          name="RequestRoomCleanScreen"
+          component={RequestRoomCleanScreen}
+        />
+        
+         <Stack.Screen
+          name="RoomCleanFrequencyScreen"
+          component={RoomCleanFrequencyScreen}
+        />
+         <Stack.Screen
+          name="MaintenanceScreen"
+          component={MaintenanceScreen}
+        />
       </Stack.Navigator>
     );
   }
@@ -196,7 +218,8 @@ export default function RootNavigation() {
         <Stack.Screen name="ReservationManagementScreen" component={ReservationManagementScreen}  options={{ headerShown: false }}/>
         <Stack.Screen name="SpaBookingManagementScreen" component={SpaBookingManagementScreen}  options={{ headerShown: false }}/>
         <Stack.Screen name="ShiftDetailScreen" component={ShiftDetailScreen} initialParams={{ shiftId: '', role: '' }}  options={{ headerShown: false }}/>
-        {/* Weitere Bildschirme */}
+        <Stack.Screen name="HousekeepingView" component={HousekeepingView}  options={{ headerShown: false }}/>
+
       </Stack.Navigator>
     );
   }
