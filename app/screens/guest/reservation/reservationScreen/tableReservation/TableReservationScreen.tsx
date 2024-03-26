@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from "../../../../../routes/types"; // Import your type definitions
 import { StackNavigationProp } from "@react-navigation/stack";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type BookingNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -21,6 +22,7 @@ const TableReservationScreen = () => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const navigation = useNavigation<BookingNavigationProp>();
+  const insets = useSafeAreaInsets();
   // Diese Funktionen müssen vervollständigt werden, um die Logik für die Auswahl der Personenanzahl zu implementieren
   const increasePeopleCount = () => {
     setPeopleCount(prevCount => prevCount + 1);
@@ -70,7 +72,7 @@ const TableReservationScreen = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView  contentContainerStyle={{ paddingBottom: insets.bottom + 70}}  style={styles.container}>
       <View style={styles.landingSection}>
         <Image
           source={{ uri: 'https://cdn.dribbble.com/userupload/4824794/file/original-b86331c3f59bb5eb12844942b99e7d74.png?resize=1024x768' }} // Ersetzen Sie dies durch die URL des Restaurantbildes

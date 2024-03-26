@@ -21,6 +21,7 @@ import EventsSection from "./eventsSection/EventsSection";
 import RoomDetails from "./roomDetails/RoomDetails";
 import HotelMap from "./hotelMap/HotelMap";
 import slider from "./slider/SliderComponent";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const MemoizedEventsSection = React.memo(EventsSection);
 const MemoizedRoomDetails = React.memo(RoomDetails);
@@ -29,6 +30,7 @@ const MemoizedSlider = React.memo(slider);
 
 const Dashboard: React.FC = () => {
   const users = useSelector((state: RootState) => state.user);
+  const insets = useSafeAreaInsets();
   console.log(users)
 
   useEffect(() => {
@@ -59,8 +61,8 @@ const Dashboard: React.FC = () => {
   ];
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.contentWrapper}>
+    <SafeAreaView style={styles.container} >
+      <ScrollView style={styles.contentWrapper} contentContainerStyle={{ paddingBottom: insets.bottom +70}}>
         <View style={styles.contentWrapper}>
           <View style={styles.header}>
             <TouchableOpacity style={styles.backButton}>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   sendMessage,
   subscribeToMessages,
@@ -18,6 +19,7 @@ const ChatScreen: React.FC = () => {
   const [channelId, setChannelId] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const messages = useSelector(selectMessages);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     dispatch(resetMessages());
@@ -52,7 +54,12 @@ const ChatScreen: React.FC = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <View  style={styles.container}>
+    <ScrollView
+    contentContainerStyle={{ paddingBottom: insets.bottom + 70}} // Fügen Sie genug Padding hinzu, um die TabBar und den Button zu berücksichtigen
+  >
+   
+       
       {channelId && (
         <View style={styles.header}>
           <TouchableOpacity style={styles.headerButton} onPress={handleChannelExit}>
@@ -102,6 +109,9 @@ const ChatScreen: React.FC = () => {
           />
         )}
       />
+  
+ 
+    </ScrollView>
     </View>
   );
 };

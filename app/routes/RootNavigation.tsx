@@ -311,12 +311,12 @@ const GuestNavigator = () => {
  
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1 }}
+      style={{ flex: 1}}
     >
     <Tab.Navigator
      
               screenOptions={({ route }) => ({
-                tabBarHideOnKeyboard: false,
+                tabBarHideOnKeyboard: true,
                 tabBarIcon: ({ color, size }) => {
                   let iconName;
                   if (route.name === "Chat") {

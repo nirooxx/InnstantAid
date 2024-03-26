@@ -4,29 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteRoomCleanRequest, deleteMaintenanceRequest, fetchRoomCleanRequests, fetchMaintenanceRequests } from '../../../store/houseKeepingSlice';
 import { AppDispatch, RootState } from '../../../store/store';
 
-// Typdefinitionen (falls noch nicht definiert)
-interface RoomCleanRequest {
-
-  roomNumber: string;
-  userId: string;
-  description?: string;
-  frequency: string; // Anpassung an tatsächliche Typen erforderlich
-  date?: string;
-  time?: string;
-  imageUri?: string;
-  notes: string;
-}
-
-interface MaintenanceRequest {
-
-  roomNumber: string;
-  userId: string;
-  description: string;
-  date?: string;
-  imageUri?: string;
-  notes: string;
-}
-
 const HousekeepingView: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const roomCleanRequests = useSelector((state: RootState) => state.houseKeeping.roomCleanRequests);
