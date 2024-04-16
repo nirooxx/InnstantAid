@@ -17,6 +17,7 @@
     "storybook-watch": "sb-rn-watcher"
   },
   "dependencies": {
+    "@apollo/client": "^3.9.9",
     "@react-native-community/netinfo": "^9.3.10",
     "@react-native-community/viewpager": "^5.0.11",
     "@react-native-firebase/app": "^18.1.0",
@@ -32,6 +33,7 @@
     "firebase": "^9.22.2",
     "formik": "^2.4.1",
     "galio-framework": "^0.8.0",
+    "graphql": "^16.8.1",
     "react": "18.2.0",
     "react-native": "0.71.10",
     "react-native-calendars": "^1.1303.0",

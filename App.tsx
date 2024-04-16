@@ -3,6 +3,8 @@ import { Provider } from "react-redux";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "./firebase";
 import { STORYBOOK_MODE } from "@env";
+import { ApolloProvider } from '@apollo/client';
+import client from './app/graphql/apolloClient';
 import { store } from "./app/store/store";
 import { ThemeProvider } from "./app/theme/useTheme";
 import { NoInternetToast } from "./app/components/NoInternet";
@@ -18,10 +20,12 @@ let Root = function App() {
     <SafeAreaProvider>
       <Provider store={store}>
         <ThemeProvider>
+        <ApolloProvider client={client}>
         <CartProvider>
           <RootNavigation />
           <NoInternetToast />
          </CartProvider>
+         </ApolloProvider>
         </ThemeProvider>
       </Provider>
     </SafeAreaProvider>

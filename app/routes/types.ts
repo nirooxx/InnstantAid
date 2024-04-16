@@ -16,6 +16,15 @@ export type RootStackParamList = {
     price: string;
     duration: string;
   };
+  GuestInformationCard:{
+    guestName:string,
+    roomName:string,
+    companyName:string,
+    checkIn:string,
+    checkOut:string,
+    status:string,
+    notes:string,
+  }
   MenuScreen:undefined;
   CartScreen:undefined;
   CheckoutScreen:undefined;

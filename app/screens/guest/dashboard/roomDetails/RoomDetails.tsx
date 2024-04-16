@@ -4,17 +4,23 @@ import Icon from "react-native-vector-icons/Ionicons";
 
 interface RoomDetailsProps {
   guestName: string;
-  role: string; // Diese Eigenschaft wurde hinzugefügt, um die Rolle (z. B. "General Doctor") darzustellen
-  date: string; // Für das Datum
-  time: string; // Für die Uhrzeit
+  roomName?: string; // Name des Zimmers
+  companyName?: string; // Name der Unternehmensgruppe, die die Reservierung getätigt hat
+  checkIn?: string; // Check-in Datum und Zeit
+  checkOut?: string; // Check-out Datum und Zeit
+  status?: string; // Status der Reservierung
+  notes?: string; // Spezielle Notizen zur Reservierung
   onPress?: () => void; // Hinzugefügt, um eine Aktion beim Klicken auszuführen
 }
 
 const RoomDetails: React.FC<RoomDetailsProps> = ({
   guestName,
-  role,
-  date,
-  time,
+  roomName, // Name des Zimmers
+  companyName, // Name der Unternehmensgruppe, die die Reservierung getätigt hat
+  checkIn, // Check-in Datum und Zeit
+  checkOut, // Check-out Datum und Zeit
+  status, // Status der Reservierung
+  notes, // Spezielle Notizen zur Reservierung
   onPress,
 }) => {
   return (
@@ -25,12 +31,12 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({
       </View>
       <View style={styles.infoContainer}>
         <Text style={styles.guestName}>{guestName}</Text>
-        <Text style={styles.role}>{role}</Text>
+        <Text style={styles.role}>{companyName}</Text>
         <View style={styles.dateTimeContainer}>
           <Icon name="calendar" size={20} color="#333" />
-          <Text style={styles.dateTimeText}>{date}</Text>
-          <Icon name="time" size={20} color="#333" />
-          <Text style={styles.dateTimeText}>{time}</Text>
+          <Text style={styles.dateTimeText}>{checkIn} - {checkOut}</Text>
+         {/* <Icon name="time" size={20} color="#333" />
+          <Text style={styles.dateTimeText}>{time}</Text>*/}
         </View>
       </View>
       <Icon name="chevron-forward" size={30} color="#333" />

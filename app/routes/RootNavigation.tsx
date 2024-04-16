@@ -19,6 +19,7 @@ import RegisterScreen from "../screens/pages/RegisterScreen";
 import ChatScreen from "../screens/guest/chat/ChatScreen";
 import GuestDashboard from "../screens/guest/dashboard/GuestDashboard";
 import SettingsScreen from "../screens/guest/settings/Settings";
+import GuestInformationCard from "../screens/guest/dashboard/roomDetails/guestInformationScreen/GuestInformationCard";
 
 import ReservationsScreen from "../screens/guest/reservation/ReservationsScreen";
 import TableReservationScreen from "../screens/guest/reservation/reservationScreen/tableReservation/TableReservationScreen";
@@ -209,6 +210,22 @@ export default function RootNavigation() {
     );
   }
 
+  function GuestDashboardStack() {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen name="GuestDashboard" component={GuestDashboard} options={{ headerShown: false }}/>
+        <Stack.Screen name="GuestInformationCard" component={GuestInformationCard}   
+        initialParams={{    guestName:'string',
+          roomName:'string',
+          companyName:'string',
+          checkIn:'string',
+          checkOut:'string',
+          status:'string',
+          notes:'string', }}/>
+      </Stack.Navigator>
+    );
+  }
+
   function EmployeeStack() {
     return (
       <Stack.Navigator>
@@ -362,7 +379,7 @@ const GuestNavigator = () => {
               })}
               
             >
-               <Tab.Screen name="Dashboard" options={{ headerShown: false }} component={GuestDashboard} />
+               <Tab.Screen name="Dashboard" options={{ headerShown: false }} component={GuestDashboardStack} />
               <Tab.Screen name="Chat" options={{ headerShown: false }} component={ChatScreen} />
               <Tab.Screen name="Reservation" options={{ headerShown: false }} component={ReservationStack} />
               <Tab.Screen name="Settings" options={{ headerShown: false }} component={SettingsScreen} />
@@ -421,7 +438,7 @@ const MainTabNavigator = () => {
                 // Entfernen Sie headerMode, da es nicht zu BottomTabNavigationOptions gehört
               })}
             >
-              <Tab.Screen name="Dashboard" options={{ headerShown: false }} component={GuestDashboard} />
+              <Tab.Screen name="Dashboard" options={{ headerShown: false }} component={GuestDashboardStack} />
               <Tab.Screen name="Chat" options={{ headerShown: false }} component={ChatScreen} />
               <Tab.Screen name="Reservation" options={{ headerShown: false }} component={ReservationStack} />
               <Tab.Screen name="Settings" options={{ headerShown: false }} component={SettingsScreen} />

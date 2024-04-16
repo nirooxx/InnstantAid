@@ -8,6 +8,7 @@ import tableReservationReducer from "./tableReservationSlice"
 import orderingReducer from "./orderingSlice";
 import spaBookingReducer from './SpaBookingSlice';
 import houseKeepingReducer from "./houseKeepingSlice";
+import graphqlReducer from "./graphqlSlice";
 // store.ts oder ein separater Typ-Definitionsfile
 import { ThunkAction } from "redux-thunk";
 import { Action } from "redux";
@@ -28,7 +29,8 @@ export const store = configureStore({
     tableReservation: tableReservationReducer,
     order: orderingReducer,
     spaBooking: spaBookingReducer,
-    houseKeeping: houseKeepingReducer
+    houseKeeping: houseKeepingReducer,
+    graphql: graphqlReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ immutableCheck: false, serializableCheck: false }),
