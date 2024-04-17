@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Card, Button } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useDispatch, useSelector  } from 'react-redux';
 import { addReservation, fetchReservations  } from '../../../../../../store/tableReservationSlice'; 
@@ -23,8 +24,6 @@ const BookingScreen: React.FC = () => {
   const userId = useSelector((state: RootState) => state.user.id);
 
   const { date, time, peopleCount, name, roomNumber } = route.params;
- 
-console.log('userID: ' + userId)
 
   const handleConfirmBooking = async () => {
     const reservationDetails = {
@@ -57,98 +56,66 @@ console.log('userID: ' + userId)
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.editButton} onPress={() => navigation.goBack()}>
-        <Icon name="pencil" size={30} color="#000" />
-      </TouchableOpacity>
-      
-      <View style={styles.bookingCard}>
-        {/* Dummy image for illustration */}
-        <Image
-          source={require('../../../../../../assets/images/avatar.png')}
-          style={styles.tableIcon}
-        />
-        <View style={styles.bookingDetails}>
-        <Text style={styles.bookingText}>{name}</Text>
-        <Text style={styles.bookingText}>Zimmernummer: {roomNumber}</Text>
-          <Text style={styles.bookingText}>Number of people</Text>
-          <Text style={styles.bookingCount}>{peopleCount}</Text>
-          <Text style={styles.bookingText}>Date and Time</Text>
-          <Text style={styles.bookingDateTime}>{date}</Text>
-          <Text style={styles.bookingTime}>{time}</Text>
-        </View>
-      </View>
+    <Text style={styles.header}>Reservierungsübersicht</Text>
+    <Card style={styles.bookingCard}>
+      <Card.Title
+        title={`Reservierung für ${name}`}
+        subtitle={`Raum Nr. ${roomNumber}`}
+        left={(props) => <Icon {...props} name="book-outline" />}
+        leftStyle={styles.cardLeftIcon}
+      />
+      <Card.Content>
+        <Text style={styles.bookingText}>Anzahl Personen: {peopleCount}</Text>
+        <Text style={styles.bookingText}>Datum & Zeit: {date} {time}</Text>
+      </Card.Content>
+    </Card>
 
-      <TouchableOpacity style={styles.confirmButton} onPress={() => handleConfirmBooking()}>
-        <Text style={styles.confirmButtonText}>Book</Text>
-      </TouchableOpacity>
-    </View>
+    <Button
+      icon="check-bold"
+      mode="contained"
+      onPress={handleConfirmBooking}
+      style={styles.confirmButton}
+    >
+      Jetzt Buchen
+    </Button>
+  </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    padding: 20,
+    backgroundColor: '#FFFFFF',
   },
-  editButton: {
-    position: 'absolute',
-    top: 40, // Adjust as per your header's height
-    right: 20,
-    zIndex: 10,
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginVertical: 20,
   },
   bookingCard: {
-    margin: 20,
-    backgroundColor: '#F2F2F2', // A light background color
-    borderRadius: 20,
-    padding: 20,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  tableIcon: {
-    width: 100,
-    height: 100,
-    resizeMode: 'contain',
-  },
-  bookingDetails: {
+    elevation: 4,
+    borderRadius: 8,
     marginTop: 20,
   },
+  cardLeftIcon: {
+    marginRight: 10,
+  },
   bookingText: {
-    fontSize: 18,
-    color: '#333',
-    fontWeight: 'bold',
-  },
-  bookingCount: {
-    fontSize: 30,
-    color: '#000',
-    marginVertical: 10,
-  },
-  bookingDateTime: {
-    fontSize: 18,
-    color: '#666',
-  },
-  bookingTime: {
-    fontSize: 18,
-    color: '#666',
-    marginBottom: 20,
+    marginTop: 10,
+    fontSize: 16,
+    lineHeight: 24,
   },
   confirmButton: {
-    backgroundColor: '#FF6347', // A nice red color for the button
-    borderRadius: 25,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    alignSelf: 'center',
-    marginTop: 30,
+    marginTop: 20,
+    paddingVertical: 8,
   },
-  confirmButtonText: {
-    color: '#FFF',
-    fontSize: 20,
-    fontWeight: 'bold',
+  editButton: {
+    alignSelf: 'flex-end',
+    margin: 16,
   },
-  // Add more styles as required
+
 });
 
 export default BookingScreen;

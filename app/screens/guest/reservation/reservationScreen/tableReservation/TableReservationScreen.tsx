@@ -1,12 +1,16 @@
 // TableReservationScreen.tsx
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, ScrollView, Image, TouchableOpacity, TextInput } from 'react-native';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from "../../../../../routes/types"; // Import your type definitions
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../../store/store";
+import DateTimePicker from 'react-native-ui-datepicker';
+import dayjs from 'dayjs';
+
 
 type BookingNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -14,13 +18,9 @@ type BookingNavigationProp = StackNavigationProp<
 >;
 
 const TableReservationScreen = () => {
-  const [date, setDate] = useState(new Date());
-  const [time, setTime] = useState(new Date());
+  const [date, setDate] = useState(dayjs());
   const [peopleCount, setPeopleCount] = useState(1);
-  const [name, setName] = useState('');
-  const [roomNumber, setRoomNumber] = useState('');
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+  const user = useSelector((state: RootState) => state.user);
   const navigation = useNavigation<BookingNavigationProp>();
   const insets = useSafeAreaInsets();
   // Diese Funktionen müssen vervollständigt werden, um die Logik für die Auswahl der Personenanzahl zu implementieren
@@ -32,44 +32,24 @@ const TableReservationScreen = () => {
     setPeopleCount(prevCount => (prevCount > 1 ? prevCount - 1 : 1));
   };
 
-   // Handler für den DatePicker
-   const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
 
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirmDate = (selectedDate:any) => {
-    setDate(selectedDate);
-    hideDatePicker();
-  };
-
-  // Handler für den TimePicker
-  const showTimePicker = () => {
-    setTimePickerVisibility(true);
-  };
-
-  const hideTimePicker = () => {
-    setTimePickerVisibility(false);
-  };
-
-  const handleConfirmTime = (selectedTime:any) => {
-    setTime(selectedTime);
-    hideTimePicker();
-  };
+  console.log(date, date.format); // This will help identify if `date` is correctly a Day.js object
 
   const handleBookTable = () => {
-    // Übergabe der Reservierungsdaten an die BookingScreen Komponente
+    if (!date.format) {
+      console.error('Date is not a Day.js object:', date);
+      return; // Prevent navigation if date is not formatted correctly
+    }
+  
     navigation.navigate('BookingScreen', {
-      date: date.toISOString().split('T')[0],
-      time: `${time.getHours()}:${time.getMinutes()}`,
+      date: date.format('DD.MM.YYYY'),
+      time: date.format('HH:mm'),
       peopleCount,
-      name,
-      roomNumber,
+      name: 'Test',
+      roomNumber: user?.roomNumber,
     });
   };
+  
 
   return (
     <ScrollView  contentContainerStyle={{ paddingBottom: insets.bottom + 70}}  style={styles.container}>
@@ -81,53 +61,27 @@ const TableReservationScreen = () => {
         <Text style={styles.title}>Willkommen im Restaurant XYZ</Text>
         <Text style={styles.subtitle}>Erleben Sie kulinarische Genüsse in gemütlicher Atmosphäre</Text>
       </View>
-
-      <View >
-        <Text style={styles.infoText}>
-          {/* Hier können Sie weitere Informationen über das Restaurant oder Angebote hinzufügen */}
-          Genießen Sie exklusive Gerichte von unserem Chefkoch und wählen Sie aus einer Vielfalt von Weinen aus.
-        </Text>
-      </View>
-
       <View style={styles.reservationSection}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Name"
-          value={name}
-          onChangeText={setName}
+     
+      <DateTimePicker
+        mode="single"
+        date={date} // Ensures that the current Day.js date object is converted to a JavaScript Date object for the picker
+        onChange={(params) => setDate(dayjs(params.date))}
+          locale='DE'
+          calendarTextStyle={styles.calendarText}
+          selectedItemColor="#0047FF"
+          timePicker={true}
+          minDate={dayjs().startOf('day').toDate()}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Zimmernummer"
-          value={roomNumber}
-          onChangeText={setRoomNumber}
-          keyboardType="numeric"
-        />
-      </View>
-        <TouchableOpacity style={styles.dateTimeButton} onPress={showDatePicker}>
-          <Icon name="calendar-blank" size={24} color="#000" />
-          <Text style={styles.dateTimeText}>{`Datum: ${date.toISOString().split('T')[0]}`}</Text>
-        </TouchableOpacity>
-        <DateTimePickerModal
-          isVisible={isDatePickerVisible}
-          mode="date"
-          onConfirm={handleConfirmDate}
-          onCancel={hideDatePicker}
-          date={date}
-        />
+    <View style={styles.dateDisplaySection}>
+  <Text style={styles.dateDisplayText}>
+    Ausgewähltes Datum: {date.format('DD.MM.YYYY')}
+  </Text>
+  <Text style={styles.dateDisplayText}>
+    Ausgewählte Uhrzeit: {date.format('HH:mm')}
+  </Text>
+</View>
 
-        <TouchableOpacity style={styles.dateTimeButton} onPress={showTimePicker}>
-          <Icon name="clock-outline" size={24} color="#000" />
-          <Text style={styles.dateTimeText}>{`Uhrzeit: ${time.getHours()}:${time.getMinutes()}`}</Text>
-        </TouchableOpacity>
-        <DateTimePickerModal
-          isVisible={isTimePickerVisible}
-          mode="time"
-          onConfirm={handleConfirmTime}
-          onCancel={hideTimePicker}
-          date={time}
-        />
 
         <View style={styles.peopleCounter}>
           <TouchableOpacity onPress={decreasePeopleCount}>
@@ -166,6 +120,10 @@ const colors = {
     container: {
       flex: 1,
       backgroundColor: colors.light,
+    },
+    calendarText: {
+      color: '#333',
+      fontSize: 16,
     },
     inputContainer: {
         paddingHorizontal: 20,
@@ -254,7 +212,15 @@ const colors = {
       textAlign: 'center',
       fontWeight: 'bold',
     },
-    // ... (Weitere Styling-Optionen)
+    dateDisplaySection: {
+      marginTop: 10,
+      alignItems: 'center',
+    },
+    dateDisplayText: {
+      fontSize: 16,
+      color: '#333',
+      marginVertical: 4,
+    },
   });
 
 export default TableReservationScreen;
