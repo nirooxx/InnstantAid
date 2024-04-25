@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Shift } from '../../types';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -11,7 +11,7 @@ interface FirestoreTimestamp {
     shift: Shift;
   }
 // Komponente für ein einzelnes Shift-Element
-const ShiftItem: React.FC<ShiftItemProps> = ({ shift }) => {
+const ShiftItem: React.FC<ShiftItemProps> = memo(({ shift }) => {
     // Berechnung des Fortschritts basierend auf der aktuellen Zeit
    // Hilfsfunktion, um zu prüfen, ob ein Objekt ein FirestoreTimestamp ist
 const isFirestoreTimestamp = (object: any): object is FirestoreTimestamp => {
@@ -19,20 +19,21 @@ const isFirestoreTimestamp = (object: any): object is FirestoreTimestamp => {
   };
   
   // Hilfsfunktion zur Umwandlung von Firestore Timestamps in JavaScript Date-Objekte
-  const toDate = (timestamp: Date | FirestoreTimestamp): Date => {
-    if (isFirestoreTimestamp(timestamp)) {
-      // Firestore Timestamp in Date umwandeln
-      return new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
-    } else {
-      // Es ist bereits ein Date-Objekt
-      return timestamp;
-    }
-  };
+  const toDate = React.useMemo(() => {
+    return (timestamp: Date | FirestoreTimestamp): Date => {
+      if (isFirestoreTimestamp(timestamp)) {
+        return new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+      } else {
+        return timestamp;
+      }
+    };
+  }, []);
+  
     
   const formatDateString = (date: Date): string => {
     return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
   };
-  console.log(shift.name)
+ 
     return (
         <View style={styles.shiftItem}>
      
@@ -46,7 +47,7 @@ const isFirestoreTimestamp = (object: any): object is FirestoreTimestamp => {
       <Icon name="ellipsis-vertical" size={20} color="#FFFFFF" style={styles.iconRight} />
     </View>
     );
-  };
+  });
 
 export default ShiftItem
 

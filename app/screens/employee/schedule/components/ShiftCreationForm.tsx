@@ -1,191 +1,205 @@
-// ShiftCreationForm.tsx
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet,TouchableOpacity, Text, ScrollView } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, TextInput, Button, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useDispatch } from 'react-redux';
 import { createShift } from '../../../../store/scheduleSlice';
-import {Shift, Role} from '../../types'
+import { Shift, Role } from '../../types';
 import { Picker } from '@react-native-picker/picker';
 import { AppDispatch } from '../../../../store/store';
 import Icon from 'react-native-vector-icons/FontAwesome'; 
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface ShiftCreationFormProps {
-  onShiftCreated: () => void;
+  onShiftCreated: () => void; // Declares a function that returns nothing
 }
 
-const ShiftCreationForm: React.FC<ShiftCreationFormProps> = ({ onShiftCreated }) => {
-    const [shiftName, setShiftName] = useState('');
-    const [employeeName, setEmployeeName] = useState('');
-    const [selectedRole, setSelectedRole] = useState<Role>('receptionist');
-    const [startTime, setStartTime] = useState(new Date());
-    const [endTime, setEndTime] = useState(new Date());
-    const [isStartTimePickerVisible, setIsStartTimePickerVisible] = useState(false);
-    const [isEndTimePickerVisible, setIsEndTimePickerVisible] = useState(false);
-    const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+const ShiftCreationForm: React.FC<ShiftCreationFormProps> = React.memo(({ onShiftCreated }) => {
+    const [formState, setFormState] = useState({
+        shiftName: '',
+        employeeName: '',
+        selectedRole: 'receptionist',
+        startTime: new Date(),
+        endTime: new Date(),
+        isStartTimePickerVisible: false,
+        isEndTimePickerVisible: false,
+        isDatePickerVisible: false
+    });
+    const insets = useSafeAreaInsets();
     const dispatch = useDispatch<AppDispatch>();
 
+    const handleInputChange = useCallback((field:any, value:any) => {
+        setFormState(prevState => ({
+            ...prevState,
+            [field]: value
+        }));
+    }, []);
 
-    const handleStartTimeChange = (event: any, selectedDate: Date | undefined) => {
-        setIsStartTimePickerVisible(false);
-        if (selectedDate) {
-          setStartTime(selectedDate);
-        }
-      };
-    
-      const handleEndTimeChange = (event: any, selectedDate: Date | undefined) => {
-        setIsEndTimePickerVisible(false);
-        if (selectedDate) {
-          setEndTime(selectedDate);
-        }
-      };
+    const formatTime = (time:Date) => {
+      return `${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}`;
+  };
+  
 
-      const handleDateChange = (event: any, selectedDate: Date | undefined) => {
-        // Setzen der Startzeit und Endzeit auf das ausgewählte Datum
-        // Uhrzeit bleibt unverändert
-        setIsDatePickerVisible(false)
-        if (selectedDate) {
-          setStartTime(new Date(selectedDate.setHours(startTime.getHours(), startTime.getMinutes())));
-          setEndTime(new Date(selectedDate.setHours(endTime.getHours(), endTime.getMinutes())));
-        }
-      };
+    const handleOpenStartTimePicker = () => {
+      setFormState(prevState => ({
+          ...prevState,
+          isStartTimePickerVisible: true,
+          isEndTimePickerVisible: false,
+          isDatePickerVisible: false
+      }));
+  };
+  
+  const handleOpenEndTimePicker = () => {
+      setFormState(prevState => ({
+          ...prevState,
+          isEndTimePickerVisible: true,
+          isStartTimePickerVisible: false,
+          isDatePickerVisible: false
+      }));
+  };
+  
+  const handleOpenDatePicker = () => {
+      setFormState(prevState => ({
+          ...prevState,
+          isDatePickerVisible: true,
+          isStartTimePickerVisible: false,
+          isEndTimePickerVisible: false
+      }));
+  };
+  
+  const handleCloseAllPickers = () => {
+      setFormState(prevState => ({
+          ...prevState,
+          isDatePickerVisible: false,
+          isStartTimePickerVisible: false,
+          isEndTimePickerVisible: false
+      }));
+  };
+  
 
-      const handleSubmit = () => {
-        // Vergewissern Sie sich, dass alle Felder ausgefüllt sind
-        if (!shiftName || !employeeName) {
-          console.error('Bitte alle Felder ausfüllen.');
-          return;
+    const handleSubmit = useCallback(() => {
+        if (!formState.shiftName || !formState.employeeName) {
+            console.error('Bitte alle Felder ausfüllen.');
+            return;
         }
-      
-        // Vergewissern Sie sich, dass das Enddatum nicht vor dem Startdatum liegt
-        const startDateTime = new Date(startTime);
-        const endDateTime = new Date(endTime);
-      
-        if (endDateTime < startDateTime) {
-          console.error('Das Enddatum kann nicht vor dem Startdatum liegen.');
-          return;
+
+        if (formatTime(formState.endTime) < formatTime(formState.startTime)) {
+            console.error('Das Enddatum kann nicht vor dem Startdatum liegen.');
+            return;
         }
-      
-        // Erstellen des Schicht-Objekts
-        const newShift: Omit<Shift, 'id'> = {
-          name: shiftName,
-          employeeName,
-          startTime: startDateTime,
-          endTime: endDateTime,
-          role: selectedRole,
+
+        const newShift = {
+            name: formState.shiftName,
+            employeeName: formState.employeeName,
+            startTime: formState.startTime,
+            endTime: formState.endTime,
+            role: formState.selectedRole,
         };
-        dispatch(createShift(newShift));
-        // Aufruf des Callbacks mit dem neuen Schicht-Objekt
-        onShiftCreated();
-      
-        // Zurücksetzen des Formulars
-        setShiftName('');
-        setEmployeeName('');
-        setStartTime(new Date());
-        setEndTime(new Date());
-      };
-      
-      // Format function
-  const formatDate = (date:Date) => {
-    return `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`;
-  };
 
-  const formatTime = (time: Date) => {
-    return `${time.getHours()}:${time.getMinutes().toString().padStart(2, '0')}`;
-  };
+        dispatch(createShift(newShift));
+        onShiftCreated();
+
+        setFormState({
+            shiftName: '',
+            employeeName: '',
+            selectedRole: 'receptionist',
+            startTime: new Date(),
+            endTime: new Date(),
+            isStartTimePickerVisible: false,
+            isEndTimePickerVisible: false,
+            isDatePickerVisible: false
+        });
+    }, [formState, dispatch]);
 
       return (
-        <ScrollView style={styles.formContainer} contentContainerStyle={styles.contentContainer}>
+        <ScrollView style={styles.formContainer} contentContainerStyle={{paddingBottom: insets.bottom + 70}}>
         {/* Eingabefeld für Schichtname */}
-        <KeyboardAwareScrollView>
+       
           <Text style={styles.label}>Schichtname</Text>
           <TextInput
-            style={styles.input}
-            placeholder="Geben Sie den Schichtnamen ein"
-            placeholderTextColor="#8e8e93"
-            value={shiftName}
-            onChangeText={setShiftName}
-          />
+                style={styles.input}
+                placeholder="Geben Sie den Schichtnamen ein"
+                placeholderTextColor="#8e8e93"
+                value={formState.shiftName}
+                onChangeText={(text) => handleInputChange('shiftName', text)}
+            />
         
   
         {/* Eingabefeld für Angestellten Namen */}
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Angestellten Name</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Geben Sie den Namen des Angestellten ein"
-            placeholderTextColor="#8e8e93"
-            value={employeeName}
-            onChangeText={setEmployeeName}
-          />
-        </View>
+        <Text style={styles.label}>Angestellten Name</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Geben Sie den Namen des Angestellten ein"
+                placeholderTextColor="#8e8e93"
+                value={formState.employeeName}
+                onChangeText={(text) => handleInputChange('employeeName', text)}
+            />
         <View style={styles.datePickerGroup}>
         {/* Datum auswählen */}
-        <TouchableOpacity style={styles.dateButton} onPress={() => setIsDatePickerVisible(true)}>
-        <Text style={styles.dateText}>Datum</Text>
-        <Text style={styles.dateText}>{formatDate(startTime)}</Text>
-        <Icon name="calendar" size={20} color="#FFFFFF" />
-      </TouchableOpacity>
-      {isDatePickerVisible && (
-        <DateTimePicker
-          value={startTime}
-          mode="date"
-          display="default"
-          onChange={handleDateChange}
-        />
-      )}
+        <TouchableOpacity style={styles.dateButton} onPress={handleOpenDatePicker}>
+    <Text style={styles.dateText}>Datum</Text>
+    <Text style={styles.dateText}>{formState.startTime.toLocaleDateString()}</Text>
+    <Icon name="calendar" size={20} color="#FFFFFF" />
+</TouchableOpacity>
+{formState.isDatePickerVisible && (
+    <DateTimePicker
+        value={formState.startTime}
+        mode="date"
+        display="default"
+        onChange={(event, date) => {
+            handleInputChange('startTime', date);
+            handleCloseAllPickers();
+        }}
+    />
+)}
   
-        {/* Startzeit auswählen */}
-        <TouchableOpacity style={styles.dateButton} onPress={() => setIsStartTimePickerVisible(true)}>
-        <Text style={styles.dateText}>Startzeit</Text>
-        <Text style={styles.dateText}>{formatTime(startTime)}</Text>
-        <Icon name="calendar" size={20} color="#FFFFFF" />
-      </TouchableOpacity>
-          {isStartTimePickerVisible && (
-            <DateTimePicker
-              value={startTime}
-              mode="time"
-              is24Hour={false}
-              display="default"
-              onChange={handleStartTimeChange}
-              style={styles.dateTimePicker}
-            />
-          )}
-       
-  
-        {/* Endzeit auswählen */}
-        <TouchableOpacity style={styles.dateButton} onPress={() => setIsEndTimePickerVisible(true)}>
-        <Text style={styles.dateText}>Endzeit </Text>
-        <Text style={styles.dateText}>{formatTime(endTime)}</Text>
-        <Icon name="calendar" size={20} color="#FFFFFF" />
-      </TouchableOpacity>
-          {isEndTimePickerVisible && (
-            <DateTimePicker
-              value={endTime}
-              mode="time"
-              is24Hour={false}
-              display="default"
-              onChange={handleEndTimeChange}
-              style={styles.dateTimePicker}
-            />
-          )}
+  <TouchableOpacity style={styles.dateButton} onPress={handleOpenStartTimePicker}>
+    <Text style={styles.dateText}>Startzeit</Text>
+    <Text style={styles.dateText}>{formatTime(formState.startTime)}</Text>
+    <Icon name="calendar" size={20} color="#FFFFFF" />
+</TouchableOpacity>
+{formState.isStartTimePickerVisible && (
+    <DateTimePicker
+        value={formState.startTime}
+        mode="time"
+        is24Hour={false}
+        display="default"
+        onChange={(event, date) => {
+            handleInputChange('startTime', date || formState.startTime);
+            handleCloseAllPickers();
+        }}
+    />
+)}
+
+<TouchableOpacity style={styles.dateButton} onPress={handleOpenEndTimePicker}>
+    <Text style={styles.dateText}>Endzeit</Text>
+    <Text style={styles.dateText}>{formatTime(formState.endTime)}</Text>
+    <Icon name="calendar" size={20} color="#FFFFFF" />
+</TouchableOpacity>
+{formState.isEndTimePickerVisible && (
+    <DateTimePicker
+        value={formState.endTime}
+        mode="time"
+        is24Hour={false}
+        display="default"
+        onChange={(event, date) => {
+            handleInputChange('endTime', date || formState.endTime);
+            handleCloseAllPickers();
+        }}
+    />
+)}
 
 </View>
      
   
         {/* Rollenauswahl */}
-        <Text style={styles.label}>Rolle</Text>
-      <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={selectedRole}
-            onValueChange={(itemValue) => setSelectedRole(itemValue as Role)}
-            style={styles.picker}
-          >
-            <Picker.Item label="Rezeptionist" value="receptionist" />
-            <Picker.Item label="Zimmermädchen" value="maid" />
-            {/* Weitere Rollen */}
-          </Picker>
-        </View>
+        <Picker
+                selectedValue={formState.selectedRole}
+                onValueChange={(itemValue) => handleInputChange('selectedRole', itemValue)}
+                style={styles.picker}
+            >
+                <Picker.Item label="Rezeptionist" value="receptionist" />
+                <Picker.Item label="Zimmermädchen" value="maid" />
+            </Picker>
   
         {/* Button-Bereich */}
       <View style={styles.buttonGroup}>
@@ -196,11 +210,10 @@ const ShiftCreationForm: React.FC<ShiftCreationFormProps> = ({ onShiftCreated })
           <Text style={styles.buttonText}>Schicht erstellen</Text>
         </TouchableOpacity>
         </View>
-        
-        </KeyboardAwareScrollView>
+       
       </ScrollView>
       );
-};
+});
 
 export default ShiftCreationForm;
 

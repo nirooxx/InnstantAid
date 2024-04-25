@@ -4,6 +4,7 @@ import { Card, Title } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from "../../../../routes/types"; // Import your type definitions
 import { StackNavigationProp } from "@react-navigation/stack";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type SpaBookingNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -19,7 +20,7 @@ const spaServices = [
 
 const SpaBookingScreen = () => {
   const navigation = useNavigation<SpaBookingNavigationProp>();
-  
+  const insets = useSafeAreaInsets();
 
   const handleSpaBooking = (service:any) => {
     // Übergabe der Reservierungsdaten an die BookingScreen Komponente
@@ -31,7 +32,12 @@ const SpaBookingScreen = () => {
     } );
   };
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container}
+    contentContainerStyle={{ 
+      paddingBottom: insets.bottom + 70,
+      flexGrow: 1,
+      justifyContent: 'center',}} 
+      >
       <View style={styles.topSection}>
         <Image source={require('../../../../assets/images/Thai-Message.webp')} style={styles.backgroundImage} />
         <View style={styles.overlay}>

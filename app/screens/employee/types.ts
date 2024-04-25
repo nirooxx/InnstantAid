@@ -20,6 +20,7 @@ export type Shift = {
     name: string;
     height: number;
     day: string;
+    employeeName: string;
     startTime: string;
     endTime: string;
   };

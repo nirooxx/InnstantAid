@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector  } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView,Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView,Alert,  } from 'react-native';
 import { RootStackParamList } from "../../../../../routes/types"; // Import your type definitions
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootState } from '../../../../../store/store';
@@ -10,6 +10,8 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { AppDispatch } from '../../../../../store/store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import DateTimePicker from 'react-native-ui-datepicker';
+import dayjs from 'dayjs';
 
 type SpaBookingNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -18,18 +20,7 @@ type SpaBookingNavigationProp = StackNavigationProp<
 
 type SpaBookingScreenRouteProp = RouteProp<{ params: { title: string; image: string;  price: string; duration: string;} }, 'params'>;
 
-interface SpaBooking {
-  id: string;
-  title: string;
-  price: string;
-  duration: string;
-  date: string;
-  time:string;
-  name: string;
-  email: string;
-  userId: string;
-  userRoomNumber:string;
-}
+
 
 //Zeit wird nicht richtig gepsoeichert
 const SpaServiceDetail: React.FC = () => {
@@ -40,28 +31,18 @@ const SpaServiceDetail: React.FC = () => {
   const [email, setEmail] = useState('');
   const userRoomNumber = useSelector((state: RootState) => state.user.roomNumber);
   const userId = useSelector((state: RootState) => state.user.id);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState(new Date());
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+  const [date, setDate] = useState(dayjs());
+
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
 
-  const formatDate = (date:Date) => {
-    const d = new Date(date);
-    const year = d.getFullYear();
-    // Monate in JavaScript beginnen bei 0, deshalb +1
-    const month = `${d.getMonth() + 1}`.padStart(2, '0');
-    const day = `${d.getDate()}`.padStart(2, '0');
-    return [year, month, day].join('-');
-  };
 
   const handleBooking = () => {
-    const formattedTime = `${selectedTime.getHours().toString().padStart(2, '0')}:${selectedTime.getMinutes().toString().padStart(2, '0')}`;
+    const formattedTime = date.format('HH:mm');
    
     // Formatierung des Datums und der Uhrzeit für die Anzeige
-    const bookingDate = formatDate(selectedDate);
-    console.log(formatDate(selectedDate))
+    const bookingDate = date.format('DD.MM.YYYY');
+  
     // Erstellung des Buchungsdetails String
     const bookingDetails = `Service: ${title}\nPreis: ${price}\nDauer: ${duration}\nDatum: ${bookingDate}\nZeit: ${formattedTime}Uhr\nName: ${name}\nEmail: ${email}`;
 
@@ -83,10 +64,14 @@ const SpaServiceDetail: React.FC = () => {
     );
   };
   
+  const handleConfirmDateTime = (selectedDate: dayjs.Dayjs) => {
+    setDate(selectedDate); // Aktualisiere das Datum und die Uhrzeit gemeinsam mit dayjs
+  };
+
   const confirmBooking = () => {
     // Verwendung der formatDate Funktion für das Datum
-    const formattedDate = formatDate(selectedDate);
-    const formattedTime = `${selectedTime.getHours().toString().padStart(2, '0')}:${selectedTime.getMinutes().toString().padStart(2, '0')}`;
+    const formattedDate = date.format('DD.MM.YYYY');
+    const formattedTime = date.format('HH:mm');
   
     const newBooking = {
       title,
@@ -110,40 +95,14 @@ const SpaServiceDetail: React.FC = () => {
   };
   
 
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
 
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirmDate = (date: Date) => {
-    console.log(date)
-    setSelectedDate(date);
-    hideDatePicker();
-  };
-
-  const showTimePicker = () => {
-    setTimePickerVisibility(true);
-  };
-
-  const hideTimePicker = () => {
-    setTimePickerVisibility(false);
-  };
-
-  const handleConfirmTime = (time: Date) => {
-
-    setSelectedTime(time);
-    hideTimePicker();
-  };
   
 // Wenn du `title` verwendest, stelle sicher, dass es ein gültiger Schlüssel ist oder verwende einen Fallback
 
   return (
-    <View style={styles.container}>
-    <ScrollView  contentContainerStyle={{ paddingBottom: insets.bottom + 70}} // Fügen Sie genug Padding hinzu, um die TabBar und den Button zu berücksichtigen
-      >
+  
+    <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 70}} // Fügen Sie genug Padding hinzu, um die TabBar und den Button zu berücksichtigen
+      style={styles.container}>
     <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSub7i7li7OKf9SdCEc-YKUVrvTH_FGYQgjNRJxj7riwokoXB30b-9yMkv0_XYqwGCAAwc&usqp=CAU' }} style={styles.image} />
     <View style={styles.detailsContainer}>
       <View style={styles.titlePriceContainer}>
@@ -172,31 +131,24 @@ const SpaServiceDetail: React.FC = () => {
           placeholder="Ihre E-Mail"
           placeholderTextColor="#ccc"
         />
-       {/* Date Picker */}
-       <TouchableOpacity style={styles.dateTimeButton} onPress={showDatePicker}>
-  <Icon name="calendar" size={24} color="#5A67D8" />
-  <Text style={styles.dateTimeText}>{`Datum: ${formatDate(selectedDate)}`}</Text>
-</TouchableOpacity>
-        <DateTimePickerModal
-          isVisible={isDatePickerVisible}
-          mode="date"
-          onConfirm={handleConfirmDate}
-          onCancel={hideDatePicker}
-          date={selectedDate}
-        />
-
-        {/* Time Picker */}
-        <TouchableOpacity style={styles.dateTimeButton} onPress={showTimePicker}>
-          <Icon name="calendar" size={24} color="#5A67D8" />
-          <Text style={styles.dateTimeText}>{`Uhrzeit: ${selectedTime.getHours()}:${selectedTime.getMinutes().toString().padStart(2, '0')} Uhr`}</Text>
-        </TouchableOpacity>
-        <DateTimePickerModal
-          isVisible={isTimePickerVisible}
-          mode="time"
-          onConfirm={handleConfirmTime}
-          onCancel={hideTimePicker}
-          date={selectedTime}
-        />
+  <DateTimePicker
+    mode="single"
+    date={date}
+    onChange={(params: any) => handleConfirmDateTime(dayjs(params.date))}
+    locale="de"
+    calendarTextStyle={styles.calendarText}
+    selectedItemColor="#0047FF"
+    timePicker={true}
+    minDate={dayjs().startOf('day').toDate()} 
+  />
+  <View style={styles.dateDisplaySection}>
+    <Text style={styles.dateDisplayText}>
+      Ausgewähltes Datum: {date.format('DD.MM.YYYY')}
+    </Text>
+    <Text style={styles.dateDisplayText}>
+      Ausgewählte Uhrzeit: {date.format('HH:mm')}
+    </Text>
+  </View>
          </View>
         {/* Buchen Button */}
         <TouchableOpacity style={styles.button} onPress={handleBooking} activeOpacity={0.8}>
@@ -204,7 +156,7 @@ const SpaServiceDetail: React.FC = () => {
         </TouchableOpacity>
       </View>
     </ScrollView>
-    </View>
+ 
   );
 };
 
@@ -217,7 +169,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  
+  dateDisplaySection: {
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  dateDisplayText: {
+    fontSize: 16,
+    color: '#333',
+    marginVertical: 4,
+  },
+  calendarText: {
+    // Deine Styling-Präferenzen für den Kalendertext
+  },
   titlePriceContainer: {
     flexDirection: 'row',
     alignItems: 'center',

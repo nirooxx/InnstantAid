@@ -1,7 +1,7 @@
 // CalendarComponent.tsx
-import React from 'react';
+import React, {useCallback} from 'react';
 import { Agenda,  } from 'react-native-calendars';
-import { Shift, ShiftsForDay, Role, AgendaEntry,  } from '../../types'; // Pfad anpassen
+import {  ShiftsForDay, Role, AgendaEntry,  } from '../../types'; // Pfad anpassen
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../../routes/types"; // Import your type definitions
@@ -17,18 +17,9 @@ interface CalendarComponentProps {
   shifts: ShiftsForDay;
 }
 
-const timeToString = (time: Date) => {
-  return `${time.getHours()}:${time.getMinutes()}`;
-};
-
-const dateToString = (date: Date) => {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1; // Monate beginnen bei 0
-  const day = date.getDate();
-
-  // Führende Nullen für Monat und Tag hinzufügen, falls erforderlich
-  return `${year}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}`;
-};
+// Helper functions
+const timeToString = (time: Date): string => `${time.getHours()}:${time.getMinutes()}`;
+const dateToString = (date: Date): string => `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 
 
 const transformShiftsToAgendaFormat = (role: Role, shifts: ShiftsForDay): { [date: string]: AgendaEntry[] } => {
@@ -69,29 +60,26 @@ const transformShiftsToAgendaFormat = (role: Role, shifts: ShiftsForDay): { [dat
 
 
   
-const CalendarComponent: React.FC<CalendarComponentProps> = ({ role, shifts }) => {
+const CalendarComponent: React.FC<CalendarComponentProps> = React.memo(({ role, shifts }) => {
   const navigation = useNavigation<CalendarNavigationProp>();
+  const agendaItems = React.useMemo(() => transformShiftsToAgendaFormat(role, shifts), [role, shifts]);
 
-  const handleShiftSelected = (item: any) => {
-    console.log(item)
-    // Stellen Sie sicher, dass item ein Shift-Objekt mit id und role ist
+  const handleShiftSelected = useCallback((item:any) => {
     if ('id' in item && 'role' in item) {
       navigation.navigate('ShiftDetailScreen', { shiftId: item.id, role: item.role });
     }
-  };
-  
+  }, [navigation]);
 
-      const renderItem = (item:any, isFirst:Boolean) => {
-        const itemStyle = isFirst ? styles.firstItem : styles.item;
-        return (
-          <TouchableOpacity style={itemStyle} onPress={() => handleShiftSelected(item)}>
-          <Text style={styles.taskTitle}>{item.name}</Text>
-          <Text style={styles.priorityLabel}>{item.employeeName}</Text>
-          <Text style={styles.itemText}>{`Beginn: ${item.startTime}`}</Text>
-          <Text style={styles.itemText}>{`Ende: ${item.endTime}`}</Text>
-        </TouchableOpacity>
-        );
-      };
+  
+  const renderItem = (item: any, isFirst: boolean) => (
+    <TouchableOpacity style={isFirst ? styles.firstItem : styles.item} onPress={() => handleShiftSelected(item)}>
+      <Text style={styles.taskTitle}>{item.name}</Text>
+      <Text style={styles.priorityLabel}>{item.employeeName}</Text>
+      <Text style={styles.itemText}>{`Beginn: ${item.startTime}`}</Text>
+      <Text style={styles.itemText}>{`Ende: ${item.endTime}`}</Text>
+    </TouchableOpacity>
+  );
+  
   
     const renderEmptyDate = () => {
       return (
@@ -103,19 +91,17 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ role, shifts }) =
   
     return (
       <Agenda
-        items={transformShiftsToAgendaFormat(role,shifts)}
-        renderItem={renderItem}
-        renderEmptyDate={renderEmptyDate}
-        theme={{
-          agendaDayTextColor: 'blue',
-          agendaDayNumColor: 'green',
-          agendaTodayColor: 'red',
-          // Weitere Themeneinstellungen...
-        }}
-        // Weitere Anpassungen...
-      />
+      items={agendaItems}
+      renderItem={renderItem}
+      renderEmptyDate={renderEmptyDate}
+      theme={{
+        agendaDayTextColor: 'blue',
+        agendaDayNumColor: 'green',
+        agendaTodayColor: 'red',
+      }}
+    />
     );
-  };
+  });
   export default CalendarComponent;
 
     const styles = StyleSheet.create({

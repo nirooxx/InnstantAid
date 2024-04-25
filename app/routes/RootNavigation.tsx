@@ -256,14 +256,11 @@ export default function RootNavigation() {
 
   // EmployeeNavigator
 const EmployeeNavigator = () => {
-  const insets = useSafeAreaInsets();
+  
   return (
  
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1 }}
-    >
-       <SafeAreaView style={{ flex: 1 }}>
+
+       <SafeAreaView  style={{ flex: 1 }}>
     <Tab.Navigator
     screenOptions={({ route }) => ({
       keyboardHidesTabBar: false,
@@ -317,7 +314,7 @@ const EmployeeNavigator = () => {
     <Tab.Screen name="Settings" options={{ headerShown: false }} component={EmployeeSettingsScreen} />
   </Tab.Navigator>
   </SafeAreaView>
-  </KeyboardAvoidingView>
+ 
 
   );
 }
@@ -326,10 +323,7 @@ const EmployeeNavigator = () => {
 const GuestNavigator = () => {
   return (
  
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1}}
-    >
+  
     <Tab.Navigator
      
               screenOptions={({ route }) => ({
@@ -384,7 +378,7 @@ const GuestNavigator = () => {
               <Tab.Screen name="Reservation" options={{ headerShown: false }} component={ReservationStack} />
               <Tab.Screen name="Settings" options={{ headerShown: false }} component={SettingsScreen} />
             </Tab.Navigator>
-            </KeyboardAvoidingView>
+           
 
           
   );
@@ -465,9 +459,7 @@ const MainTabNavigator = () => {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-    
-        <SafeAreaView style={globalStyles.safeArea}>
-  
+
           {!isLoggedIn ? (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
               <Stack.Screen name="Login" component={LoginScreen} />
@@ -479,9 +471,7 @@ const MainTabNavigator = () => {
              renderNavigationBasedOnRole(userRole)
           
           )}
-           
-        </SafeAreaView>
-      
+  
       </NavigationContainer>
     </SafeAreaProvider>
   );

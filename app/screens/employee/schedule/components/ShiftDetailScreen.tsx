@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ import { fetchShifts } from '../../../../store/scheduleSlice';
 import { fetchTasks } from '../../../../store/taskSlice';
 import { Shift, FirestoreTimestamp } from '../../types';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import dayjs from 'dayjs';
 
 interface RouteParams {
     shiftId: string;
@@ -23,125 +23,91 @@ const ShiftDetailScreen: React.FC = () => {
   const route = useRoute<ShiftDetailScreenRouteProp>();
   const { shiftId, role } = route.params as RouteParams;
   const [loading, setLoading] = useState(true);
-  const [shift, setShift] = useState<Shift | null>(null);
-  const [tasks, setTasks] = useState<Task[]>([]);
   const shifts = useSelector((state: RootState) => state.schedule.shifts);
   const allTasks = useSelector((state: RootState) => state.task.tasks);
 
- 
-
-  const isFirestoreTimestamp = (object: any): object is FirestoreTimestamp => {
-    return 'seconds' in object && 'nanoseconds' in object;
+  const toDateFormat = (timestamp:any) => {
+    if (!timestamp || typeof timestamp.seconds !== 'number') {
+      return new Date();
+    }
+    // Firestore Timestamp in Millisekunden umrechnen
+    return new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
   };
-  
-  // Hilfsfunktion zur Umwandlung von Firestore Timestamps in JavaScript Date-Objekte
+
+  const shift = useMemo(() => shifts.find(s => s.id === shiftId), [shifts, shiftId]);
+  const tasks = useMemo(() => {
+    return allTasks.filter(task => {
+        // Sicherstellen, dass die Daten gültig sind, bevor sie weiterverarbeitet werden
+        const taskDueDate = dayjs(task.dueDate);
+        const shiftStartDate = shift ? dayjs(toDateFormat(shift?.startTime)) : null;
+        // Prüfen Sie, ob das Datum gültig ist, bevor Sie fortfahren
+        if (!taskDueDate.isValid() || (shiftStartDate && !shiftStartDate.isValid())) {
+            console.error('Ungültiges Datum gefunden');
+            return false;
+        }
+
+        // Vergleich der formatierten Daten
+        return taskDueDate.format('YYYY-MM-DD') === shiftStartDate?.format('YYYY-MM-DD') && task.roleRequired === role;
+    });
+}, [allTasks, shift, role]);
+ 
   const toDate = (timestamp: Date | FirestoreTimestamp): Date => {
-    if (isFirestoreTimestamp(timestamp)) {
-      // Firestore Timestamp in Date umwandeln
-      return new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
-    } else {
-      // Es ist bereits ein Date-Objekt
-      return timestamp;
+    try {
+      if (typeof timestamp === 'object' && 'seconds' in timestamp) {
+        return new Date(timestamp.seconds * 1000);
+      } else if (timestamp instanceof Date) {
+        return timestamp;
+      } else {
+        throw new Error('Invalid date object');
+      }
+    } catch (error) {
+      console.error('Date conversion error:', error);
+      return new Date(); // Rückgabe des aktuellen Datums als Fallback
     }
   };
-    
-  const formatDateString = (date: Date): string => {
-    console.log(date)
-    return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
-  };
 
-  const formatTime = (date: Date): string => {
-    // Führende Nullen für Stunden und Minuten, falls nötig
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes}`;
-  };
   
-
   useEffect(() => {
-    // Lade Schichten und Aufgaben
     dispatch(fetchShifts());
     dispatch(fetchTasks());
   }, [dispatch]);
 
   useEffect(() => {
-    // Schicht mit der gegebenen ID suchen
-    const foundShift = shifts.find(s => s.id === shiftId);
-    if (foundShift) {
-      setShift(foundShift);
-    }
-  }, [shifts, shiftId]);
+    setLoading(!shift || !allTasks.length);
+  }, [shift, allTasks]);
 
-  useEffect(() => {
-    // Aufgaben filtern
-  
-    const filteredTasks = allTasks.filter((task) => {
-      // Umwandlung des dueDate von Task in ein Date-Objekt
-      const taskDueDate = new Date(task.dueDate);
-   
-      // Formatierung des taskDueDate und shift.startTime in das gleiche Format
-      const formattedTaskDate = formatDateString(taskDueDate);
- 
-      const shiftStartDate = shift ? formatDateString(toDate(shift.startTime)) : null;
-    
-      // Vergleich der formatierten Daten und der Rollen
-      return formattedTaskDate === shiftStartDate && task.roleRequired === role;
-    });
-  
-    setTasks(filteredTasks);
-    setLoading(false);
-  }, [allTasks, shift, role]);
-
-  if (loading || !shift) {
+  if (loading) {
     return <ActivityIndicator size="large" />;
   }
 
+  const formattedStartDate = shift?.startTime ? toDate(shift?.startTime).toLocaleDateString() : 'N/A';
+const formattedStartTime = shift?.startTime ? toDate(shift?.startTime).toLocaleTimeString() : 'N/A';
+const formattedEndDate = shift?.endTime ? toDate(shift?.endTime).toLocaleTimeString() : 'N/A';
 
   return (
-    <ScrollView style={styles.container}>
-       <View style={styles.shiftDetailsContainer}>
-      <Text style={styles.shiftTitle}>{shift.name}</Text>
-      <Text style={styles.shiftDetail}>
-        {`Datum: ${formatDateString(toDate(shift.startTime))}`}
-      </Text>
-      <Text style={styles.shiftDetail}>
-        {`Beginn: ${formatTime(toDate(shift.startTime))}`}
-      </Text>
-      <Text style={styles.shiftDetail}>
-        {`Ende: ${formatTime(toDate(shift.endTime))}`}
-      </Text>
-      <Text style={styles.shiftDetail}>{`Mitarbeiter: ${shift.employeeName}`}</Text>
-    </View>
-     {/* Aufgaben */}
+<ScrollView style={styles.container}>
+      <View style={styles.shiftDetailsContainer}>
+        <Text style={styles.shiftTitle}>{shift?.name}</Text>
+        <Text style={styles.shiftDetail}>
+          {`Datum: ${formattedStartDate}`}
+        </Text>
+        <Text style={styles.shiftDetail}>
+          {`Beginn: ${formattedStartTime}`}
+        </Text>
+        <Text style={styles.shiftDetail}>
+          {`Ende: ${formattedEndDate}`}
+        </Text>
+        <Text style={styles.shiftDetail}>{`Mitarbeiter: ${shift?.employeeName}`}</Text>
+      </View>
       <View style={styles.tasksContainer}>
         <Text style={styles.subtitle}>Zugehörige Aufgaben:</Text>
-        {
-          tasks.length > 0 ? (
-        tasks.map(task => (
-          <View style={styles.card}>
-          <View style={styles.priorityLabel}>
-            <Text style={styles.priorityText}>{task.priority}</Text>
+        {tasks.length > 0 ? tasks.map(task => (
+          <View key={task.id} style={styles.card}>
+            <Text style={styles.title}>{task.title}</Text>
+            <Text style={styles.description}>{task.description}</Text>
+            <Text style={styles.dueDate}>{task.dueDate}</Text>
           </View>
-          <View style={styles.statusLabel}>
-            <Icon name="checkmark-circle" size={14} color="#FFFFFF" />
-            <Text style={styles.statusText}>{task.status}</Text>
-          </View>
-          <Text style={styles.title}>{task.title}</Text>
-          <Text style={styles.description}>{task.description}</Text>
-          <Text style={styles.dueDate}>{formatDateString(new Date(task.dueDate))}</Text>
-          <View style={styles.iconsRow}>
-            <Icon name="chatbox-ellipses-outline" size={20} color="#000" />
-            <Text>2</Text>
-            <Icon name="attach-outline" size={20} color="#000" />
-            <Text>{task.assignedTo}</Text>
-            {/*task.users.map((user, index) => (
-              <Image key={index} source={{ uri: user.avatar }} style={styles.avatar} />
-            ))*/}
-          </View>
-        </View>
-        ))) : (
-          <Text style={styles.noTasksMessage}>Keine Aufgaben an diesem Tag.</Text>
-        )}
+        )) : <Text style={styles.noTasksMessage}>Keine Aufgaben an diesem Tag.</Text>}
       </View>
     </ScrollView>
   );

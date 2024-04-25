@@ -1,5 +1,5 @@
 // ScheduleScreen.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo  } from "react";
 import { View, StyleSheet,ScrollView, Modal, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchShifts } from '../../../store/scheduleSlice';
@@ -27,50 +27,35 @@ const ScheduleScreen: React.FC = () => {
  
 
   const toggleFormModal = () => {
-    setIsFormVisible(!isFormVisible);
+    setIsFormVisible(prev => !prev);
   };
 
-  function convertFirestoreTimestampToDate(timestamp: FirestoreTimestamp | Date): Date {
-    if (timestamp instanceof Date) {
-      return timestamp; // Ist bereits ein Date-Objekt
-    } else if ('seconds' in timestamp) {
-      return new Date(timestamp.seconds * 1000); // Umwandlung von Firestore Timestamp
-    }
-    return new Date(); // Rückgabe des aktuellen Datums als Fallback
-  }
+  const convertFirestoreTimestampToDate = (timestamp: FirestoreTimestamp | Date): Date => {
+    return timestamp instanceof Date ? timestamp : new Date(timestamp.seconds * 1000);
+  };
   
   // Umwandlung des Shift-Arrays in ein ShiftsForDay-Objekt
-  const shiftsForCalendar: ShiftsForDay = shiftsFromStore.reduce((acc, shift) => {
-    const startTime = convertFirestoreTimestampToDate(shift.startTime);
-    const endTime = convertFirestoreTimestampToDate(shift.endTime);
-  
-    if (startTime) {
+  const shiftsForCalendar = useMemo(() => {
+    return shiftsFromStore.reduce((acc, shift) => {
+      const startTime = convertFirestoreTimestampToDate(shift.startTime);
+      const endTime = convertFirestoreTimestampToDate(shift.endTime);
       const shiftDate = startTime.toISOString().split('T')[0];
-  
-      if (!acc[shiftDate]) {
-        acc[shiftDate] = [];
-      }
-  
+      if (!acc[shiftDate]) acc[shiftDate] = [];
       acc[shiftDate].push({ ...shift, startTime, endTime });
-    } else {
-      console.error('Ungültiges oder fehlendes Startdatum für Schicht:', shift);
-    }
-    return acc;
-  }, {} as ShiftsForDay);
+      return acc;
+    }, {} as ShiftsForDay);
+  }, [shiftsFromStore]);
 
   return (
     <>
       <View style={styles.container}>
-    <ScrollView
-      contentContainerStyle={{ paddingBottom: insets.bottom }} // Fügen Sie genug Padding hinzu, um die TabBar und den Button zu berücksichtigen
-      style={styles.scrollView}
-    >
+  
     
         {/* Role Selection */}
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={selectedRole}
-            onValueChange={(itemValue) => setSelectedRole(itemValue as Role)}
+            onValueChange={setSelectedRole}
             style={styles.picker}
           >
             <Picker.Item label="Rezeptionist" value="receptionist" />
@@ -81,7 +66,7 @@ const ScheduleScreen: React.FC = () => {
 
         {/* Calendar Component */}
         <CalendarComponent role={selectedRole} shifts={shiftsForCalendar} />
-        </ScrollView>
+    
    
 
 
@@ -109,7 +94,8 @@ const ScheduleScreen: React.FC = () => {
 };
 export default ScheduleScreen;
 
-const styles = StyleSheet.create({container: {
+const styles = StyleSheet.create({
+  container: {
   flex: 1,
   backgroundColor: '#f7f7f7',
 },
