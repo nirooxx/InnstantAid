@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Button, Text, TouchableOpacity, ScrollView, Image, StyleSheet } from 'react-native';
+import { View, Button, Text, TouchableOpacity, ScrollView, Image, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { GiftedChat, IMessage  } from 'react-native-gifted-chat';
+import { GiftedChat, IMessage, Bubble, InputToolbar  } from 'react-native-gifted-chat';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import {
   sendMessage,
@@ -15,6 +15,7 @@ import ChannelSelector from './component/ChannelSelector'; // Pfad entsprechend 
 import { RootState, AppDispatch } from '../../../store/store';
 import { RootStackParamList } from "../../../routes/types"; // Import your type definitions
 import { StackNavigationProp } from "@react-navigation/stack";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type EmplyoeeChatNavigationProp = StackNavigationProp<
@@ -50,6 +51,7 @@ const EmployeeChatScreen: React.FC = () => {
   const guests = useSelector((state: RootState) => state.chat.guests);
   const navigation = useNavigation<EmplyoeeChatNavigationProp>();
   const isFocused = useIsFocused();
+  const insets = useSafeAreaInsets();
   // Initialisierung eines States für die Zählung ungelesener Nachrichten pro Channel
 const [unreadCounts, setUnreadCounts] = useState<{ [key: string]: number }>({});
 // Beispiel für einen initialen State, wenn lastVisited im Redux Store gespeichert wird
@@ -179,7 +181,7 @@ function isFirestoreTimestamp(object: any): object is FirestoreTimestamp {
 
   if (selectedChannel && !selectedUserId) {
     return (
-      <ScrollView>
+<View>
        <View style={styles.backButtonContainer}>
         <TouchableOpacity onPress={() => setSelectedChannel(null)} style={styles.backButton}>
           <Icon name="arrow-left" size={20} color="#fff" />
@@ -251,8 +253,8 @@ function isFirestoreTimestamp(object: any): object is FirestoreTimestamp {
             </TouchableOpacity>
           );
         })}
-      
-      </ScrollView>
+      </View>
+    
 
     );
   }
@@ -296,9 +298,15 @@ function isFirestoreTimestamp(object: any): object is FirestoreTimestamp {
   
 
   return (
-    <View style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+    style={{ flex: 1 }}
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+    keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+  >
+    <View   style={[styles.container, { paddingBottom: insets.bottom + 70 }]}>
     {selectedUserId ? (
       <>
+              <Button title="Zurück zur Gästeliste" onPress={() => setSelectedUserId(null)} />
         <GiftedChat
           messages={formattedMessages}
           onSend={messagesToSend => onSend(messagesToSend)}
@@ -306,8 +314,33 @@ function isFirestoreTimestamp(object: any): object is FirestoreTimestamp {
             _id: userId,
             name: "Rezeption",
           }}
+          renderBubble={(props) => (
+            <Bubble
+              {...props}
+              wrapperStyle={{
+                right: { backgroundColor: '#0078ff' },
+                left: { backgroundColor: '#f0f0f0' },
+              }}
+              textStyle={{
+                right: { color: '#fff' },
+                left: { color: '#333' },
+              }}
+            />
+          )}
+          renderInputToolbar={(props) => (
+            <InputToolbar
+              {...props}
+              containerStyle={{
+                borderRadius: 0,
+                marginHorizontal: 8,
+                marginVertical: 8,
+              }}
+              primaryStyle={{ alignItems: 'center' }}
+            />
+          )}
+          placeholder='Type a message...'
         />
-        <Button title="Zurück zur Gästeliste" onPress={() => setSelectedUserId(null)} />
+
       </>
     ) : (
       // UI für die Anzeige der Gästeliste
@@ -321,10 +354,14 @@ function isFirestoreTimestamp(object: any): object is FirestoreTimestamp {
       </ScrollView>
     )}
   </View>
+  </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
+  container:{
+    flex:1
+  },
   chatContainer: {
     flex: 1,
     backgroundColor: '#ffffff', // oder jede andere Farbe, die das Design verlangt

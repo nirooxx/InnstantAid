@@ -260,7 +260,7 @@ const EmployeeNavigator = () => {
   return (
  
 
-       <SafeAreaView  style={{ flex: 1 }}>
+
     <Tab.Navigator
     screenOptions={({ route }) => ({
       keyboardHidesTabBar: false,
@@ -313,7 +313,7 @@ const EmployeeNavigator = () => {
     <Tab.Screen name="Reservation" options={{ headerShown: false }} component={EmployeeScheduleStack} />
     <Tab.Screen name="Settings" options={{ headerShown: false }} component={EmployeeSettingsScreen} />
   </Tab.Navigator>
-  </SafeAreaView>
+
  
 
   );

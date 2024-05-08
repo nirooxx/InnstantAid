@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -18,7 +18,8 @@ const ChatScreen: React.FC = () => {
   const userId = useSelector((state: RootState) => state.user.id);
   const [channelId, setChannelId] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
-  const messages = useSelector(selectMessages);
+  const rawMessages = useSelector(selectMessages);
+  const [messages, setMessages] = useState([]);
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
@@ -27,13 +28,20 @@ const ChatScreen: React.FC = () => {
     if (userId && channelId) {
       unsubscribe = dispatch(subscribeToMessages(userId, channelId));
     }
-    return () => unsubscribe(); // Diese Funktion wird aufgerufen, wenn die Komponente unmountet wird oder wenn sich userId/channelId ändert.
+    return () => unsubscribe();
   }, [userId, channelId, dispatch]);
-  
 
-  const onSend = (messages: any[] = []) => {
+  useEffect(() => {
+    const convertedMessages:any = rawMessages.map((msg:any) => ({
+      ...msg,
+      createdAt: new Date(msg.createdAt)
+    }));
+    setMessages(convertedMessages);
+  }, [rawMessages]);
+
+  const onSend = (newMessages = []) => {
     if (userId && channelId) {
-      messages.forEach((message) => {
+      newMessages.forEach((message:any) => {
         dispatch(sendMessage(userId, channelId, {
           _id: message._id,
           text: message.text,
@@ -54,12 +62,8 @@ const ChatScreen: React.FC = () => {
   }
 
   return (
-    <View  style={styles.container}>
-    <ScrollView
-    contentContainerStyle={{ paddingBottom: insets.bottom + 70}} // Fügen Sie genug Padding hinzu, um die TabBar und den Button zu berücksichtigen
-  >
-   
-       
+    
+    <View   style={[styles.container, { paddingBottom: insets.bottom + 60 }]}>
       {channelId && (
         <View style={styles.header}>
           <TouchableOpacity style={styles.headerButton} onPress={handleChannelExit}>
@@ -69,50 +73,39 @@ const ChatScreen: React.FC = () => {
         </View>
       )}
 
-      <GiftedChat
-        messages={messages}
-        onSend={(messages) => onSend(messages)}
-        user={{
-          _id: userId,
-          name: "Gast",
-        }}
-        renderBubble={(props) => (
-          <Bubble
-            {...props}
-            wrapperStyle={{
-              right: {
-                backgroundColor: '#0078ff',
-              },
-              left: {
-                backgroundColor: '#f0f0f0',
-              },
-            }}
-            textStyle={{
-              right: {
-                color: '#fff',
-              },
-              left: {
-                color: '#333',
-              },
-            }}
-          />
-        )}
-        renderInputToolbar={(props) => (
-          <InputToolbar
-            {...props}
-            containerStyle={{
-              borderRadius: 20,
-              marginHorizontal: 8,
-              marginVertical: 8,
-            }}
-            primaryStyle={{ alignItems: 'center' }}
-          />
-        )}
-      />
-  
- 
-    </ScrollView>
+<GiftedChat
+          messages={messages}
+          onSend={(msg:any) => onSend(msg)}
+          user={{ _id: userId || '', name: "Gast" }}
+          renderBubble={(props) => (
+            <Bubble
+              {...props}
+              wrapperStyle={{
+                right: { backgroundColor: '#0078ff' },
+                left: { backgroundColor: '#f0f0f0' },
+              }}
+              textStyle={{
+                right: { color: '#fff' },
+                left: { color: '#333' },
+              }}
+            />
+          )}
+          renderInputToolbar={(props) => (
+            <InputToolbar
+              {...props}
+              containerStyle={{
+                borderRadius: 0,
+                marginHorizontal: 8,
+                marginVertical: 8,
+              }}
+              primaryStyle={{ alignItems: 'center' }}
+            />
+          )}
+          placeholder='Type a message...'
+        />
+   
     </View>
+ 
   );
 };
 
