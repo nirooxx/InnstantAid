@@ -1,11 +1,11 @@
 // TableReservationScreen.tsx
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo  } from 'react';
 import { View, Text, Button, StyleSheet, ScrollView, Image, TouchableOpacity, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from "../../../../../routes/types"; // Import your type definitions
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+//import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../../store/store";
 import DateTimePicker from 'react-native-ui-datepicker';
@@ -19,26 +19,28 @@ type BookingNavigationProp = StackNavigationProp<
 
 const TableReservationScreen = () => {
   const [date, setDate] = useState(dayjs());
+  const memoizedDate = useMemo(() => date.toDate(), [date]);
   const [peopleCount, setPeopleCount] = useState(1);
   const user = useSelector((state: RootState) => state.user);
   const navigation = useNavigation<BookingNavigationProp>();
-  const insets = useSafeAreaInsets();
-  // Diese Funktionen müssen vervollständigt werden, um die Logik für die Auswahl der Personenanzahl zu implementieren
-  const increasePeopleCount = () => {
+ // const insets = useSafeAreaInsets();
+
+  const increasePeopleCount = useCallback(() => {
     setPeopleCount(prevCount => prevCount + 1);
-  };
+  }, []);
 
-  const decreasePeopleCount = () => {
+  const decreasePeopleCount = useCallback(() => {
     setPeopleCount(prevCount => (prevCount > 1 ? prevCount - 1 : 1));
-  };
+  }, []);
 
+  const handleDateChange = useCallback((params:any) => {
+    setDate(dayjs(params.date));
+  }, []);
 
-  console.log(date, date.format); // This will help identify if `date` is correctly a Day.js object
-
-  const handleBookTable = () => {
+  const handleBookTable = useCallback(() => {
     if (!date.format) {
       console.error('Date is not a Day.js object:', date);
-      return; // Prevent navigation if date is not formatted correctly
+      return;
     }
   
     navigation.navigate('BookingScreen', {
@@ -48,41 +50,32 @@ const TableReservationScreen = () => {
       name: 'Test',
       roomNumber: user?.roomNumber,
     });
-  };
+  }, [date, peopleCount, user]);
   
 
+
   return (
-    <ScrollView  contentContainerStyle={{ paddingBottom: insets.bottom + 70}}  style={styles.container}>
-      <View style={styles.landingSection}>
-        <Image
-          source={{ uri: 'https://cdn.dribbble.com/userupload/4824794/file/original-b86331c3f59bb5eb12844942b99e7d74.png?resize=1024x768' }} // Ersetzen Sie dies durch die URL des Restaurantbildes
-          style={styles.restaurantImage}
-        />
-        <Text style={styles.title}>Willkommen im Restaurant XYZ</Text>
-        <Text style={styles.subtitle}>Erleben Sie kulinarische Genüsse in gemütlicher Atmosphäre</Text>
-      </View>
+
       <View style={styles.reservationSection}>
-     
-      <DateTimePicker
-        mode="single"
-        date={date} // Ensures that the current Day.js date object is converted to a JavaScript Date object for the picker
-        onChange={(params) => setDate(dayjs(params.date))}
+        <DateTimePicker
+          mode="single"
+          date={memoizedDate}
+          onChange={handleDateChange}
           locale='DE'
           calendarTextStyle={styles.calendarText}
           selectedItemColor="#0047FF"
           timePicker={true}
           minDate={dayjs().startOf('day').toDate()}
         />
-    <View style={styles.dateDisplaySection}>
-  <Text style={styles.dateDisplayText}>
-    Ausgewähltes Datum: {date.format('DD.MM.YYYY')}
-  </Text>
-  <Text style={styles.dateDisplayText}>
-    Ausgewählte Uhrzeit: {date.format('HH:mm')}
-  </Text>
-</View>
-
-
+       
+        <View style={styles.dateDisplaySection}>
+          <Text style={styles.dateDisplayText}>
+            Ausgewähltes Datum: {date.format('DD.MM.YYYY')}
+          </Text>
+          <Text style={styles.dateDisplayText}>
+            Ausgewählte Uhrzeit: {date.format('HH:mm')} Uhr
+          </Text>
+        </View>
         <View style={styles.peopleCounter}>
           <TouchableOpacity onPress={decreasePeopleCount}>
             <Icon name="minus-box" size={30} color="#000" />
@@ -93,16 +86,14 @@ const TableReservationScreen = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.bookButtonContainer}>
-        <Button
-          title="Reservieren"
-          onPress={handleBookTable}
-          color="#841584"
-        />
+          <Button
+            title="Reservieren"
+            onPress={handleBookTable}
+            color="#841584"
+          />
+        </View>
+       
       </View>
-      </View>
-     
-      {/* Weitere Sektionen und Funktionalitäten */}
-    </ScrollView>
   );
 };
 
