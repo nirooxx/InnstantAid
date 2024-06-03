@@ -24,7 +24,7 @@ const SliderComponent: React.FC = () => {
   const dimensions = useWindowDimensions();
 
   // Berechnen Sie die Größen basierend auf den aktuellen Dimensionen
-  const sliderWidth = dimensions.width - 60;
+  const sliderWidth = dimensions.width;
   const itemWidth = dimensions.width - 60; // Berücksichtigen Sie den gewünschten Abstand
 
   const sliderItems: SliderItem[] = [
@@ -57,7 +57,7 @@ const SliderComponent: React.FC = () => {
 
   const renderItem = ({ item }: RenderItemProps) => {
     return (
-      <View style={styles.slide}>
+      <View style={[styles.slide, { width: itemWidth }]}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.description}>{item.description}</Text>
         <TouchableOpacity style={styles.button} onPress={item.onPress}>
@@ -68,6 +68,7 @@ const SliderComponent: React.FC = () => {
   };
 
   return (
+    <View style={styles.container}>
     <Carousel
       data={sliderItems}
       renderItem={renderItem}
@@ -77,10 +78,17 @@ const SliderComponent: React.FC = () => {
       containerCustomStyle={styles.carouselContainer}
       contentContainerCustomStyle={styles.carouselContentContainer}
     />
+     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
+  },
   carouselContainer: {
     flexGrow: 0, // Verhindert, dass der Container über die Größe der Kinder hinauswächst
   },
@@ -93,13 +101,12 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "center",
     alignItems: "center",
-    // marginHorizontal: 30, // Gibt dem Slide etwas Abstand von den Rändern
-    //  width: useWindowDimensions().width - 60, // Abzüglich der Gesamtpolsterung
   },
   title: {
     fontSize: 22,
     fontWeight: "bold",
     color: "#333",
+    marginBottom: 10,
   },
   description: {
     fontSize: 16,
@@ -110,7 +117,8 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#333",
     borderRadius: 10,
-    padding: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
   buttonText: {
     color: "white",

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { TouchableOpacity, View, StyleSheet, SafeAreaView } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useIsFocused } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { SafeAreaProvider, useSafeAreaInsets  } from "react-native-safe-area-context";
@@ -241,6 +241,17 @@ export default function RootNavigation() {
     );
   }
 
+  function GuestChatStack() {
+    return (
+      <Stack.Navigator>
+
+        <Stack.Screen name="ChatGuest" component={ChatScreen}  options={{ headerShown: false }}/>
+        <Stack.Screen name="GuestDashboard" component={GuestDashboard}  options={{ headerShown: false }}/>
+
+      </Stack.Navigator>
+    );
+  }
+
   function EmployeeScheduleStack() {
     return (
       <Stack.Navigator>
@@ -282,8 +293,7 @@ const EmployeeNavigator = () => {
         ); // Verwenden Sie die iconName Variable hier
       },
       tabBarStyle: {
-        ...tabBarStyles.tabBar,
-        // Entfernen Sie bottom: 10 und fügen Sie die SafeArea-Unterstützung hinzu
+        display: route.name === 'Chat' && useIsFocused() ? 'none' : 'flex',
         height: 65, // Setzen Sie die Höhe der TabBar
       },
       tabBarActiveTintColor: "#4B76E4",
@@ -346,9 +356,8 @@ const GuestNavigator = () => {
                   ); // Verwenden Sie die iconName Variable hier
                 },
                 tabBarStyle: {
-                  ...tabBarStyles.tabBar,
-                  // Entfernen Sie bottom: 10 und fügen Sie die SafeArea-Unterstützung hinzu
-                  height: 65, // Setzen Sie die Höhe der TabBar
+                  height: 65,
+                  display: route.name === 'Chat' && useIsFocused() ? 'none' : 'flex', // Conditionally hide the tab bar
                 },
                 tabBarActiveTintColor: "#4B76E4",
                 tabBarInactiveTintColor: "#A5A5A5",
@@ -374,7 +383,7 @@ const GuestNavigator = () => {
               
             >
                <Tab.Screen name="Dashboard" options={{ headerShown: false }} component={GuestDashboardStack} />
-              <Tab.Screen name="Chat" options={{ headerShown: false }} component={ChatScreen} />
+               <Tab.Screen name="Chat" options={{ headerShown: false }} component={GuestChatStack} />
               <Tab.Screen name="Reservation" options={{ headerShown: false }} component={ReservationStack} />
               <Tab.Screen name="Settings" options={{ headerShown: false }} component={SettingsScreen} />
             </Tab.Navigator>

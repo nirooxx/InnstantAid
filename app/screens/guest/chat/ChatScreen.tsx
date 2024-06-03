@@ -1,46 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   sendMessage,
   subscribeToMessages,
   selectMessages,
-  resetMessages
+  resetMessages,
 } from '../../../store/chatSlice';
 import { RootState, AppDispatch } from '../../../store/store';
 import ChannelSelector from './components/ChannelSelector'; // Pfad überprüfen
-// Stellen Sie sicher, dass der Pfad korrekt ist
 
 const ChatScreen: React.FC = () => {
   const userId = useSelector((state: RootState) => state.user.id);
   const [channelId, setChannelId] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const rawMessages = useSelector(selectMessages);
-  const [messages, setMessages] = useState([]);
-  const insets = useSafeAreaInsets();
+  const [messages, setMessages] = useState<any>([]);
+
 
   useEffect(() => {
+    if (!userId || !channelId) return;
+
     dispatch(resetMessages());
-    let unsubscribe = () => {};
-    if (userId && channelId) {
-      unsubscribe = dispatch(subscribeToMessages(userId, channelId));
-    }
-    return () => unsubscribe();
+    const unsubscribe = dispatch(subscribeToMessages(userId, channelId));
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, [userId, channelId, dispatch]);
 
   useEffect(() => {
-    const convertedMessages:any = rawMessages.map((msg:any) => ({
+    const convertedMessages = rawMessages.map((msg:any) => ({
       ...msg,
-      createdAt: new Date(msg.createdAt)
+      createdAt: new Date(msg.createdAt),
     }));
     setMessages(convertedMessages);
   }, [rawMessages]);
 
-  const onSend = (newMessages = []) => {
-    if (userId && channelId) {
+  const onSend = useCallback(
+    (newMessages = []) => {
+      if (!userId || !channelId) return;
+      
       newMessages.forEach((message:any) => {
         dispatch(sendMessage(userId, channelId, {
           _id: message._id,
@@ -49,12 +51,12 @@ const ChatScreen: React.FC = () => {
           user: message.user,
         }));
       });
-    }
-  };
+    },
+    [userId, channelId, dispatch]
+  );
 
-  // Funktion, um zum Kanalauswahlbildschirm zurückzukehren
   const handleChannelExit = () => {
-    setChannelId(null); // Setzt channelId zurück und zeigt den Kanalauswahlbildschirm an
+    setChannelId(null);
   };
 
   if (!channelId) {
@@ -62,8 +64,7 @@ const ChatScreen: React.FC = () => {
   }
 
   return (
-    
-    <View   style={[styles.container, { paddingBottom: insets.bottom + 60 }]}>
+    <View style={[styles.container]}>
       {channelId && (
         <View style={styles.header}>
           <TouchableOpacity style={styles.headerButton} onPress={handleChannelExit}>
@@ -73,10 +74,11 @@ const ChatScreen: React.FC = () => {
         </View>
       )}
 
-<GiftedChat
+  
+        <GiftedChat
           messages={messages}
           onSend={(msg:any) => onSend(msg)}
-          user={{ _id: userId || '', name: "Gast" }}
+          user={{ _id: userId || '', name: 'Gast' }}
           renderBubble={(props) => (
             <Bubble
               {...props}
@@ -94,18 +96,22 @@ const ChatScreen: React.FC = () => {
             <InputToolbar
               {...props}
               containerStyle={{
-                borderRadius: 0,
-                marginHorizontal: 8,
-                marginVertical: 8,
+                borderRadius: 50,
               }}
               primaryStyle={{ alignItems: 'center' }}
             />
           )}
-          placeholder='Type a message...'
+          placeholder="Type a message..."
+          alwaysShowSend
+          scrollToBottom
+          scrollToBottomComponent={() => (
+            <Icon name="chevron-double-down" size={24} color="#0078ff" />
+          )}
+          minComposerHeight={40}
+          maxComposerHeight={120}
         />
-   
+     
     </View>
- 
   );
 };
 
@@ -138,6 +144,5 @@ const styles = StyleSheet.create({
   },
   // Weitere Stile können hier hinzugefügt werden
 });
-
 
 export default ChatScreen;

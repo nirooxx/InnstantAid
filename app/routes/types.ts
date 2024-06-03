@@ -67,6 +67,7 @@ export type RootStackParamList = {
   };
   Chat: undefined;
   Dashboard: undefined;
+  GuestDashboard:undefined;
   RequestRoomCleanScreen:undefined;
   Settings: undefined;
   Login: undefined; // Stellen Sie sicher, dass Sie diese Route hinzufügen
