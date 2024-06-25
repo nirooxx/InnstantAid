@@ -70,7 +70,7 @@ const Dashboard: React.FC = () => {
   const roomStays = useSelector((state: RootState) => state.graphql.roomStays);
   const loading = useSelector((state: RootState) => state.graphql.loading);
   
-  console.log(user)
+
  //console.log(roomStays.length, roomStays[0])
   useEffect(() => {
     const todayISOString = new Date().toISOString().split('T')[0]; // 'YYYY-MM-DD'
@@ -91,6 +91,7 @@ const Dashboard: React.FC = () => {
   }, [dispatch]);
 
   const handleGuestInformationCard = (stay:any) => {
+    console.log(stay)
     // Übergabe der Reservierungsdaten an die BookingScreen Komponente
     navigation.navigate('GuestInformationCard',{
       guestName: stay.first_guest?.firstname + ' ' + stay.first_guest?.lastname,
@@ -109,7 +110,6 @@ const Dashboard: React.FC = () => {
 
   const filteredRoomStays = roomStays.filter(stay => stay.roomName === user?.roomNumber);
 
-  console.log(filteredRoomStays)
   return (
     <SafeAreaView style={styles.container} >
       <ScrollView style={styles.contentWrapper} contentContainerStyle={{ paddingBottom: insets.bottom +70}}>

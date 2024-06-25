@@ -10,7 +10,6 @@ import { useTheme } from "../theme/useTheme";
 import { getSecureValue } from "../utils/keyChain";
 import { updateToken } from "../store/userSlice";
 import { RootState } from "../store/store";
-import { KeyboardAvoidingView, Platform } from 'react-native';
 
 
 // Importieren Sie Ihre Bildschirmkomponenten
