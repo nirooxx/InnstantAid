@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import {fetchGuestReservations , deleteReservation } from '../../../../../../store/tableReservationSlice'; // Pfad anpassen
-import { RootState, AppDispatch } from '../../../../../../store/store'; // Pfad anpassen
-
+import { fetchGuestReservations, deleteReservation } from '../../../../../../store/tableReservationSlice';
+import { RootState, AppDispatch } from '../../../../../../store/store';
 
 const TableReservationsList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { reservations, status } = useSelector((state: RootState) => state.tableReservation);
-  const userId = useSelector((state: RootState) => state.user.id); // Hole die userId aus dem Benutzerzustand
+  const userId = useSelector((state: RootState) => state.user.id);
 
   useEffect(() => {
     if (userId) {
@@ -17,7 +16,6 @@ const TableReservationsList: React.FC = () => {
   }, [dispatch, userId]);
 
   const handleCancelReservation = async (reservationId: string) => {
-    // Stornierung der Reservierung
     const resultAction = await dispatch(deleteReservation(reservationId));
     if (deleteReservation.fulfilled.match(resultAction)) {
       Alert.alert('Stornierung', 'Die Reservierung wurde erfolgreich storniert.');
@@ -39,19 +37,18 @@ const TableReservationsList: React.FC = () => {
             <Text style={styles.reservationText}>Zeit: {item.time}</Text>
             <Text style={styles.reservationText}>Personen: {item.peopleCount}</Text>
             <TouchableOpacity
-                style={styles.cancelButton}
-                onPress={() => {
-                    if (item.id) {
-                    handleCancelReservation(item.id);
-                    } else {
-                    // Handle the case where item.id is undefined
-                    console.error("Fehler: Die Reservierungs-ID ist undefiniert.");
-                    Alert.alert("Fehler", "Die Reservierungs-ID ist undefiniert. Die Stornierung kann nicht durchgeführt werden.");
-                    }
-                }}
-                >
-                <Text style={styles.cancelButtonText}>Stornieren</Text>
-                </TouchableOpacity>
+              style={styles.cancelButton}
+              onPress={() => {
+                if (item.id) {
+                  handleCancelReservation(item.id);
+                } else {
+                  console.error("Fehler: Die Reservierungs-ID ist undefiniert.");
+                  Alert.alert("Fehler", "Die Reservierungs-ID ist undefiniert. Die Stornierung kann nicht durchgeführt werden.");
+                }
+              }}
+            >
+              <Text style={styles.cancelButtonText}>Stornieren</Text>
+            </TouchableOpacity>
           </View>
         )}
       />
@@ -62,31 +59,37 @@ const TableReservationsList: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000', // Schwarzer Hintergrund
+    backgroundColor: '#F7FAFC',
+    padding: 16,
   },
   reservationItem: {
-    backgroundColor: '#333', // Dunkelgrauer Hintergrund für jedes Item
+    backgroundColor: '#FFFFFF',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-    borderRadius: 5,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   reservationText: {
-    color: 'white',
+    color: '#2D3748',
     marginBottom: 5,
+    fontSize: 16,
   },
   cancelButton: {
-    backgroundColor: 'red',
+    backgroundColor: '#E53E3E',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 8,
     marginTop: 10,
+    alignItems: 'center',
   },
   cancelButtonText: {
-    color: 'white',
+    color: '#FFFFFF',
     fontSize: 16,
-    textAlign: 'center',
   },
-  // Weitere Styles...
 });
 
 export default TableReservationsList;

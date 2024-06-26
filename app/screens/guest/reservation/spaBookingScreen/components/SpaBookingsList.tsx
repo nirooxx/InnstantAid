@@ -37,7 +37,6 @@ const SpaBookingsList: React.FC = () => {
         <Icon name="person" size={16} color="#5A67D8" />
         <Text style={styles.details}>Name: {item.name}</Text>
       </View>
-      {/* Weitere Details mit Icons */}
       <TouchableOpacity style={styles.cancelButton} onPress={() => handleCancelBooking(item.id)}>
         <Icon name="close-circle" size={24} color="#fff" />
         <Text style={styles.cancelButtonText}>Cancel Booking</Text>
@@ -65,14 +64,15 @@ const SpaBookingsList: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f2f5',
+    backgroundColor: '#F7FAFC',
+    paddingTop: 20,
   },
   bookingItem: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-    borderRadius: 10,
+    borderRadius: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#2D3748',
     marginBottom: 8,
   },
   detailsContainer: {
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   },
   details: {
     fontSize: 16,
-    color: '#555',
+    color: '#4A5568',
     marginLeft: 8,
   },
   cancelButton: {
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 18,
-    color: '#999',
+    color: '#A0AEC0',
   },
 });
 

@@ -4,42 +4,40 @@ import Icon from "react-native-vector-icons/Ionicons";
 
 interface RoomDetailsProps {
   guestName: string;
-  roomName?: string; // Name des Zimmers
-  companyName?: string; // Name der Unternehmensgruppe, die die Reservierung getätigt hat
-  checkIn?: string; // Check-in Datum und Zeit
-  checkOut?: string; // Check-out Datum und Zeit
-  status?: string; // Status der Reservierung
-  notes?: string; // Spezielle Notizen zur Reservierung
-  onPress?: () => void; // Hinzugefügt, um eine Aktion beim Klicken auszuführen
+  roomName?: string;
+  companyName?: string;
+  checkIn?: string;
+  checkOut?: string;
+  status?: string;
+  notes?: string;
+  onPress?: () => void;
 }
 
 const RoomDetails: React.FC<RoomDetailsProps> = ({
   guestName,
-  roomName, // Name des Zimmers
-  companyName, // Name der Unternehmensgruppe, die die Reservierung getätigt hat
-  checkIn, // Check-in Datum und Zeit
-  checkOut, // Check-out Datum und Zeit
-  status, // Status der Reservierung
-  notes, // Spezielle Notizen zur Reservierung
+  roomName,
+  companyName,
+  checkIn,
+  checkOut,
+  status,
+  notes,
   onPress,
 }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.imageContainer}>
-        {/* Hier könnte ein Bild platziert werden, falls erforderlich */}
-        <Icon name="person-circle" size={50} color="#333" />
+        <Icon name="person-circle" size={50} color="#5A67D8" />
       </View>
       <View style={styles.infoContainer}>
         <Text style={styles.guestName}>{guestName}</Text>
-        <Text style={styles.role}>{companyName}</Text>
+        <Text style={styles.roomName}>{roomName}</Text>
+        <Text style={styles.companyName}>{companyName}</Text>
         <View style={styles.dateTimeContainer}>
-          <Icon name="calendar" size={20} color="#333" />
+          <Icon name="calendar" size={20} color="#5A67D8" />
           <Text style={styles.dateTimeText}>{checkIn} - {checkOut}</Text>
-         {/* <Icon name="time" size={20} color="#333" />
-          <Text style={styles.dateTimeText}>{time}</Text>*/}
         </View>
       </View>
-      <Icon name="chevron-forward" size={30} color="#333" />
+      <Icon name="chevron-forward" size={30} color="#5A67D8" />
     </TouchableOpacity>
   );
 };
@@ -47,32 +45,41 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    backgroundColor: "transparent", // Transparenter Hintergrund
-    borderRadius: 25,
-    paddingVertical: 25,
-    paddingHorizontal: 20,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 15,
     alignItems: "center",
-    marginVertical: 20,
-    borderWidth: 1, // Hinzugefügte Borderlinie
-    borderColor: "#ddd", // Farbe der Borderlinie
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   imageContainer: {
-    marginRight: 30,
+    marginRight: 20,
   },
   infoContainer: {
     flex: 1,
-    paddingRight: 15,
   },
   guestName: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "bold",
-    color: "#333",
-    marginBottom: 10,
+    color: "#2D3748",
+    marginBottom: 5,
   },
-  role: {
+  roomName: {
     fontSize: 18,
-    color: "#444",
-    marginBottom: 15,
+    color: "#4A5568",
+    marginBottom: 5,
+  },
+  companyName: {
+    fontSize: 16,
+    color: "#718096",
+    marginBottom: 10,
   },
   dateTimeContainer: {
     flexDirection: "row",
@@ -80,9 +87,8 @@ const styles = StyleSheet.create({
   },
   dateTimeText: {
     fontSize: 16,
-    color: "#555",
+    color: "#4A5568",
     marginLeft: 10,
-    marginRight: 20,
   },
 });
 

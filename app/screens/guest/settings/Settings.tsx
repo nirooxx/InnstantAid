@@ -32,32 +32,26 @@ const Settings = () => {
   const handleLogout = () => {
     removeSecureValue("token");
     dispatch(clearUser());
-    // Navigate to login screen after logout
     navigation.navigate("Login");
   };
 
   const handleLoginOrRegister = () => {
-    // Check if user is logged in
     if (userState.token) {
       handleLogout();
     } else {
-      // Navigate to login screen if not logged in
       navigation.navigate("Login");
     }
   };
 
   const handleReservations = () => {
-    // Navigiere zur TableReservationsList Komponente
     navigation.navigate("TableReservationsList");
   };
 
   const handleOrders = () => {
-    // Navigiere zur TableReservationsList Komponente
     navigation.navigate("OrderedList");
   };
 
   const handleSpaBookings = () => {
-    // Navigiere zur TableReservationsList Komponente
     navigation.navigate("SpaBookingsList");
   };
 
@@ -65,15 +59,16 @@ const Settings = () => {
     <Layout>
       <ScrollView
         style={[styles.contentContainer, { backgroundColor: theme.layoutBg }]}
+        contentContainerStyle={styles.scrollContainer}
       >
-        <Card style={{ backgroundColor: theme.cardBg }}>
+        <Card style={[styles.card, { backgroundColor: theme.cardBg }]}>
           <View style={styles.avatarRow}>
             <Image source={avatar} style={styles.avatar} />
             <View>
-              <Text style={{ color: theme.color }}>
+              <Text style={[styles.text, { color: theme.color }]}>
                 {userState.name || "Gast"}
               </Text>
-              <Text style={{ color: theme.color }}>
+              <Text style={[styles.text, { color: theme.color }]}>
                 {userState.username || "Bitte einloggen"}
               </Text>
             </View>
@@ -82,11 +77,11 @@ const Settings = () => {
             label="Reservierungen"
             onPress={handleReservations}
           />
-           <MenuItem
+          <MenuItem
             label="Bestellungen"
             onPress={handleOrders}
           />
-            <MenuItem
+          <MenuItem
             label="Buchungen"
             onPress={handleSpaBookings}
           />
@@ -94,7 +89,6 @@ const Settings = () => {
             label={userState.token ? "Logout" : "Login / Register"}
             onPress={handleLoginOrRegister}
           />
-          {/* ... other menu items ... */}
           <MenuItem
             label="Dark Mode"
             onPress={() => toggleTheme(theme.name !== "dark")}
@@ -105,10 +99,10 @@ const Settings = () => {
                 trackColor={{ false: "#767577", true: "#81b0ff" }}
                 thumbColor={theme.name === "dark" ? "#f5dd4b" : "#f4f3f4"}
                 ios_backgroundColor="#3e3e3e"
+                style={styles.switch}
               />
             }
           />
-          {/* ... other menu items ... */}
         </Card>
       </ScrollView>
     </Layout>
@@ -122,27 +116,14 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingVertical: 16,
     paddingHorizontal: 12,
-    background: 'rgba(255, 255, 255, 0.8)',
-    backdropFilter: 'blur(10px)',
+    backgroundColor: '#F7FAFC',
   },
-  header: {
-    paddingLeft: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    height: 50,
-    backgroundColor: 'transparent',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.1)',
-  },
-  btnHamburger: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+  scrollContainer: {
+    paddingBottom: 16,
   },
   avatarRow: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: 'transparent',
     paddingVertical: 20,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 0, 0, 0.1)',
@@ -153,12 +134,16 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginRight: 15,
     borderWidth: 2,
-    borderColor: '#fff',
+    borderColor: '#FFF',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: '600',
   },
   card: {
     backgroundColor: 'white',
@@ -171,11 +156,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
     elevation: 3,
-  },
-  menuItemText: {
-    color: '#333',
-    fontSize: 16,
-    fontWeight: '600',
   },
   switch: {
     transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }],

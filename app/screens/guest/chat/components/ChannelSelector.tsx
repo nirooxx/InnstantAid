@@ -2,12 +2,10 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from "../../../../routes/types"; // Import your type definitions
+import { RootStackParamList } from "../../../../routes/types";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-type ChatNavigationProp = StackNavigationProp<
-  RootStackParamList
->;
+type ChatNavigationProp = StackNavigationProp<RootStackParamList>;
 interface ChannelSelectorProps {
   onSelectChannel: (channelId: string) => void;
 }
@@ -26,7 +24,7 @@ const ChannelSelector: React.FC<ChannelSelectorProps> = ({ onSelectChannel }) =>
       <ScrollView style={styles.container}>
         <View style={styles.header}>
           <Image
-            source={require('../../../../assets/images/Thai-Message.webp')} //hotellobby.jpg
+            source={require('../../../../assets/images/Thai-Message.webp')}
             style={styles.headerImage}
           />
           <View style={styles.overlay}>
@@ -41,7 +39,7 @@ const ChannelSelector: React.FC<ChannelSelectorProps> = ({ onSelectChannel }) =>
               style={styles.channelButton}
               onPress={() => onSelectChannel(channel.id)}
             >
-              <Icon name={channel.icon} size={22} color="#5A67D8" />
+              <Icon name={channel.icon} size={24} color="#5A67D8" />
               <Text style={styles.channelText}>{channel.name}</Text>
             </TouchableOpacity>
           ))}
@@ -61,54 +59,57 @@ const ChannelSelector: React.FC<ChannelSelectorProps> = ({ onSelectChannel }) =>
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
+    backgroundColor: '#F7FAFC', // Light background color for the whole screen
   },
   container: {
     flex: 1,
   },
   header: {
-    height: 120, // Reduced header height
+    height: 180, // Increased header height for better visuals
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    backgroundColor: '#5A67D8', // Or any other color as per design
+    backgroundColor: '#5A67D8', // Main color
   },
   headerImage: {
     position: 'absolute',
     width: '100%',
     height: '100%',
+    resizeMode: 'cover',
     opacity: 0.3, // Make the background image less prominent
   },
   overlay: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 20,
   },
   headerTitle: {
-    fontSize: 20, // Reduced font size
+    fontSize: 24, // Adjusted font size for title
     fontWeight: 'bold',
     color: '#ffffff',
     textAlign: 'center',
   },
   headerSubtitle: {
-    fontSize: 14, // Reduced font size
+    fontSize: 16, // Adjusted font size for subtitle
     color: '#ffffff',
     textAlign: 'center',
+    marginTop: 4,
   },
   channelsContainer: {
-    marginTop: -30, // Negative margin to bring the list closer to the header
+    paddingVertical: 20, // Add padding for better spacing
   },
   channelButton: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#ffffff',
-    paddingVertical: 12,
+    paddingVertical: 15,
     paddingHorizontal: 20,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#dddddd',
   },
   channelText: {
-    marginLeft: 10,
-    fontSize: 16, // Adjusted font size
+    marginLeft: 12,
+    fontSize: 18, // Adjusted font size for channel text
     color: '#333333',
   },
   navigationButton: {

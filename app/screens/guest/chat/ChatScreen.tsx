@@ -19,7 +19,6 @@ const ChatScreen: React.FC = () => {
   const rawMessages = useSelector(selectMessages);
   const [messages, setMessages] = useState<any>([]);
 
-
   useEffect(() => {
     if (!userId || !channelId) return;
 
@@ -32,7 +31,7 @@ const ChatScreen: React.FC = () => {
   }, [userId, channelId, dispatch]);
 
   useEffect(() => {
-    const convertedMessages = rawMessages.map((msg:any) => ({
+    const convertedMessages = rawMessages.map((msg: any) => ({
       ...msg,
       createdAt: new Date(msg.createdAt),
     }));
@@ -42,8 +41,8 @@ const ChatScreen: React.FC = () => {
   const onSend = useCallback(
     (newMessages = []) => {
       if (!userId || !channelId) return;
-      
-      newMessages.forEach((message:any) => {
+
+      newMessages.forEach((message: any) => {
         dispatch(sendMessage(userId, channelId, {
           _id: message._id,
           text: message.text,
@@ -74,43 +73,42 @@ const ChatScreen: React.FC = () => {
         </View>
       )}
 
-  
-        <GiftedChat
-          messages={messages}
-          onSend={(msg:any) => onSend(msg)}
-          user={{ _id: userId || '', name: 'Gast' }}
-          renderBubble={(props) => (
-            <Bubble
-              {...props}
-              wrapperStyle={{
-                right: { backgroundColor: '#0078ff' },
-                left: { backgroundColor: '#f0f0f0' },
-              }}
-              textStyle={{
-                right: { color: '#fff' },
-                left: { color: '#333' },
-              }}
-            />
-          )}
-          renderInputToolbar={(props) => (
-            <InputToolbar
-              {...props}
-              containerStyle={{
-                borderRadius: 50,
-              }}
-              primaryStyle={{ alignItems: 'center' }}
-            />
-          )}
-          placeholder="Type a message..."
-          alwaysShowSend
-          scrollToBottom
-          scrollToBottomComponent={() => (
-            <Icon name="chevron-double-down" size={24} color="#0078ff" />
-          )}
-          minComposerHeight={40}
-          maxComposerHeight={120}
-        />
-     
+      <GiftedChat
+        messages={messages}
+        onSend={(msg: any) => onSend(msg)}
+        user={{ _id: userId || '', name: 'Gast' }}
+        renderBubble={(props) => (
+          <Bubble
+            {...props}
+            wrapperStyle={{
+              right: { backgroundColor: '#5A67D8' },
+              left: { backgroundColor: '#f0f0f0' },
+            }}
+            textStyle={{
+              right: { color: '#fff' },
+              left: { color: '#333' },
+            }}
+          />
+        )}
+        renderInputToolbar={(props) => (
+          <InputToolbar
+            {...props}
+            containerStyle={{
+              borderRadius: 20,
+              margin: 2.5,
+            }}
+            primaryStyle={{ alignItems: 'center' }}
+          />
+        )}
+        placeholder="Nachricht eingeben..."
+        alwaysShowSend
+        scrollToBottom
+        scrollToBottomComponent={() => (
+          <Icon name="chevron-double-down" size={24} color="#5A67D8" />
+        )}
+        minComposerHeight={40}
+        maxComposerHeight={120}
+      />
     </View>
   );
 };
@@ -118,12 +116,12 @@ const ChatScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e5e5e5',
+    backgroundColor: '#F7FAFC',
   },
   header: {
     paddingVertical: 10,
     paddingHorizontal: 10,
-    backgroundColor: '#0078ff',
+    backgroundColor: '#5A67D8',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',

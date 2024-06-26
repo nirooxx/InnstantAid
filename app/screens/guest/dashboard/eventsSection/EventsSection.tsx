@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import Layout from "../../../../components/Layout";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -58,7 +57,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events }) => {
 
 const styles = StyleSheet.create({
   section: {
-    marginVertical: 16,
+    marginVertical: 0,
   },
   sectionHeader: {
     flexDirection: "row",
@@ -67,18 +66,19 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   sectionTitle: {
-    fontSize: hp("2.5%"), // 2.5% der Bildschirmhöhe
+    fontSize: hp("2.5%"),
     fontWeight: "bold",
     color: "#333",
   },
   viewAll: {
-    color: "#0077ff", // Leuchtendes Blau
-    fontSize: hp("2%"), // 2% der Bildschirmhöhe
+    color: "#5A67D8",
+    fontSize: hp("2%"),
   },
   eventCard: {
-    marginRight: wp("2.5%"), // 2.5% der Bildschirmbreite
+    marginRight: wp("2.5%"),
     borderRadius: 10,
     overflow: "hidden",
+    backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: hp("0.25%") },
     shadowOpacity: 0.3,
@@ -86,30 +86,35 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   eventImage: {
-    width: wp("50%"), // 50% der Bildschirmbreite
-    height: hp("15%"), // 15% der Bildschirmhöhe
+    width: wp("50%"),
+    height: hp("15%"),
   },
   eventOverlay: {
     position: "absolute",
     bottom: 0,
     backgroundColor: "rgba(0,0,0,0.5)",
     width: "100%",
-    padding: wp("1.25%"), // 1.25% der Bildschirmbreite
+    padding: wp("1.25%"),
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
   },
   eventTitle: {
     color: "#ffffff",
     fontWeight: "bold",
+    fontSize: hp("2%"),
+    marginBottom: 2,
   },
   eventDate: {
     color: "#ffffff",
+    fontSize: hp("1.75%"),
   },
   eventTime: {
     color: "#ffffff",
+    fontSize: hp("1.75%"),
   },
   eventLocation: {
     color: "#ffffff",
+    fontSize: hp("1.75%"),
   },
 });
 

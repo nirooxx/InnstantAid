@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
-import  * as ImagePicker  from 'react-native-image-picker';
+import * as ImagePicker from 'react-native-image-picker';
 import { useDispatch, useSelector } from 'react-redux'; // Import useDispatch
-import { submitMaintenanceRequest } from '../../../../../store/houseKeepingSlice'; 
+import { submitMaintenanceRequest } from '../../../../../store/houseKeepingSlice';
 import { AppDispatch } from '../../../../../store/store';
 import { RootState } from '../../../../../store/store';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from "../../../../../routes/types"; // Import your type definitions
 import { StackNavigationProp } from "@react-navigation/stack";
 
-type HosekeepingNavigationProp = StackNavigationProp<
+type HousekeepingNavigationProp = StackNavigationProp<
   RootStackParamList
 >;
 
@@ -19,15 +19,15 @@ const MaintenanceScreen: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user);
-  const navigation = useNavigation<HosekeepingNavigationProp>();
+  const navigation = useNavigation<HousekeepingNavigationProp>();
 
   const handleChoosePhoto = () => {
-    const options:any = {
+    const options: any = {
       mediaType: 'photo',
       quality: 1,
     };
-    
-    ImagePicker?.launchImageLibrary(options, (response:any) => {
+
+    ImagePicker.launchImageLibrary(options, (response: any) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.errorCode) {
@@ -47,7 +47,6 @@ const MaintenanceScreen: React.FC = () => {
 
     // Dispatch the submitMaintenanceRequest action with the form data
     dispatch(submitMaintenanceRequest({
-    
       userId: user.id,
       roomNumber: user.roomNumber,
       date: new Date().toLocaleDateString('de-DE'),
@@ -55,21 +54,21 @@ const MaintenanceScreen: React.FC = () => {
       imageUri: image ? image : '', // Assuming imageUri should be populated with the image state
       notes,
     }))
-    .unwrap() // Unwrap the Promise returned by dispatch
-    .then(() => {
-      Alert.alert('Success', 'Maintenance request submitted');
-      navigation.goBack();
-    })
-    .catch((error) => {
-      Alert.alert('Error', 'Failed to submit maintenance request: ' + error.message);
-    });
+      .unwrap() // Unwrap the Promise returned by dispatch
+      .then(() => {
+        Alert.alert('Success', 'Maintenance request submitted');
+        navigation.goBack();
+      })
+      .catch((error) => {
+        Alert.alert('Error', 'Failed to submit maintenance request: ' + error.message);
+      });
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Maintenance</Text>
       <Text style={styles.instructions}>
-        Please describe the issue and click submit. We aim to resolve issues as soon as possible, usually within 24 hours. If you believe the problem requires urgent attention please click the chat button below. We apologise for any inconvenience caused.
+        Please describe the issue and click submit. We aim to resolve issues as soon as possible, usually within 24 hours. If you believe the problem requires urgent attention please click the chat button below. We apologize for any inconvenience caused.
       </Text>
 
       <TextInput
@@ -100,64 +99,64 @@ const MaintenanceScreen: React.FC = () => {
 export default MaintenanceScreen;
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      padding: 20,
-      backgroundColor: '#fff', // Weißer Hintergrund für den gesamten Bildschirm
-    },
-    header: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      marginBottom: 16,
-    },
-    instructions: {
-      fontSize: 16,
-      color: '#333', // Dunkelgrauer Text für die Anweisungen
-      marginBottom: 20,
-    },
-    inputContainer: {
-      marginBottom: 16,
-    },
-    input: {
-      borderColor: '#ccc',
-      borderWidth: 1,
-      marginBottom: 12,
-      padding: 10,
-      borderRadius: 4,
-      backgroundColor: '#f7f7f7', // Leicht grauer Hintergrund für Inputfelder
-    },
-    notesInput: {
-      height: 100, // Höhe für das Notizenfeld
-      textAlignVertical: 'top', // Startet den Text von oben
-    },
-    button: {
-      backgroundColor: '#5D5DFF', // Blaue Farbe für den Button
-      padding: 15,
-      borderRadius: 4,
-      alignItems: 'center',
-      marginBottom: 12,
-    },
-    buttonText: {
-      color: '#fff', // Weißer Text für den Button
-      fontWeight: 'bold',
-    },
-    submitButton: {
-      backgroundColor: '#4CAF50', // Grüne Farbe für den Submit-Button
-      padding: 15,
-      borderRadius: 4,
-      alignItems: 'center',
-    },
-    submitButtonText: {
-      color: '#fff', // Weißer Text für den Submit-Button
-      fontWeight: 'bold',
-      fontSize: 18,
-    },
-    image: {
-      width: '100%', // Vollständige Breite des Containers
-      height: 200, // Feste Höhe für das Bild
-      resizeMode: 'cover', // Bedeckt den verfügbaren Raum ohne zu verzerren
-      marginBottom: 12,
-    },
-  });
-  
- 
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#F7FAFC', // Hellgrauer Hintergrund für den gesamten Bildschirm
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2D3748', // Dunkle Textfarbe für den Header
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  instructions: {
+    fontSize: 16,
+    color: '#4A5568', // Mittelgraue Textfarbe für die Anweisungen
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  input: {
+    borderColor: '#E2E8F0', // Hellgraue Rahmenfarbe
+    borderWidth: 1,
+    borderRadius: 8,
+    backgroundColor: '#FFFFFF', // Weißer Hintergrund für Inputfelder
+    padding: 12,
+    marginBottom: 12,
+    color: '#2D3748', // Dunkle Textfarbe
+  },
+  notesInput: {
+    height: 100, // Höhe für das Notizenfeld
+    textAlignVertical: 'top', // Startet den Text von oben
+  },
+  button: {
+    backgroundColor: '#5A67D8', // Hauptfarbe für den Button
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  buttonText: {
+    color: '#FFFFFF', // Weißer Text für den Button
+    fontWeight: 'bold',
+  },
+  submitButton: {
+    backgroundColor: '#5A67D8', // Hauptfarbe für den Submit-Button
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  submitButtonText: {
+    color: '#FFFFFF', // Weißer Text für den Submit-Button
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  image: {
+    width: '100%', // Vollständige Breite des Containers
+    height: 200, // Feste Höhe für das Bild
+    resizeMode: 'cover', // Bedeckt den verfügbaren Raum ohne zu verzerren
+    marginBottom: 12,
+    borderRadius: 8,
+  },
+});

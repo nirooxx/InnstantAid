@@ -1,6 +1,5 @@
-// ConfirmationScreen.tsx
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 import { Button } from 'react-native-elements';
 import { useDispatch } from 'react-redux';
 import { deleteReservation } from '../../../../../../store/tableReservationSlice'; // Pfad anpassen
@@ -16,23 +15,20 @@ type ConfirmationNavigationProp = StackNavigationProp<
 >;
 
 type ConfirmScreenRouteProp = RouteProp<{ params: { reservationId: string;} }, 'params'>;
-// Typdefinitionen und Props entsprechend anpassen
-const ConfirmationScreen = () => {
+
+const ConfirmationScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation<ConfirmationNavigationProp>();
   const route = useRoute<ConfirmScreenRouteProp>();
 
-  // Hier wäre die ID der Reservierung, die du zum Stornieren brauchst
   const { reservationId } = route.params;
-console.log(reservationId)
 
-const handleCancelBooking = async () => {
+  const handleCancelBooking = async () => {
     const resultAction = await dispatch(deleteReservation(reservationId));
     if (deleteReservation.fulfilled.match(resultAction)) {
       navigation.goBack();
     } else {
       if (resultAction.payload) {
-        // Fehlerbehandlung, z.B. ein Alert anzeigen
         console.log('Fehler', 'Die Stornierung ist fehlgeschlagen.');
       }
     }
@@ -44,7 +40,7 @@ const handleCancelBooking = async () => {
         <Icon
           name="check-circle-outline"
           size={72}
-          color="green"
+          color="#5A67D8"
           style={styles.checkIcon}
         />
         <Text style={styles.confirmationText}>Ihre Buchung wurde erfolgreich vorgenommen!</Text>
@@ -74,7 +70,7 @@ const handleCancelBooking = async () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F7FAFC',
   },
   container: {
     flex: 1,
@@ -87,11 +83,13 @@ const styles = StyleSheet.create({
   },
   confirmationText: {
     fontSize: 20,
+    fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 40,
+    color: '#2D3748',
   },
   button: {
-    backgroundColor: '#2089dc',
+    backgroundColor: '#5A67D8',
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 30,
@@ -100,10 +98,12 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   cancelButton: {
-    backgroundColor: 'red',
+    backgroundColor: '#E53E3E',
   },
   buttonTitle: {
     marginHorizontal: 10,
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 

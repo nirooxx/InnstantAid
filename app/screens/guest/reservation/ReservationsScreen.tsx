@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from "../../../routes/types"; // Import your type definitions
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -29,18 +29,26 @@ const ReservationsScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={handleTableReservationPress}>
-        <Text style={styles.buttonText}>Tischreservierung</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handleSpaBookingPress}>
-        <Text style={styles.buttonText}>Spa-Buchung</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handleRoomServiceOrderPress}>
-        <Text style={styles.buttonText}>Zimmerservice-Bestellung</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handleHouseKeepingPress}>
-        <Text style={styles.buttonText}>Housekeeping</Text>
-      </TouchableOpacity>
+      <View style={styles.row}>
+        <TouchableOpacity style={styles.tile} onPress={handleTableReservationPress}>
+          <Image source={require('../../../assets/images/avatar.png')} style={styles.image} />
+          <Text style={styles.tileText}>Tischreservierung</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.tile} onPress={handleSpaBookingPress}>
+          <Image source={require('../../../assets/images/avatar.png')} style={styles.image} />
+          <Text style={styles.tileText}>Spa-Buchung</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.row}>
+        <TouchableOpacity style={styles.tile} onPress={handleRoomServiceOrderPress}>
+          <Image source={require('../../../assets/images/avatar.png')} style={styles.image} />
+          <Text style={styles.tileText}>Zimmerservice-Bestellung</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.tile} onPress={handleHouseKeepingPress}>
+          <Image source={require('../../../assets/images/avatar.png')} style={styles.image} />
+          <Text style={styles.tileText}>Housekeeping</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -49,23 +57,38 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#F7FAFC',
   },
-  button: {
-    backgroundColor: '#007bff',
-    padding: 15,
-    borderRadius: 5,
-    marginVertical: 10,
-    width: '100%',
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  tile: {
+    backgroundColor: '#FFFFFF',
+    width: '48%',
+    aspectRatio: 1,
+    justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+    padding: 10,
   },
-  buttonText: {
-    color: '#fff',
+  image: {
+    width: 50,
+    height: 50,
+    marginBottom: 10,
+  },
+  tileText: {
+    color: '#2D3748',
     fontWeight: 'bold',
+    textAlign: 'center',
   },
-  // Weitere Styles...
 });
 
 export default ReservationsScreen;

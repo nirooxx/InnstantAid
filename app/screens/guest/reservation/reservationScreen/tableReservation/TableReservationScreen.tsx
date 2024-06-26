@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { View, Text, Button, StyleSheet, ScrollView, TouchableOpacity, Platform } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from "../../../../../routes/types"; // Import your type definitions
+import { RootStackParamList } from "../../../../../routes/types";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../../store/store";
@@ -15,7 +15,7 @@ type BookingNavigationProp = StackNavigationProp<
   "BookingScreen"
 >;
 
-const TableReservationScreen = () => {
+const TableReservationScreen: React.FC = () => {
   const [date, setDate] = useState(dayjs());
   const memoizedDate = useMemo(() => date.toDate(), [date]);
   const [peopleCount, setPeopleCount] = useState(1);
@@ -68,7 +68,7 @@ const TableReservationScreen = () => {
               onChange={handleDateChange}
               locale='DE'
               calendarTextStyle={styles.calendarText}
-              selectedItemColor="#0047FF"
+              selectedItemColor="#5A67D8"
               minDate={dayjs().startOf('day').toDate()}
             />
             {showTimePicker && (
@@ -93,19 +93,17 @@ const TableReservationScreen = () => {
           </View>
           <View style={styles.peopleCounter}>
             <TouchableOpacity onPress={decreasePeopleCount}>
-              <Icon name="minus" type="material-community" size={30} color="#000" />
+              <Icon name="minus" type="material-community" size={30} color="#5A67D8" />
             </TouchableOpacity>
             <Text style={styles.peopleCount}>{`${peopleCount} Person(en)`}</Text>
             <TouchableOpacity onPress={increasePeopleCount}>
-              <Icon name="plus" type="material-community" size={30} color="#000" />
+              <Icon name="plus" type="material-community" size={30} color="#5A67D8" />
             </TouchableOpacity>
           </View>
           <View style={styles.bookButtonContainer}>
-            <Button
-              title="Reservieren"
-              onPress={handleBookTable}
-              color="#841584"
-            />
+            <TouchableOpacity style={styles.bookButton} onPress={handleBookTable}>
+              <Text style={styles.bookButtonText}>Reservieren</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -114,11 +112,11 @@ const TableReservationScreen = () => {
 };
 
 const colors = {
-  primary: '#007bff',
-  light: '#f8f9fa',
-  dark: '#343a40',
-  white: '#ffffff',
-  grey: '#6c757d',
+  primary: '#5A67D8',
+  light: '#F7FAFC',
+  dark: '#2D3748',
+  white: '#FFFFFF',
+  grey: '#A0AEC0',
 };
 
 const styles = StyleSheet.create({
@@ -132,12 +130,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   calendarText: {
-    color: '#333',
+    color: colors.dark,
     fontSize: 16,
   },
   bookButtonContainer: {
     marginVertical: 20,
     paddingHorizontal: 20,
+  },
+  bookButton: {
+    backgroundColor: colors.primary,
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  bookButtonText: {
+    color: colors.white,
+    fontWeight: 'bold',
+    fontSize: 18,
   },
   peopleCounter: {
     flexDirection: 'row',
@@ -147,6 +156,7 @@ const styles = StyleSheet.create({
   },
   peopleCount: {
     fontSize: 16,
+    color: colors.dark,
   },
   reservationSection: {
     padding: 20,
@@ -164,7 +174,7 @@ const styles = StyleSheet.create({
   },
   dateDisplayText: {
     fontSize: 16,
-    color: '#333',
+    color: colors.dark,
     marginVertical: 4,
   },
   dateTimePickerWrapper: {

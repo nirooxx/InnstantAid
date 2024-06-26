@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux'; // Import useDispatch
-import { submitRoomCleanRequest  } from '../../../../../store/houseKeepingSlice'; 
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { submitRoomCleanRequest } from '../../../../../store/houseKeepingSlice';
 import { AppDispatch } from '../../../../../store/store';
 import { RootState } from '../../../../../store/store';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from "../../../../../routes/types"; // Import your type definitions
+import { RootStackParamList } from "../../../../../routes/types";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-type HosekeepingNavigationProp = StackNavigationProp<
+type HousekeepingNavigationProp = StackNavigationProp<
   RootStackParamList
 >;
 
@@ -19,16 +19,15 @@ const RoomCleanFrequencyScreen: React.FC = () => {
   const [notes, setNotes] = useState('');
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user);
-  const navigation = useNavigation<HosekeepingNavigationProp>();
+  const navigation = useNavigation<HousekeepingNavigationProp>();
 
   const handleSelectFrequency = (option: CleanFrequencyOption) => {
     setSelectedFrequency(option);
   };
 
   const handleSchedule = () => {
-    // Annahme: Die ID und das Datum werden serverseitig generiert oder sind in diesem Kontext nicht erforderlich
     dispatch(submitRoomCleanRequest({
-      userId: user.id,
+      userId: user?.id,
       roomNumber: user.roomNumber,
       date: new Date().toLocaleDateString('de-DE'),
       frequency: selectedFrequency,
@@ -42,11 +41,10 @@ const RoomCleanFrequencyScreen: React.FC = () => {
     .catch((error) => {
       Alert.alert('Error', `Failed to set room clean frequency: ${error.message}`);
     });
-
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.title}>Set Room Clean Frequency</Text>
       <Text style={styles.subtitle}>
         Set your room clean frequency. If none set, your room clean will occur between 10am and 1pm daily
@@ -82,10 +80,9 @@ const RoomCleanFrequencyScreen: React.FC = () => {
       <TouchableOpacity style={styles.scheduleButton} onPress={handleSchedule}>
         <Text style={styles.scheduleButtonText}>SCHEDULE</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
-
 
 export default RoomCleanFrequencyScreen;
 
@@ -93,16 +90,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#F7FAFC',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: '#2D3748',
+    textAlign: 'center',
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: '#4A5568',
+    textAlign: 'center',
     marginBottom: 20,
   },
   frequencyContainer: {
@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
   },
   frequencyLabel: {
     fontWeight: 'bold',
+    color: '#2D3748',
     marginBottom: 10,
   },
   optionContainer: {
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
     width: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#000',
+    borderColor: '#5A67D8',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 10,
@@ -131,34 +132,37 @@ const styles = StyleSheet.create({
     height: 12,
     width: 12,
     borderRadius: 6,
-    backgroundColor: '#000',
+    backgroundColor: '#5A67D8',
   },
   optionText: {
-    fontSize: 18,
+    fontSize: 16,
+    color: '#2D3748',
   },
   notesLabel: {
     fontWeight: 'bold',
+    color: '#2D3748',
     marginBottom: 10,
   },
   notesInput: {
-    borderColor: '#ccc',
+    borderColor: '#E2E8F0',
     borderWidth: 1,
-    borderRadius: 5,
-    padding: 10,
+    borderRadius: 8,
+    padding: 12,
     height: 100,
     textAlignVertical: 'top',
     marginBottom: 20,
+    color: '#2D3748',
+    backgroundColor: '#FFFFFF',
   },
   scheduleButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#5A67D8',
     padding: 15,
-    borderRadius: 5,
+    borderRadius: 8,
     alignItems: 'center',
   },
   scheduleButtonText: {
-    color: '#fff',
+    color: '#FFFFFF',
     fontWeight: 'bold',
     fontSize: 18,
   },
 });
-

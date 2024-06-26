@@ -36,10 +36,17 @@ const HotelMap: React.FC = () => {
       {Object.keys(hotelAreas).map((areaKey) => (
         <TouchableOpacity
           key={areaKey}
-          style={styles.areaButton} // Positionierung je nach Bild festlegen
+          style={[
+            styles.areaButton,
+            // Beispielpositionierung, anpassen für jede Bereich
+            areaKey === "spa" && { top: 100, left: 50 },
+            areaKey === "fitness" && { top: 150, left: 100 },
+          ]}
           onPress={() => setSelectedArea(areaKey as keyof typeof hotelAreas)}
         >
-          <Text>{hotelAreas[areaKey as keyof typeof hotelAreas].name}</Text>
+          <Text style={styles.areaButtonText}>
+            {hotelAreas[areaKey as keyof typeof hotelAreas].name}
+          </Text>
         </TouchableOpacity>
       ))}
 
@@ -54,12 +61,14 @@ const HotelMap: React.FC = () => {
               <Text style={styles.modalTitle}>
                 {hotelAreas[selectedArea].name}
               </Text>
-              <Text>{hotelAreas[selectedArea].details}</Text>
+              <Text style={styles.modalDetails}>
+                {hotelAreas[selectedArea].details}
+              </Text>
               <TouchableOpacity
                 onPress={() => setSelectedArea(null)}
                 style={styles.closeButton}
               >
-                <Text>Close</Text>
+                <Text style={styles.closeButtonText}>Schließen</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -74,7 +83,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff", // Weißer Hintergrund für die gesamte Komponente
+    backgroundColor: "#f0f4f8", // Leichter Hintergrund für die gesamte Komponente
   },
   mapImage: {
     width: "100%",
@@ -83,14 +92,18 @@ const styles = StyleSheet.create({
   },
   areaButton: {
     position: "absolute",
-    backgroundColor: "#FFF",
+    backgroundColor: "#5A67D8", // Hauptfarbe
     padding: 10,
     borderRadius: 5,
     elevation: 5,
-    // Beispiel für die Positionierung des SPA-Bereichs
-    // Sie müssen die top und left Werte für jeden Bereich anpassen
-    top: 100, // Beispielwert
-    left: 50, // Beispielwert
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+  },
+  areaButtonText: {
+    color: "#FFF",
+    fontWeight: "bold",
   },
   modalOverlay: {
     flex: 1,
@@ -105,10 +118,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     maxWidth: "80%", // Verhindert, dass das Modal zu breit wird
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
@@ -117,14 +127,23 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
+    color: "#5A67D8",
+  },
+  modalDetails: {
+    fontSize: 16,
+    color: "#333",
   },
   closeButton: {
     marginTop: 20,
-    backgroundColor: "#f44336", // Rote Farbe für den Schließen-Button
+    backgroundColor: "#5A67D8", // Hauptfarbe
     padding: 10,
     borderRadius: 20,
     borderWidth: 1,
     borderColor: "#FFF",
+  },
+  closeButtonText: {
+    color: "#FFF",
+    fontWeight: "bold",
   },
 });
 

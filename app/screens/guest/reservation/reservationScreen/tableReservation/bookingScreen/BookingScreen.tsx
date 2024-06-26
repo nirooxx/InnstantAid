@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { Card, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { useDispatch, useSelector  } from 'react-redux';
-import { addReservation, fetchReservations  } from '../../../../../../store/tableReservationSlice'; 
+import { useDispatch, useSelector } from 'react-redux';
+import { addReservation, fetchReservations } from '../../../../../../store/tableReservationSlice';
 import { AppDispatch } from '../../../../../../store/store';
 import { RootState } from '../../../../../../store/store';
 import { RootStackParamList } from "../../../../../../routes/types"; // Import your type definitions
@@ -15,7 +15,7 @@ type BookingNavigationProp = StackNavigationProp<
   'ConfirmationScreen'
 >;
 
-type BookingScreenRouteProp = RouteProp<{ params: { date: string; time: string; peopleCount: number; name: string, roomNumber: string} }, 'params'>;
+type BookingScreenRouteProp = RouteProp<{ params: { date: string; time: string; peopleCount: number; name: string, roomNumber: string } }, 'params'>;
 
 const BookingScreen: React.FC = () => {
   const navigation = useNavigation<BookingNavigationProp>();
@@ -35,50 +35,48 @@ const BookingScreen: React.FC = () => {
       reservierung: 'Tischreservierung',
       table: 'T4',
       userId
-      // hier könntest du noch weitere Details hinzufügen, wie z.B. die Tischnummer
     };
-  
-    // Dispatch die addReservation Methode mit den Reservierungsdetails EINMAL
+
     try {
       const reservation = await dispatch(addReservation(reservationDetails)).unwrap();
-      // Navigation zur Bestätigungsseite mit der ID der neu erstellten Reservierung
       navigation.navigate('ConfirmationScreen', { reservationId: reservation.id });
     } catch (error) {
       Alert.alert("Fehler beim Erstellen der Reservierung: " + error);
-      // Hier könntest du eine Fehlermeldung anzeigen
     }
   };
+
   useEffect(() => {
     dispatch(fetchReservations());
   }, [dispatch]);
 
- 
-
   return (
     <View style={styles.container}>
-    <Text style={styles.header}>Reservierungsübersicht</Text>
-    <Card style={styles.bookingCard}>
-      <Card.Title
-        title={`Reservierung für ${name}`}
-        subtitle={`Raum Nr. ${roomNumber}`}
-        left={(props) => <Icon {...props} name="book-outline" />}
-        leftStyle={styles.cardLeftIcon}
-      />
-      <Card.Content>
-        <Text style={styles.bookingText}>Anzahl Personen: {peopleCount}</Text>
-        <Text style={styles.bookingText}>Datum & Zeit: {date} {time}</Text>
-      </Card.Content>
-    </Card>
+      <Text style={styles.header}>Reservierungsübersicht</Text>
+      <Card style={styles.bookingCard}>
+        <Card.Title
+          title={`Reservierung für ${name}`}
+          subtitle={`Raum Nr. ${roomNumber}`}
+          left={(props) => <Icon {...props} name="book-outline" size={30} color="#5A67D8" />}
+          leftStyle={styles.cardLeftIcon}
+        />
+        <Card.Content>
+          <Text style={styles.bookingText}>Anzahl Personen: {peopleCount}</Text>
+          <Text style={styles.bookingText}>Datum & Zeit: {date} {time}</Text>
+        </Card.Content>
+      </Card>
 
-    <Button
-      icon="check-bold"
-      mode="contained"
-      onPress={handleConfirmBooking}
-      style={styles.confirmButton}
-    >
-      Jetzt Buchen
-    </Button>
-  </View>
+      <Button
+        icon="check-bold"
+        mode="contained"
+        onPress={handleConfirmBooking}
+        style={styles.confirmButton}
+        color="#5A67D8"
+        contentStyle={styles.buttonContent}
+        labelStyle={styles.buttonLabel}
+      >
+        Jetzt Buchen
+      </Button>
+    </View>
   );
 };
 
@@ -86,18 +84,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7FAFC',
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 20,
+    color: '#2D3748',
   },
   bookingCard: {
     elevation: 4,
     borderRadius: 8,
     marginTop: 20,
+    backgroundColor: '#FFFFFF',
   },
   cardLeftIcon: {
     marginRight: 10,
@@ -106,16 +106,20 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     lineHeight: 24,
+    color: '#4A5568',
   },
   confirmButton: {
     marginTop: 20,
-    paddingVertical: 8,
+    paddingVertical: 10,
+    borderRadius: 8,
   },
-  editButton: {
-    alignSelf: 'flex-end',
-    margin: 16,
+  buttonContent: {
+    height: 50,
   },
-
+  buttonLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
 });
 
 export default BookingScreen;

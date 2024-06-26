@@ -1,19 +1,20 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from "../../../../routes/types"; // Import your type definitions
 import { StackNavigationProp } from "@react-navigation/stack";
 
-type HosekeepingNavigationProp = StackNavigationProp<
+type HousekeepingNavigationProp = StackNavigationProp<
   RootStackParamList
 >;
 
+const { width } = Dimensions.get('window');
+
 const HousekeepingScreen = () => {
-  const navigation = useNavigation<HosekeepingNavigationProp>();
+  const navigation = useNavigation<HousekeepingNavigationProp>();
   
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Housekeeping</Text>
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
 
       {/* Request Room Clean */}
       <TouchableOpacity style={styles.section} onPress={() => navigation.navigate('RequestRoomCleanScreen')}>
@@ -39,25 +40,36 @@ const HousekeepingScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#F7FAFC',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+  contentContainer: {
+    padding: 20,
+    paddingBottom: 40,
+    alignItems: 'center',
   },
   section: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 10,
+    elevation: 5,
     marginBottom: 20,
+    width: width - 40,
+    overflow: 'hidden',
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    marginBottom: 10,
+    color: '#2D3748',
+    padding: 15,
+    backgroundColor: '#5A67D8',
+    textAlign: 'center',
   },
   image: {
     width: '100%',
-    height: 200, // or whatever size you need
+    height: 200,
     resizeMode: 'cover',
   },
 });

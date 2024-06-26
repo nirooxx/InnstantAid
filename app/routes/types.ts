@@ -40,13 +40,14 @@ export type RootStackParamList = {
         note:string;
        };
   MenuItemDetailsScreen: {
-    id: string;
+      id: string;
     title: string;
     price: number;
     imageUrl: string;
     description?: string; // Optional
     ingredients?: string[]; // Optional
-  };
+    category: string;
+   };
   BookingScreen: {
     date: string;
     time: string;

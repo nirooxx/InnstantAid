@@ -38,8 +38,7 @@ const SliderComponent: React.FC = () => {
     },
     {
       title: "Spa",
-      description:
-        "Entspannen Sie sich und genießen Sie unsere Spa-Behandlungen.",
+      description: "Entspannen Sie sich und genießen Sie unsere Spa-Behandlungen.",
       buttonText: "Mehr erfahren",
       onPress: () => {
         // Hier navigieren oder Aktion ausführen
@@ -55,30 +54,28 @@ const SliderComponent: React.FC = () => {
     },
   ];
 
-  const renderItem = ({ item }: RenderItemProps) => {
-    return (
-      <View style={[styles.slide, { width: itemWidth }]}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.description}>{item.description}</Text>
-        <TouchableOpacity style={styles.button} onPress={item.onPress}>
-          <Text style={styles.buttonText}>{item.buttonText}</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+  const renderItem = ({ item }: RenderItemProps) => (
+    <View style={[styles.slide, { width: itemWidth }]}>
+      <Text style={styles.title}>{item.title}</Text>
+      <Text style={styles.description}>{item.description}</Text>
+      <TouchableOpacity style={styles.button} onPress={item.onPress}>
+        <Text style={styles.buttonText}>{item.buttonText}</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
-    <Carousel
-      data={sliderItems}
-      renderItem={renderItem}
-      sliderWidth={sliderWidth} // Verwenden Sie die gesamte Breite
-      itemWidth={itemWidth} // Abzüglich der Gesamtpolsterung
-      activeSlideAlignment="center"
-      containerCustomStyle={styles.carouselContainer}
-      contentContainerCustomStyle={styles.carouselContentContainer}
-    />
-     </View>
+      <Carousel
+        data={sliderItems}
+        renderItem={renderItem}
+        sliderWidth={sliderWidth}
+        itemWidth={itemWidth}
+        activeSlideAlignment="center"
+        containerCustomStyle={styles.carouselContainer}
+        contentContainerCustomStyle={styles.carouselContentContainer}
+      />
+    </View>
   );
 };
 
@@ -87,7 +84,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#F7FAFC",
   },
   carouselContainer: {
     flexGrow: 0, // Verhindert, dass der Container über die Größe der Kinder hinauswächst
@@ -96,33 +93,39 @@ const styles = StyleSheet.create({
     alignItems: "center", // Zentriert die Slides im Carousel, wenn diese kleiner als der Bildschirm sind
   },
   slide: {
-    backgroundColor: "white", // oder ein anderer gewünschter Hintergrund
+    backgroundColor: "#FFFFFF", // oder ein anderer gewünschter Hintergrund
     borderRadius: 20,
     padding: 20,
     justifyContent: "center",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
   },
   title: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: "bold",
-    color: "#333",
+    color: "#5A67D8",
     marginBottom: 10,
   },
   description: {
     fontSize: 16,
-    color: "#666",
+    color: "#4A5568",
     textAlign: "center",
     marginBottom: 20,
   },
   button: {
-    backgroundColor: "#333",
+    backgroundColor: "#5A67D8",
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,
   },
   buttonText: {
-    color: "white",
+    color: "#FFFFFF",
     fontSize: 16,
+    fontWeight: "bold",
   },
 });
 
