@@ -15,37 +15,41 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Event, RootStackParamList } from '../../../../routes/types';
 
-type EventsSectionProps = {
+type EventsSectionTomorrowProps = {
   events: Event[];
   onViewAll: () => void;
 };
 
 type EventsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'EventDetail'>;
 
-const EventsSection: React.FC<EventsSectionProps> = ({ events, onViewAll }) => {
+const EventsSectionTomorrow: React.FC<EventsSectionTomorrowProps> = ({ events, onViewAll }) => {
   const navigation = useNavigation<EventsScreenNavigationProp>();
 
   const handleEventPress = (event: Event) => {
     navigation.navigate('EventDetail', { event });
   };
 
-  // Filter events to show only today's events
-  const today = new Date().toISOString().split('T')[0];
-  const todaysEvents = events.filter(event => event.date === today);
+  // Calculate the date for tomorrow
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrowDate = tomorrow.toISOString().split('T')[0];
+
+  // Filter events to show only tomorrow's events
+  const tomorrowsEvents = events.filter(event => event.date === tomorrowDate);
 
   return (
     <View style={styles.section}>
       <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Veranstaltungen heute</Text>
+        <Text style={styles.sectionTitle}>Veranstaltungen morgen</Text>
         <TouchableOpacity onPress={onViewAll}>
           <Text style={styles.viewAll}>Alle anzeigen</Text>
         </TouchableOpacity>
       </View>
-      {todaysEvents.length === 0 ? (
-        <Text style={styles.noEventsText}>Keine Veranstaltungen für heute gefunden.</Text>
+      {tomorrowsEvents.length === 0 ? (
+        <Text style={styles.noEventsText}>Keine Veranstaltungen für morgen gefunden.</Text>
       ) : (
         <FlatList
-          data={todaysEvents}
+          data={tomorrowsEvents}
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => {
@@ -150,4 +154,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EventsSection;
+export default EventsSectionTomorrow;

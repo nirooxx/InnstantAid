@@ -1,4 +1,67 @@
 // types.ts
+export type Event = {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  location: string;
+  image: string;
+  details: {
+    url: string;
+    name: string;
+    dates: {
+      start: {
+        localDate: string;
+        localTime: string;
+      };
+    };
+    classifications:Array<{
+      genre: {
+        name: string;
+      }
+    }>;
+    images: Array<{
+      url: string;
+      ratio: string;
+      width: number;
+      height: number;
+    }>;
+    priceRanges: Array<{
+      currency: string;
+      min: number;
+      max: number;
+    }>;
+    seatmap: {
+      staticUrl: string;
+    };
+    promoter:{
+      id: string;
+      name: string;
+    }
+    _embedded: {
+      venues: Array<{
+        name: string;
+        postalCode: string;
+        url: string;
+        city: {
+          name: string;
+        };
+        country: {
+          name: string;
+        };
+        address: {
+          line1: string;
+        };
+        location: {
+          longitude: string;
+          latitude: string;
+        };
+      }>;
+    };
+  };
+};
+
+
 export type RootStackParamList = {
   Reservation: undefined;
   Reservations: undefined;
@@ -16,6 +79,8 @@ export type RootStackParamList = {
     price: string;
     duration: string;
   };
+  EventsScreen: { events: Event[] };
+  EventDetail: { event: Event };
   GuestInformationCard:{
     guestName:string,
     roomName:string,

@@ -19,6 +19,8 @@ import ChatScreen from "../screens/guest/chat/ChatScreen";
 import GuestDashboard from "../screens/guest/dashboard/GuestDashboard";
 import SettingsScreen from "../screens/guest/settings/Settings";
 import GuestInformationCard from "../screens/guest/dashboard/roomDetails/guestInformationScreen/GuestInformationCard";
+import EventsScreen from "../screens/guest/dashboard/eventsSection/EventsScreen";
+import EventDetail from "../screens/guest/dashboard/eventsSection/EventDetail";
 
 import ReservationsScreen from "../screens/guest/reservation/ReservationsScreen";
 import TableReservationScreen from "../screens/guest/reservation/reservationScreen/tableReservation/TableReservationScreen";
@@ -52,13 +54,7 @@ import TaskListScreen from "../screens/employee/tasks/TaskListScreen";
 import ShiftDetailScreen from "../screens/employee/schedule/components/ShiftDetailScreen";
 import EmployeeChatScreen from "../screens/employee/chat/EmployeeChatScreen";
 
-const globalStyles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#f7f7f7', // Hintergrundfarbe der gesamten App
-  },
-});
-
+import { RootStackParamList } from './types';
 // Styles für die Tab Bar
 const tabBarStyles = StyleSheet.create({
   tabBar: {
@@ -115,7 +111,7 @@ export default function RootNavigation() {
         <Stack.Screen
           name="Reservations"
           component={ReservationsScreen}
-          options={{ headerShown: false }}
+         
         />
         <Stack.Screen
           name="SpaBookingScreen"
@@ -130,7 +126,7 @@ export default function RootNavigation() {
         <Stack.Screen
           name="TableReservationScreen"
           component={TableReservationScreen}
-          options={{ headerShown: false }}
+         
         />
          <Stack.Screen
           name="MenuItemDetailsScreen"
@@ -155,37 +151,37 @@ export default function RootNavigation() {
          <Stack.Screen
           name="ConfirmCheckoutScreen"
           component={ConfirmCheckoutScreen}
-          options={{ headerShown: false }}
+         
           initialParams={{ firstName: '', lastName: '', address: '', note: '', roomNumber:'' }}
         />
          <Stack.Screen
           name="OrderedList"
           component={OrderedList}
-          options={{ headerShown: false }}
+         
           
         />
            <Stack.Screen
           name="SpaBookingsList"
           component={SpaBookingsList}
-          options={{ headerShown: false }}
+         
           
         />
          <Stack.Screen
           name="BookingScreen"
           component={BookingScreen}
-          options={{ headerShown: false }}
+         
           initialParams={{ date: '', time: '', peopleCount: 1, name: '', roomNumber:'' }}
         />
          <Stack.Screen
           name="ConfirmationScreen"
           component={ConfirmationScreen}
-          options={{ headerShown: false }}
+         
           initialParams={{ reservationId: '' }}
         />
          <Stack.Screen
           name="TableReservationsList"
           component={TableReservationsList}
-          options={{ headerShown: false }}
+         
           
         />
          <Stack.Screen
@@ -213,6 +209,11 @@ export default function RootNavigation() {
     return (
       <Stack.Navigator>
         <Stack.Screen name="GuestDashboard" component={GuestDashboard} options={{ headerShown: false }}/>
+        <Stack.Screen
+        name="EventsScreen"
+        component={EventsScreen}
+      />
+       <Stack.Screen name="EventDetail" component={EventDetail} />
         <Stack.Screen name="GuestInformationCard" component={GuestInformationCard}   
         initialParams={{    guestName:'string',
           roomName:'string',
@@ -221,6 +222,7 @@ export default function RootNavigation() {
           checkOut:'string',
           status:'string',
           notes:'string', }}/>
+    
       </Stack.Navigator>
     );
   }
@@ -382,8 +384,9 @@ const GuestNavigator = () => {
               
             >
                <Tab.Screen name="Dashboard" options={{ headerShown: false }} component={GuestDashboardStack} />
+               <Tab.Screen name="Reservation" options={{ headerShown: false }} component={ReservationStack} />
                <Tab.Screen name="Chat" options={{ headerShown: false }} component={GuestChatStack} />
-              <Tab.Screen name="Reservation" options={{ headerShown: false }} component={ReservationStack} />
+           
               <Tab.Screen name="Settings" options={{ headerShown: false }} component={SettingsScreen} />
             </Tab.Navigator>
            
