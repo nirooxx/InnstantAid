@@ -7,6 +7,8 @@ import {
   Text,
   StyleSheet,
   ActivityIndicator,
+  TouchableOpacity,
+  Image,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../store/store";
@@ -118,16 +120,33 @@ const Dashboard: React.FC = () => {
   }, []);
 
   const handleGuestInformationCard = (stay: any) => {
+    console.log(stay)
     navigation.navigate('GuestInformationCard', {
       guestName: `${stay.first_guest?.firstname} ${stay.first_guest?.lastname}`,
       roomName: `${stay.roomName} - ${stay.category?.name} - ${stay.room_setup?.areaName}`,
-      companyName: stay.reservation?.groupName,
+      companyName: stay.reservation?.groupName || 'Keine Firmendaten',
       checkIn: stay.reservation_from,
       checkOut: stay.reservation_to,
       status: stay.reservation.status,
-      notes: stay.guestMessage || 'No special notes',
+      notes: stay.guestMessage || 'Keine speziellen Hinweise',
+      telephone: stay.reservation.client.telephone || 'Keine Telefonnummer',
+      email: stay.reservation.client.email || 'Keine E-Mail-Adresse',
+      street: stay.reservation.client.street || 'Keine Straßenangabe',
+      zipcode: stay.reservation.client.zipcode || 'Keine Postleitzahl',
+      city: stay.reservation.client.city || 'Kein Ort',
+      country: stay.reservation.client.country || 'Kein Land',
+      totalAmount: stay.gross,
+      openAmount: stay.additionalSales,
+      category: stay.category?.name,
+      standardOccupancy: stay.category?.standardOccupancy,
+      maxOccupancy: stay.category?.maxOccupancy,
+      mealNotes: stay.mealNotes || 'Keine Mahlzeitenhinweise',
+      maidNotes: stay.maidNotes || 'Keine Reinigungsnotizen',
+      selfcheckout_enabled: stay.selfcheckout_enabled,
+      selfcheckout_url: stay.selfcheckout_url
     });
-  };
+};
+
 
   if (loading) {
     return <Text style={styles.loadingText}>Loading...</Text>;
@@ -142,8 +161,15 @@ const Dashboard: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.contentWrapper} contentContainerStyle={{ paddingBottom: insets.bottom + 70 }}>
-        <View style={styles.contentWrapper}>
-          <MemoizedSlider />
+        <View style={styles.header}>
+          <Text style={styles.subGreeting}>Hallo, <Text style={styles.greetingName}>{filteredRoomStays[0]?.first_guest?.firstname}!</Text></Text>
+          <Text style={styles.mainGreeting}>Willkommen im Palast Hotel.</Text>
+        </View>
+        <View style={styles.section}>
+        <MemoizedSlider />
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Zimmerdetails</Text>
           {filteredRoomStays.map(stay => (
             <MemoizedRoomDetails
               key={stay.id}
@@ -153,11 +179,16 @@ const Dashboard: React.FC = () => {
               checkIn={stay.reservation_from}
               checkOut={stay.reservation_to}
               status={stay?.reservation?.status}
-              notes={stay.guestMessage || 'No special notes'}
+              notes={stay.guestMessage || 'Keine speziellen Hinweise'}
               onPress={() => handleGuestInformationCard(stay)}
             />
           ))}
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Hotelkarte</Text>
           <MemoizedHotelMap />
+        </View>
+        <View style={styles.section}>
           <MemoizedEventsSection events={events} onViewAll={() => navigation.navigate('EventsScreen', { events })}/>
           <MemoizedEventsSectionTomorrow events={events} onViewAll={() => navigation.navigate('EventsScreen', { events })}/>
         </View>
@@ -169,7 +200,23 @@ const Dashboard: React.FC = () => {
 const styles = StyleSheet.create({
   container: { 
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#F8F9FD",
+  },
+  header: {
+    padding: 16,
+  },
+  subGreeting: {
+    fontSize: 16,
+    color: '#666',
+  },
+  mainGreeting: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  greetingName: {
+    fontWeight: 'bold',
+    color: '#333',
   },
   contentWrapper: {
     paddingHorizontal: 16,
@@ -185,6 +232,37 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  section: {
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#333',
+    marginBottom: 12,
+  },
+  button: {
+    backgroundColor: '#5A67D8',
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  mapImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 12,
+    marginBottom: 16,
+  },
+  noEventsText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginTop: 8,
   },
 });
 

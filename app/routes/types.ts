@@ -89,6 +89,21 @@ export type RootStackParamList = {
     checkOut:string,
     status:string,
     notes:string,
+    telephone:string,
+    email:string,
+    street:string,
+    zipcode:string,
+    city:string,
+    country:string,
+    totalAmount:string,
+    openAmount:string,
+    category:string,
+    standardOccupancy:string,
+    maxOccupancy:string,
+    mealNotes:string,
+    maidNotes:string,
+    selfcheckout_enabled: Boolean,
+    selfcheckout_url:string,
   }
   MenuScreen:undefined;
   CartScreen:undefined;

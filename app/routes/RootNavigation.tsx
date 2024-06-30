@@ -111,7 +111,7 @@ export default function RootNavigation() {
         <Stack.Screen
           name="Reservations"
           component={ReservationsScreen}
-         
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="SpaBookingScreen"

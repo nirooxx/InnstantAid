@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -22,10 +22,10 @@ interface RenderItemProps {
 
 const SliderComponent: React.FC = () => {
   const dimensions = useWindowDimensions();
+  const carouselRef = useRef<Carousel<SliderItem>>(null);
 
-  // Berechnen Sie die Größen basierend auf den aktuellen Dimensionen
   const sliderWidth = dimensions.width;
-  const itemWidth = dimensions.width - 60; // Berücksichtigen Sie den gewünschten Abstand
+  const itemWidth = dimensions.width - 40;
 
   const sliderItems: SliderItem[] = [
     {
@@ -54,6 +54,18 @@ const SliderComponent: React.FC = () => {
     },
   ];
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (carouselRef.current) {
+        const currentIndex = carouselRef.current.currentIndex;
+        const nextIndex = (currentIndex + 1) % sliderItems.length;
+        carouselRef.current.snapToItem(nextIndex);
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [sliderItems.length]);
+
   const renderItem = ({ item }: RenderItemProps) => (
     <View style={[styles.slide, { width: itemWidth }]}>
       <Text style={styles.title}>{item.title}</Text>
@@ -67,6 +79,7 @@ const SliderComponent: React.FC = () => {
   return (
     <View style={styles.container}>
       <Carousel
+        ref={carouselRef}
         data={sliderItems}
         renderItem={renderItem}
         sliderWidth={sliderWidth}
@@ -84,29 +97,29 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F7FAFC",
+    backgroundColor: "#F0F4F8",
   },
   carouselContainer: {
-    flexGrow: 0, // Verhindert, dass der Container über die Größe der Kinder hinauswächst
+    flexGrow: 0,
   },
   carouselContentContainer: {
-    alignItems: "center", // Zentriert die Slides im Carousel, wenn diese kleiner als der Bildschirm sind
+    alignItems: "center",
   },
   slide: {
-    backgroundColor: "#FFFFFF", // oder ein anderer gewünschter Hintergrund
-    borderRadius: 20,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
     padding: 20,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
     elevation: 5,
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: "700",
     color: "#5A67D8",
     marginBottom: 10,
   },
@@ -118,14 +131,14 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#5A67D8",
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
   },
   buttonText: {
     color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "600",
   },
 });
 

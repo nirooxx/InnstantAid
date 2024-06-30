@@ -14,7 +14,6 @@ const EventDetail: React.FC = () => {
   const venue = _embedded.venues[0];
   const genre = classifications && classifications.length > 0 ? classifications[0].genre.name : 'N/A';
 
-  // Format the date, time, and price for German locale
   const formattedDate = new Date(dates.start.localDate).toLocaleDateString('de-DE');
   const formattedTime = new Date(`1970-01-01T${dates.start.localTime}`).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
   const formattedPriceRange = priceRanges ? `${priceRanges[0].min.toLocaleString('de-DE', { style: 'currency', currency: priceRanges[0].currency })} - ${priceRanges[0].max.toLocaleString('de-DE', { style: 'currency', currency: priceRanges[0].currency })}` : 'N/A';
@@ -25,12 +24,30 @@ const EventDetail: React.FC = () => {
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>{name}</Text>
         <Text style={styles.genre}>{genre}</Text>
-        <Text style={styles.date}>Datum: {formattedDate}</Text>
-        <Text style={styles.time}>Uhrzeit: {formattedTime} Uhr</Text>
-        <Text style={styles.location}>Ort: {venue.name}, {venue.city.name}, {venue.country.name}</Text>
-        <Text style={styles.address}>Adresse: {venue.address.line1}, {venue.postalCode}</Text>
-        <Text style={styles.coordinates}>Koordinaten: {venue.location.latitude}, {venue.location.longitude}</Text>
-        <Text style={styles.priceRange}>Preisspanne: {formattedPriceRange}</Text>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Datum:</Text>
+          <Text style={styles.value}>{formattedDate}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Uhrzeit:</Text>
+          <Text style={styles.value}>{formattedTime} Uhr</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Ort:</Text>
+          <Text style={styles.value}>{venue.name}, {venue.city.name}, {venue.country.name}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Adresse:</Text>
+          <Text style={styles.value}>{venue.address.line1}, {venue.postalCode}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Koordinaten:</Text>
+          <Text style={styles.value}>{venue.location.latitude}, {venue.location.longitude}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Preisspanne:</Text>
+          <Text style={styles.value}>{formattedPriceRange}</Text>
+        </View>
         {seatmap && <Image source={{ uri: seatmap.staticUrl }} style={styles.seatmap} />}
         <TouchableOpacity style={styles.button} onPress={() => Linking.openURL(url)}>
           <Text style={styles.buttonText}>Tickets kaufen</Text>
@@ -43,65 +60,48 @@ const EventDetail: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FD',
+    backgroundColor: '#FFFFFF',
   },
   image: {
     width: '100%',
-    height: Dimensions.get('window').width * 0.56, // 16:9 ratio
+    height: Dimensions.get('window').width * 0.56,
     marginBottom: 16,
+    borderRadius: 10,
   },
   detailsContainer: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
   },
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: 'bold',
-    color: '#5A67D8',
+    color: '#333333',
     marginBottom: 12,
   },
   genre: {
     fontSize: 20,
     fontStyle: 'italic',
-    color: '#6B7280',
+    color: '#555555',
     marginBottom: 12,
   },
-  date: {
-    fontSize: 18,
-    color: '#4B5563',
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 8,
   },
-  time: {
+  label: {
     fontSize: 18,
-    color: '#4B5563',
-    marginBottom: 8,
+    color: '#777777',
   },
-  location: {
+  value: {
     fontSize: 18,
-    color: '#4B5563',
-    marginBottom: 8,
-  },
-  address: {
-    fontSize: 18,
-    color: '#4B5563',
-    marginBottom: 8,
-  },
-  coordinates: {
-    fontSize: 18,
-    color: '#4B5563',
-    marginBottom: 8,
-  },
-  priceRange: {
-    fontSize: 18,
-    color: '#1F2937',
-    fontWeight: '600',
-    marginBottom: 16,
+    color: '#333333',
   },
   seatmap: {
     width: '100%',
     height: 200,
     resizeMode: 'contain',
     marginBottom: 16,
-    borderRadius: 8,
+    borderRadius: 10,
   },
   button: {
     backgroundColor: '#5A67D8',
@@ -113,13 +113,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: '600',
-  },
-  urlLink: {
-    color: '#5A67D8',
-    textDecorationLine: 'underline',
-    marginTop: 16,
-    fontSize: 18,
-    textAlign: 'center',
   },
 });
 

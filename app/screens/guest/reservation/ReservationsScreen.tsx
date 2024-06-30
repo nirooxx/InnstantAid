@@ -1,12 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from "../../../routes/types"; // Import your type definitions
+import { RootStackParamList } from "../../../routes/types";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-type ReservationsNavigationProp = StackNavigationProp<
-  RootStackParamList
->;
+type ReservationsNavigationProp = StackNavigationProp<RootStackParamList>;
 
 const ReservationsScreen: React.FC = () => {
   const navigation = useNavigation<ReservationsNavigationProp>();
@@ -28,65 +26,75 @@ const ReservationsScreen: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.row}>
         <TouchableOpacity style={styles.tile} onPress={handleTableReservationPress}>
-          <Image source={require('../../../assets/images/avatar.png')} style={styles.image} />
+          <Image source={require('../../../assets/images/tick.png')} style={styles.image} />
           <Text style={styles.tileText}>Tischreservierung</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.tile} onPress={handleSpaBookingPress}>
-          <Image source={require('../../../assets/images/avatar.png')} style={styles.image} />
+          <Image source={require('../../../assets/images/tick.png')} style={styles.image} />
           <Text style={styles.tileText}>Spa-Buchung</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.row}>
         <TouchableOpacity style={styles.tile} onPress={handleRoomServiceOrderPress}>
-          <Image source={require('../../../assets/images/avatar.png')} style={styles.image} />
-          <Text style={styles.tileText}>Zimmerservice-Bestellung</Text>
+          <Image source={require('../../../assets/images/tick.png')} style={styles.image} />
+          <Text style={styles.tileText}>Zimmerservice</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.tile} onPress={handleHouseKeepingPress}>
-          <Image source={require('../../../assets/images/avatar.png')} style={styles.image} />
+          <Image source={require('../../../assets/images/tick.png')} style={styles.image} />
           <Text style={styles.tileText}>Housekeeping</Text>
         </TouchableOpacity>
       </View>
-    </View>
+      <View style={styles.row}>
+        <TouchableOpacity style={styles.tile} onPress={handleRoomServiceOrderPress}>
+          <Image source={require('../../../assets/images/tick.png')} style={styles.image} />
+          <Text style={styles.tileText}>Fitness</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.tile} onPress={handleHouseKeepingPress}>
+          <Image source={require('../../../assets/images/tick.png')} style={styles.image} />
+          <Text style={styles.tileText}>Housekeeping</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-    backgroundColor: '#F7FAFC',
+    padding: 16,
+    backgroundColor: '#F0F4F8',
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 20,
+    marginBottom: 16,
   },
   tile: {
+    flex: 1,
     backgroundColor: '#FFFFFF',
-    width: '48%',
-    aspectRatio: 1,
-    justifyContent: 'center',
+    borderRadius: 12,
+    padding: 16,
     alignItems: 'center',
-    borderRadius: 8,
+    justifyContent: 'center',
+    margin: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 2,
-    padding: 10,
+    elevation: 3,
   },
   image: {
-    width: 50,
-    height: 50,
-    marginBottom: 10,
+    width: 60,
+    height: 60,
+    marginBottom: 8,
   },
   tileText: {
-    color: '#2D3748',
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#5A67D8',
     textAlign: 'center',
   },
 });

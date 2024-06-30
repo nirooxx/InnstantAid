@@ -23,21 +23,33 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({
   notes,
   onPress,
 }) => {
+  const formatDateRange = (checkIn: any, checkOut: any) => {
+    return `${new Date(checkIn).toLocaleDateString('de-DE')} - ${new Date(checkOut).toLocaleDateString('de-DE')}`;
+};
+
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.imageContainer}>
-        <Icon name="person-circle" size={50} color="#5A67D8" />
+        <Icon name="person-circle-outline" size={60} color="#5A67D8" />
       </View>
       <View style={styles.infoContainer}>
         <Text style={styles.guestName}>{guestName}</Text>
-        <Text style={styles.roomName}>{roomName}</Text>
-        <Text style={styles.companyName}>{companyName}</Text>
-        <View style={styles.dateTimeContainer}>
-          <Icon name="calendar" size={20} color="#5A67D8" />
-          <Text style={styles.dateTimeText}>{checkIn} - {checkOut}</Text>
-        </View>
+        {roomName && <Text style={styles.roomName}>{roomName}</Text>}
+        {companyName && <Text style={styles.companyName}>{companyName}</Text>}
+        {(checkIn || checkOut) && (
+          <View style={styles.dateTimeContainer}>
+            <Icon name="calendar-outline" size={20} color="#5A67D8" />
+            <Text style={styles.dateTimeText}>
+              {formatDateRange(checkIn, checkOut)}
+            </Text>
+          </View>
+        )}
+        {status && <Text style={styles.status}>{status}</Text>}
+        {notes && <Text style={styles.notes}>{notes}</Text>}
       </View>
-      <Icon name="chevron-forward" size={30} color="#5A67D8" />
+      <View style={styles.iconContainer}>
+        <Icon name="chevron-forward-outline" size={30} color="#5A67D8" />
+      </View>
     </TouchableOpacity>
   );
 };
@@ -45,50 +57,61 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 10,
-    paddingVertical: 20,
-    paddingHorizontal: 15,
     alignItems: "center",
-    marginVertical: 10,
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
+    backgroundColor: "#FFFFFF",
+    padding: 16,
+    borderRadius: 12,
+    marginVertical: 8,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 2,
   },
   imageContainer: {
-    marginRight: 20,
+    marginRight: 16,
   },
   infoContainer: {
     flex: 1,
   },
   guestName: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 18,
+    fontWeight: "700",
     color: "#2D3748",
-    marginBottom: 5,
+    marginBottom: 4,
   },
   roomName: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#4A5568",
-    marginBottom: 5,
+    marginBottom: 4,
   },
   companyName: {
     fontSize: 16,
-    color: "#718096",
-    marginBottom: 10,
+    color: "#4A5568",
+    marginBottom: 4,
   },
   dateTimeContainer: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: 4,
   },
   dateTimeText: {
     fontSize: 16,
     color: "#4A5568",
-    marginLeft: 10,
+    marginLeft: 8,
+  },
+  status: {
+    fontSize: 14,
+    color: "#5A67D8",
+    fontWeight: "600",
+    marginBottom: 4,
+  },
+  notes: {
+    fontSize: 14,
+    color: "#4A5568",
+  },
+  iconContainer: {
+    marginLeft: 16,
   },
 });
 

@@ -1,22 +1,16 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, Image, ScrollView, Linking } from 'react-native';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-type SpaBookingScreenRouteProp = RouteProp<{ params: { roomName: string; companyName: string; checkIn: string; checkOut: string; status: string; notes: string; } }, 'params'>;
+type SpaBookingScreenRouteProp = RouteProp<{ params: { roomName: string; companyName: string; checkIn: string; checkOut: string; status: string; notes: string; telephone?: string; email?: string; street?: string; zipcode?: string; city?: string; country?: string; totalAmount?: number; openAmount?: number; category?: string; standardOccupancy?: number; maxOccupancy?: number; mealNotes?: string; maidNotes?: string; selfcheckout_enabled?: boolean; selfcheckout_url?: string; } }, 'params'>;
 
 const GuestInformationCard: React.FC = () => {
     const route = useRoute<SpaBookingScreenRouteProp>();
-    const { roomName, companyName, checkIn, checkOut, status, notes } = route.params;
-
-    const activities = [
-        { date: "12/04/2021", description: "Proposed to client" },
-        { date: "06/05/2021", description: "Transferred to account team" },
-        { date: "22/08/2021", description: "Onboard" },
-    ];
+    const { roomName, companyName, checkIn, checkOut, status, notes, telephone, email, street, zipcode, city, country, totalAmount, openAmount, category, standardOccupancy, maxOccupancy, mealNotes, maidNotes, selfcheckout_enabled, selfcheckout_url } = route.params;
 
     const formatDateRange = (checkIn: string, checkOut: string) => {
-        return `${new Date(checkIn).toLocaleDateString()} - ${new Date(checkOut).toLocaleDateString()}`;
+        return `${new Date(checkIn).toLocaleDateString('de-DE')} 15:00 Uhr - ${new Date(checkOut).toLocaleDateString('de-DE')} 10:00 Uhr`;
     };
 
     return (
@@ -24,7 +18,7 @@ const GuestInformationCard: React.FC = () => {
             <View style={styles.card}>
                 <View style={styles.headerContainer}>
                     <Image
-                        source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSub7i7li7OKf9SdCEc-YKUVrvTH_FGYQgjNRJxj7riwokoXB30b-9yMkv0_XYqwGCAAwc&usqp=CAU' }} // Replace with actual image uri
+                        source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSub7i7li7OKf9SdCEc-YKUVrvTH_FGYQgjNRJxj7riwokoXB30b-9yMkv0_XYqwGCAAwc&usqp=CAU' }}
                         style={styles.avatar}
                     />
                     <View style={styles.headerContent}>
@@ -33,37 +27,85 @@ const GuestInformationCard: React.FC = () => {
                     </View>
                 </View>
                 <Text style={styles.subtitle}>{companyName}</Text>
-                <Text style={styles.subtitle}>{notes}</Text>
-                <View style={styles.infoContainer}>
-                    <View style={styles.infoSection}>
-                        <Text style={styles.infoLabel}>Check-In/Check-Out</Text>
-                        <Text style={styles.infoContent}>{formatDateRange(checkIn, checkOut)}</Text>
-                    </View>
-                    <View style={styles.infoSection}>
-                        <Text style={styles.infoLabel}>Status</Text>
-                        <Text style={styles.infoContent}>{status}</Text>
-                    </View>
-                </View>
             </View>
 
             <View style={styles.card}>
-                <View style={styles.section}>
-                    <Text style={styles.sectionHeader}>Notizen</Text>
-                    <Text style={styles.profileSummary}>{notes}</Text>
-                    <Text style={styles.sectionTitle}>Arbeitsverlauf</Text>
-                    <Text style={styles.content}>{companyName}</Text>
-                    <Text style={styles.sectionTitle}>Bildung</Text>
-                    <Text style={styles.content}>SMU - Singapore Management University</Text>
-                    <Text style={styles.sectionTitle}>Verfügbarkeit</Text>
-                    <Text style={styles.content}>{checkIn}</Text>
-                    <Text style={styles.sectionTitle}>Aktivitäten</Text>
-                    {activities.map((activity, index) => (
-                        <View key={index} style={styles.activityRow}>
-                            <Text style={styles.activityDate}>{activity.date}</Text>
-                            <Text style={styles.activityDescription}>{activity.description}</Text>
-                        </View>
-                    ))}
+                <View style={styles.infoContainer}>
+               
+                            <Text style={styles.sectionHeader}>Check-In/Check-Out</Text>
+                            <Text style={styles.profileSummary}>{formatDateRange(checkIn, checkOut)}</Text>
+                     
+                    </View>
+                    <View style={styles.infoContainer}>
+                  
+                            <Text style={styles.sectionHeader}>Status</Text>
+                            <Text style={styles.profileSummary}>{status}</Text>
+                    
                 </View>
+                <View style={styles.infoContainer}>
+                  
+                            <Text style={styles.sectionHeader}>Telefon</Text>
+                            <Text style={styles.profileSummary}>{telephone}</Text>
+                   
+                    </View>
+                    <View style={styles.infoContainer}>
+                  
+                            <Text style={styles.sectionHeader}>E-Mail</Text>
+                            <Text style={styles.profileSummary}>{email}</Text>
+                     
+                </View>
+                <View style={styles.infoContainer}>
+                   
+                            <Text style={styles.sectionHeader}>Adresse</Text>
+                            <Text style={styles.profileSummary}>{street}, {zipcode} {city}, {country}</Text>
+                      
+                </View>
+                <View style={styles.infoContainer}>
+                  
+                            <Text style={styles.sectionHeader}>Gesamtbetrag</Text>
+                            <Text style={styles.profileSummary}>{Number(totalAmount)?.toFixed(2).replace('.', ',') || 'Keine Angaben'} €</Text>
+                   
+                    </View>
+                    <View style={styles.infoContainer}>
+                      
+                            <Text style={styles.sectionHeader}>Offener Betrag</Text>
+                            <Text style={styles.profileSummary}>{Number(openAmount)?.toFixed(2).replace('.', ',') || 'Keine Angaben'} €</Text>
+                    
+                </View>
+                <View style={styles.infoContainer}>
+                    
+                            <Text style={styles.sectionHeader}>Zimmerkategorie</Text>
+                            <Text style={styles.profileSummary}>{category}</Text>
+                     
+                    </View>
+                    <View style={styles.infoContainer}>
+                    
+                            <Text style={styles.sectionHeader}>Belegung</Text>
+                            <Text style={styles.profileSummary}>Standard: {standardOccupancy}, Maximal: {maxOccupancy}</Text>
+                  
+                </View>
+                <View style={styles.infoContainer}>
+              
+                            <Text style={styles.sectionHeader}>Mahlzeiten-Notizen</Text>
+                            <Text style={styles.profileSummary}>{mealNotes}</Text>
+                       
+                    </View>
+                    <View style={styles.infoContainer}>
+                       
+                            <Text style={styles.sectionHeader}>Reinigungs-Notizen</Text>
+                            <Text style={styles.profileSummary}>{maidNotes}</Text>
+                   
+                </View>
+                {selfcheckout_enabled && (
+                    <View style={styles.infoContainer}>
+                    
+                            <Text style={styles.sectionHeader}>Self-Checkout</Text>
+                            <Text style={[styles.profileSummary, styles.link]} onPress={() => Linking.openURL(selfcheckout_url || '')}>Hier klicken</Text>
+                
+                    </View>
+                )}
+                <Text style={styles.sectionHeader}>Notizen</Text>
+                <Text style={styles.profileSummary}>{notes}</Text>
             </View>
         </ScrollView>
     );
@@ -72,19 +114,19 @@ const GuestInformationCard: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F0F4F8',
-        padding: 10,
+        backgroundColor: '#F7FAFC',
+        padding: 16,
     },
     card: {
-        borderRadius: 12,
-        margin: 10,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 8,
         padding: 16,
-        backgroundColor: '#fff',
+        marginBottom: 16,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
+        shadowRadius: 8,
+        elevation: 4,
     },
     headerContainer: {
         flexDirection: 'row',
@@ -95,87 +137,54 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         borderRadius: 30,
-        borderWidth: 2,
-        borderColor: '#5A67D8',
-        marginRight: 12,
+        marginRight: 16,
     },
     headerContent: {
         flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
     },
     title: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#333',
-        flexShrink: 1,
+        color: '#2D3748',
     },
     subtitle: {
         fontSize: 16,
-        color: '#555',
-        marginBottom: 4,
+        color: '#4A5568',
+        marginBottom: 16,
     },
     infoContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingLeft: 8,
-        paddingTop: 8,
+        marginBottom: 16,
     },
     infoSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
+    infoTextContainer: {
+        marginLeft: 8,
         flex: 1,
     },
     infoLabel: {
-        fontSize: 12,
-        color: '#888',
-        textTransform: 'uppercase',
-        fontWeight: 'bold',
+        fontSize: 16,
+        color: '#4A5568',
     },
     infoContent: {
-        fontSize: 14,
-        fontWeight: 'bold',
-        color: '#333',
-        marginTop: 2,
+        fontSize: 16,
+        color: '#2D3748',
     },
-    section: {
-        paddingTop: 0,
+    link: {
+        color: '#5A67D8',
+        textDecorationLine: 'underline',
     },
     sectionHeader: {
-        fontWeight: 'bold',
         fontSize: 18,
-        color: '#5A67D8',
-        marginBottom: 4,
+        fontWeight: 'bold',
+        color: '#2D3748',
+        marginBottom: 8,
     },
     profileSummary: {
-        fontSize: 14,
-        color: '#666',
-        marginBottom: 12,
-    },
-    sectionTitle: {
-        fontWeight: 'bold',
         fontSize: 16,
-        color: '#333',
-        marginTop: 8,
-        marginBottom: 4,
-    },
-    content: {
-        fontSize: 14,
-        color: '#555',
-        marginBottom: 4,
-    },
-    activityRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 4,
-    },
-    activityDate: {
-        fontSize: 12,
-        color: '#888',
-        marginRight: 8,
-    },
-    activityDescription: {
-        fontSize: 14,
-        color: '#333',
+        color: '#4A5568',
     },
 });
 

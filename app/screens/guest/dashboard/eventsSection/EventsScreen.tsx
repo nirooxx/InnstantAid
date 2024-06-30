@@ -5,7 +5,6 @@ import { Event, RootStackParamList } from '../../../../routes/types';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-// Define screen dimensions
 const { width } = Dimensions.get('window');
 
 type EventsScreenRouteProp = RouteProp<RootStackParamList, 'EventsScreen'>;
@@ -19,8 +18,8 @@ const EventsScreen: React.FC = () => {
   if (!events || events.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.header}>All Events</Text>
-        <Text style={styles.noEventsText}>No events found.</Text>
+        <Text style={styles.header}>Alle Veranstaltungen</Text>
+        <Text style={styles.noEventsText}>Keine Veranstaltungen gefunden.</Text>
       </SafeAreaView>
     );
   }
@@ -135,7 +134,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   eventCard: {
-    width: width * 0.8,
+    width: width * 0.85,
     marginRight: 16,
     borderRadius: 12,
     backgroundColor: '#ffffff',
