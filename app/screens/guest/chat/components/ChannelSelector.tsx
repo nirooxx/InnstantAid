@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from "../../../../routes/types";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -11,9 +11,9 @@ interface ChannelSelectorProps {
 }
 
 const channels = [
-  { id: 'rezeption', name: 'Rezeption', icon: 'desk-lamp' },
-  { id: 'spa', name: 'Spa', icon: 'flower-tulip' },
-  { id: 'restaurant', name: 'Restaurant', icon: 'silverware-fork-knife' },
+  { id: 'rezeption', name: 'Rezeption', icon: 'paper-plane' },
+  { id: 'spa', name: 'Spa', icon: 'thermometer' },
+  { id: 'restaurant', name: 'Restaurant', icon: 'restaurant' },
 ];
 
 const ChannelSelector: React.FC<ChannelSelectorProps> = ({ onSelectChannel }) => {
@@ -49,7 +49,7 @@ const ChannelSelector: React.FC<ChannelSelectorProps> = ({ onSelectChannel }) =>
         style={styles.navigationButton}
         onPress={() => navigation.navigate('Dashboard')}
       >
-        <Icon name="arrow-left" size={24} color="#ffffff" />
+        <Icon name="caret-back" size={24} color="#ffffff" />
         <Text style={styles.navigationButtonText}>Back to Dashboard</Text>
       </TouchableOpacity>
     </View>

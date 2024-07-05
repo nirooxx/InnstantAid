@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
 import { Card, Button } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addReservation, fetchReservations } from '../../../../../../store/tableReservationSlice';
@@ -56,7 +56,7 @@ const BookingScreen: React.FC = () => {
         <Card.Title
           title={`Reservierung für ${name}`}
           subtitle={`Raum Nr. ${roomNumber}`}
-          left={(props) => <Icon {...props} name="book-outline" size={30} color="#5A67D8" />}
+          left={(props) => <Icon {...props} name="restaurant-sharp" size={30} color="#5A67D8" />}
           leftStyle={styles.cardLeftIcon}
         />
         <Card.Content>
@@ -66,7 +66,6 @@ const BookingScreen: React.FC = () => {
       </Card>
 
       <Button
-        icon="check-bold"
         mode="contained"
         onPress={handleConfirmBooking}
         style={styles.confirmButton}

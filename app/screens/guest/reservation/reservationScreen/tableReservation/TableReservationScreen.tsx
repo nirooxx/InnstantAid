@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { View, Text, Button, StyleSheet, ScrollView, TouchableOpacity, Platform } from 'react-native';
-import { Icon } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from "../../../../../routes/types";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -93,11 +93,11 @@ const TableReservationScreen: React.FC = () => {
           </View>
           <View style={styles.peopleCounter}>
             <TouchableOpacity onPress={decreasePeopleCount}>
-              <Icon name="minus" type="material-community" size={30} color="#5A67D8" />
+            <Icon name="remove-circle-outline" size={30}  color="#5A67D8"/>
             </TouchableOpacity>
             <Text style={styles.peopleCount}>{`${peopleCount} Person(en)`}</Text>
             <TouchableOpacity onPress={increasePeopleCount}>
-              <Icon name="plus" type="material-community" size={30} color="#5A67D8" />
+            <Icon name="add-circle-outline" size={30} color="#5A67D8" />
             </TouchableOpacity>
           </View>
           <View style={styles.bookButtonContainer}>

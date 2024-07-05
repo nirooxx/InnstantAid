@@ -1,38 +1,45 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from "../../../../routes/types"; // Import your type definitions
+import { RootStackParamList } from "../../../../routes/types";
 import { StackNavigationProp } from "@react-navigation/stack";
+import Icon from 'react-native-vector-icons/Ionicons';
 
-type HousekeepingNavigationProp = StackNavigationProp<
-  RootStackParamList
->;
+type HousekeepingNavigationProp = StackNavigationProp<RootStackParamList>;
 
-const { width } = Dimensions.get('window');
-
-const HousekeepingScreen = () => {
+const HousekeepingScreen: React.FC = () => {
   const navigation = useNavigation<HousekeepingNavigationProp>();
-  
+
+  const handleRequestRoomCleanPress = () => {
+    navigation.navigate('RequestRoomCleanScreen');
+  };
+
+  const handleSetRoomCleanFrequencyPress = () => {
+    navigation.navigate('RoomCleanFrequencyScreen');
+  };
+
+  const handleMaintenancePress = () => {
+    navigation.navigate('MaintenanceScreen');
+  };
+
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-
-      {/* Request Room Clean */}
-      <TouchableOpacity style={styles.section} onPress={() => navigation.navigate('RequestRoomCleanScreen')}>
-        <Text style={styles.sectionTitle}>Request Room Clean</Text>
-        <Image source={require('../../../../assets/images/housekeeping.webp')} style={styles.image} />
-      </TouchableOpacity>
-
-      {/* Set Room Clean Frequency */}
-      <TouchableOpacity style={styles.section} onPress={() => navigation.navigate('RoomCleanFrequencyScreen')}>
-        <Text style={styles.sectionTitle}>Set Room Clean Frequency</Text>
-        <Image source={require('../../../../assets/images/housekeeping.webp')} style={styles.image} />
-      </TouchableOpacity>
-
-      {/* Maintenance */}
-      <TouchableOpacity style={styles.section} onPress={() => navigation.navigate('MaintenanceScreen')}>
-        <Text style={styles.sectionTitle}>Maintenance</Text>
-        <Image source={require('../../../../assets/images/housekeeping.webp')} style={styles.image} />
-      </TouchableOpacity>
+    <ScrollView style={styles.container}>
+      <View style={styles.row}>
+        <TouchableOpacity style={styles.tile} onPress={handleRequestRoomCleanPress}>
+          <Icon name="water" size={50} color="#5A67D8" style={styles.icon} />
+          <Text style={styles.tileText}>Request Room Clean</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.tile} onPress={handleSetRoomCleanFrequencyPress}>
+          <Icon name="repeat" size={50} color="#5A67D8" style={styles.icon} />
+          <Text style={styles.tileText}>Set Room Clean Frequency</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.row}>
+        <TouchableOpacity style={styles.tile} onPress={handleMaintenancePress}>
+          <Icon name="hammer" size={50} color="#5A67D8" style={styles.icon} />
+          <Text style={styles.tileText}>Maintenance</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
@@ -40,37 +47,36 @@ const HousekeepingScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7FAFC',
+    padding: 16,
+    backgroundColor: '#F0F4F8',
   },
-  contentContainer: {
-    padding: 20,
-    paddingBottom: 40,
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  tile: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
     alignItems: 'center',
-  },
-  section: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
+    justifyContent: 'center',
+    margin: 8,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 10,
-    elevation: 5,
-    marginBottom: 20,
-    width: width - 40,
-    overflow: 'hidden',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  sectionTitle: {
-    fontSize: 18,
+  icon: {
+    marginBottom: 8,
+  },
+  tileText: {
+    fontSize: 16,
     fontWeight: '600',
-    color: '#2D3748',
-    padding: 15,
-    backgroundColor: '#5A67D8',
+    color: '#5A67D8',
     textAlign: 'center',
-  },
-  image: {
-    width: '100%',
-    height: 200,
-    resizeMode: 'cover',
   },
 });
 

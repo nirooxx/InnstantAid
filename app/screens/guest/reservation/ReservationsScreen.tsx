@@ -1,8 +1,9 @@
 import React from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from "../../../routes/types";
 import { StackNavigationProp } from "@react-navigation/stack";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 type ReservationsNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -29,32 +30,32 @@ const ReservationsScreen: React.FC = () => {
     <ScrollView style={styles.container}>
       <View style={styles.row}>
         <TouchableOpacity style={styles.tile} onPress={handleTableReservationPress}>
-          <Image source={require('../../../assets/images/tick.png')} style={styles.image} />
+          <Icon name="restaurant" size={50} color="#5A67D8" style={styles.icon} />
           <Text style={styles.tileText}>Tischreservierung</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.tile} onPress={handleSpaBookingPress}>
-          <Image source={require('../../../assets/images/tick.png')} style={styles.image} />
+          <Icon name="battery-charging" size={50} color="#5A67D8" style={styles.icon} />
           <Text style={styles.tileText}>Spa-Buchung</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.row}>
         <TouchableOpacity style={styles.tile} onPress={handleRoomServiceOrderPress}>
-          <Image source={require('../../../assets/images/tick.png')} style={styles.image} />
+          <Icon name="fast-food" size={50} color="#5A67D8" style={styles.icon} />
           <Text style={styles.tileText}>Zimmerservice</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.tile} onPress={handleHouseKeepingPress}>
-          <Image source={require('../../../assets/images/tick.png')} style={styles.image} />
+          <Icon name="infinite" size={50} color="#5A67D8" style={styles.icon} />
           <Text style={styles.tileText}>Housekeeping</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.row}>
         <TouchableOpacity style={styles.tile} onPress={handleRoomServiceOrderPress}>
-          <Image source={require('../../../assets/images/tick.png')} style={styles.image} />
+          <Icon name="barbell" size={50} color="#5A67D8" style={styles.icon} />
           <Text style={styles.tileText}>Fitness</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.tile} onPress={handleHouseKeepingPress}>
-          <Image source={require('../../../assets/images/tick.png')} style={styles.image} />
-          <Text style={styles.tileText}>Housekeeping</Text>
+          <Icon name="information" size={50} color="#5A67D8" style={styles.icon} />
+          <Text style={styles.tileText}>Info</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -86,9 +87,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  image: {
-    width: 60,
-    height: 60,
+  icon: {
     marginBottom: 8,
   },
   tileText: {

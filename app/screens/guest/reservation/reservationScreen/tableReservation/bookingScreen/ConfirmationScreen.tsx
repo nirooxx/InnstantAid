@@ -6,7 +6,7 @@ import { deleteReservation } from '../../../../../../store/tableReservationSlice
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { AppDispatch } from '../../../../../../store/store';
 import { RootStackParamList } from "../../../../../../routes/types"; // Import your type definitions
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { StackNavigationProp } from "@react-navigation/stack";
 
 type ConfirmationNavigationProp = StackNavigationProp<
@@ -38,7 +38,7 @@ const ConfirmationScreen: React.FC = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <Icon
-          name="check-circle-outline"
+          name="checkmark-circle"
           size={72}
           color="#5A67D8"
           style={styles.checkIcon}

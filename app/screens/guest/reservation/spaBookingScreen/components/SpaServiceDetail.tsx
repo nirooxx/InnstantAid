@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView, Alert, Modal, Button } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Alert, Modal, Button } from 'react-native';
 import { RootStackParamList } from "../../../../../routes/types";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootState } from '../../../../../store/store';
@@ -22,24 +22,20 @@ type SpaBookingScreenRouteProp = RouteProp<{ params: { title: string; image: str
 const SpaServiceDetail: React.FC = () => {
   const navigation = useNavigation<SpaBookingNavigationProp>();
   const route = useRoute<SpaBookingScreenRouteProp>();
-  const { title, price, duration } = route.params;
+  const { title, price, duration, image } = route.params;
   const userRoomNumber = useSelector((state: RootState) => state.user.roomNumber);
   const userId = useSelector((state: RootState) => state.user.id);
   const [date, setDate] = useState(dayjs());
   const [isPickerShow, setIsPickerShow] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
 
   const memoizedDate = useMemo(() => date.toDate(), [date]);
 
   const handleBooking = useCallback(() => {
-    const bookingDetails = `Service: ${title}\nPreis: ${price}\nDauer: ${duration}\nDatum: ${date.format('DD.MM.YYYY')}\nZeit: ${date.format('HH:mm')} Uhr\nName: ${'name'}\nEmail: ${'email'}`;
-
-    Alert.alert("Buchung bestätigen", bookingDetails, [
-      { text: "Abbrechen", onPress: () => console.log("Buchung abgebrochen"), style: "cancel" },
-      { text: "Bestätigen", onPress: confirmBooking }
-    ]);
-  }, [title, price, duration, date]);
+    setIsModalVisible(true);
+  }, [setIsModalVisible]);
 
   const confirmBooking = useCallback(() => {
     const newBooking = {
@@ -73,7 +69,7 @@ const SpaServiceDetail: React.FC = () => {
 
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 70 }} style={styles.container}>
-      <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSub7i7li7OKf9SdCEc-YKUVrvTH_FGYQgjNRJxj7riwokoXB30b-9yMkv0_XYqwGCAAwc&usqp=CAU' }} style={styles.image} />
+      <Image source={require(image)} style={styles.image} />
       <View style={styles.detailsContainer}>
         <View style={styles.titlePriceContainer}>
           <Icon name="calendar" size={28} color="#5A67D8" style={styles.icon} />
@@ -94,7 +90,7 @@ const SpaServiceDetail: React.FC = () => {
           <Text style={styles.dateDisplayText}>
             Ausgewählte Uhrzeit: {date.format('HH:mm')}
           </Text>
-          <Modal visible={isPickerShow} transparent={false} animationType="slide">
+          <Modal visible={isPickerShow} transparent={true} animationType="slide">
             <View style={styles.modalOverlay}>
               <View style={styles.modalContent}>
                 <DateTimePicker
@@ -107,7 +103,8 @@ const SpaServiceDetail: React.FC = () => {
                   timePicker={true}
                   minDate={dayjs().startOf('day').toDate()}
                 />
-                <Button title="Schließen" onPress={() => setIsPickerShow(false)} />
+                
+                <Button color='#5A67D8' title="Schließen" onPress={() => setIsPickerShow(false)} />
               </View>
             </View>
           </Modal>
@@ -116,6 +113,27 @@ const SpaServiceDetail: React.FC = () => {
           <Text style={styles.buttonText}>Buchung bestätigen</Text>
         </TouchableOpacity>
       </View>
+
+      <Modal visible={isModalVisible} transparent={true} animationType="slide">
+        <View style={styles.confirmModalOverlay}>
+          <View style={styles.confirmModalContent}>
+            <Text style={styles.confirmTitle}>Buchung bestätigen</Text>
+            <Text style={styles.confirmText}>Service: {title}</Text>
+            <Text style={styles.confirmText}>Preis: {price}</Text>
+            <Text style={styles.confirmText}>Dauer: {duration}</Text>
+            <Text style={styles.confirmText}>Datum: {date.format('DD.MM.YYYY')}</Text>
+            <Text style={styles.confirmText}>Zeit: {date.format('HH:mm')} Uhr</Text>
+            <View style={styles.confirmButtonContainer}>
+              <TouchableOpacity style={styles.confirmButton} onPress={() => setIsModalVisible(false)}>
+                <Text style={styles.confirmButtonText}>Abbrechen</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.confirmButton} onPress={confirmBooking}>
+                <Text style={styles.confirmButtonText}>Bestätigen</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -123,15 +141,19 @@ const SpaServiceDetail: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7FAFC',
+    backgroundColor: '#F0F4F8',
   },
   image: {
     width: '100%',
-    height: 300,
+    height: 250,
     resizeMode: 'cover',
   },
   detailsContainer: {
-    padding: 20,
+    padding: 16,
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    marginTop: -20,
   },
   titlePriceContainer: {
     flexDirection: 'row',
@@ -139,7 +161,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   titlePriceTextContainer: {
-    flex: 1,
+    marginLeft: 8,
   },
   title: {
     fontSize: 24,
@@ -147,64 +169,35 @@ const styles = StyleSheet.create({
     color: '#2D3748',
   },
   price: {
-    fontSize: 20,
-    color: '#2D3748',
+    fontSize: 18,
+    color: '#4A5568',
+    marginTop: 4,
   },
   description: {
     fontSize: 16,
-    color: '#4A5568',
-    marginBottom: 20,
+    color: '#718096',
+    marginBottom: 16,
+  },
+  inputContainer: {
+    marginBottom: 16,
   },
   dateTimeButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#E8EAF6',
-    borderRadius: 25,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    marginVertical: 10,
-    shadowColor: '#5A67D8',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3.84,
-    elevation: 5,
+    padding: 12,
+    backgroundColor: '#E2E8F0',
+    borderRadius: 8,
+    marginBottom: 8,
   },
   dateTimeText: {
-    marginLeft: 10,
+    marginLeft: 8,
     fontSize: 16,
-    color: '#333',
-  },
-  icon: {
-    marginRight: 8,
-  },
-  inputContainer: {
-    marginBottom: 24,
+    color: '#5A67D8',
   },
   dateDisplayText: {
     fontSize: 16,
-    color: '#333',
-    textAlign: 'center',
-    marginVertical: 4,
-  },
-  button: {
-    backgroundColor: '#5A67D8',
-    borderRadius: 25,
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-    shadowColor: '#5A67D8',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 6,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
+    color: '#4A5568',
+    marginBottom: 4,
   },
   modalOverlay: {
     flex: 1,
@@ -213,21 +206,72 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
+    width: '90%',
+    backgroundColor: '#fff',
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    width: '80%',
+    padding: 16,
+    alignItems: 'center',
   },
   calendarText: {
+    fontSize: 16,
+    color: '#4A5568',
+  },
+  button: {
+    backgroundColor: '#5A67D8',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  buttonText: {
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  icon: {
+    marginRight: 8,
+  },
+  confirmModalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  confirmModalContent: {
+    width: '90%',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 16,
+    alignItems: 'center',
+  },
+  confirmTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
     color: '#2D3748',
+    marginBottom: 16,
+  },
+  confirmText: {
+    fontSize: 16,
+    color: '#4A5568',
+    marginBottom: 8,
+  },
+  confirmButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  confirmButton: {
+    backgroundColor: '#5A67D8',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 16,
+    width: '45%',
+  },
+  confirmButtonText: {
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });
 

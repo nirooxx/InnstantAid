@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {
   sendMessage,
   subscribeToMessages,
@@ -67,7 +67,7 @@ const ChatScreen: React.FC = () => {
       {channelId && (
         <View style={styles.header}>
           <TouchableOpacity style={styles.headerButton} onPress={handleChannelExit}>
-            <Icon name="arrow-left" size={24} color="#ffffff" />
+            <Icon name="caret-back" size={24} color="#ffffff" />
             <Text style={styles.headerButtonText}>Kanal wechseln</Text>
           </TouchableOpacity>
         </View>
