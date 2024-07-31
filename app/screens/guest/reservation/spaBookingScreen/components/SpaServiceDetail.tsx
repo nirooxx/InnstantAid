@@ -69,7 +69,7 @@ const SpaServiceDetail: React.FC = () => {
 
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 70 }} style={styles.container}>
-      <Image source={require(image)} style={styles.image} />
+     
       <View style={styles.detailsContainer}>
         <View style={styles.titlePriceContainer}>
           <Icon name="calendar" size={28} color="#5A67D8" style={styles.icon} />

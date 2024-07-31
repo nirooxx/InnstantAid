@@ -12,10 +12,10 @@ type SpaBookingNavigationProp = StackNavigationProp<
 >;
 
 const spaServices = [
-  { title: 'Thai Massage', image: require('../../../../assets/images/Thai.webp'), price: '99€', duration: '60 Min.' },
-  { title: 'Swedish Massage', image: require('../../../../assets/images/swedish.webp'), price: '89€', duration: '60 Min.' },
-  { title: 'Hot Stone Massage', image: require('../../../../assets/images/hotStone.webp'), price: '109€', duration: '75 Min.' },
-  { title: 'Aromatherapy Massage', image: require('../../../../assets/images/aroma.webp'), price: '79€', duration: '60 Min.' },
+  { title: 'Thai Massage', image: require('../../../../assets/images/Gebäude_Architektur.jpg'), price: '99€', duration: '60 Min.' },
+  { title: 'Swedish Massage', image: require('../../../../assets/images/Gebäude_Architektur.jpg'), price: '89€', duration: '60 Min.' },
+  { title: 'Hot Stone Massage', image: require('../../../../assets/images/Gebäude_Architektur.jpg'), price: '109€', duration: '75 Min.' },
+  { title: 'Aromatherapy Massage', image: require('../../../../assets/images/Gebäude_Architektur.jpg'), price: '79€', duration: '60 Min.' },
 ];
 
 const SpaBookingScreen: React.FC = () => {
@@ -41,7 +41,7 @@ const SpaBookingScreen: React.FC = () => {
       }}
     >
     <View style={styles.topSection}>
-  <Image source={require('../../../../assets/images/Thai-Message.webp')} style={styles.backgroundImage} />
+  <Image source={require('../../../../assets/images/Gebäude_Architektur.jpg')} style={styles.backgroundImage} />
   <View style={styles.overlay}>
     <View style={styles.textContainer}>
       <Text style={styles.heading}>Entspannen Sie sich</Text>

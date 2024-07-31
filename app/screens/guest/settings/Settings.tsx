@@ -20,8 +20,6 @@ import { RootState } from "../../../store/store";
 import type { RootStackParamList } from "../../../routes/types";
 import type { StackNavigationProp } from "@react-navigation/stack";
 
-const avatar = require("../../../assets/images/avatar.png");
-
 const Settings = () => {
   const { theme, toggleTheme } = useTheme();
   const userState = useSelector((state: RootState) => state.user);
@@ -63,7 +61,6 @@ const Settings = () => {
       >
         <Card style={[styles.card, { backgroundColor: theme.cardBg }]}>
           <View style={styles.avatarRow}>
-            <Image source={avatar} style={styles.avatar} />
             <View>
               <Text style={[styles.text, { color: theme.color }]}>
                 {userState.name || "Gast"}

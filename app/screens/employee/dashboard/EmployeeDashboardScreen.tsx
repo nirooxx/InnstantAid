@@ -27,7 +27,7 @@ const EmployeeDashboardScreen: React.FC = () => {
   return (
     <View style={styles.container}>
     <View style={styles.header}>
-      <Image source={require('../../../assets/images/Thai-Message.webp')} style={styles.logo} />
+      <Image source={require('../../../assets/images/Gebäude_Architektur.jpg')} style={styles.logo} />
       <Text style={styles.headerTitle}>Smart HR</Text>
     </View>
     <View style={styles.cardContainer}>

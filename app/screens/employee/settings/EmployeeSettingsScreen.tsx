@@ -20,7 +20,7 @@ import { RootState } from "../../../store/store";
 import type { RootStackParamList } from "../../../routes/types";
 import type { StackNavigationProp } from "@react-navigation/stack";
 
-const avatar = require("../../../assets/images/avatar.png");
+const avatar = require("../../../assets/images/appicon.png");
 
 const EmployeeSettingsScreen = () => {
   const { theme, toggleTheme } = useTheme();
@@ -122,8 +122,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingVertical: 16,
     paddingHorizontal: 12,
-    background: 'rgba(255, 255, 255, 0.8)',
-    backdropFilter: 'blur(10px)',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
   },
   header: {
     paddingLeft: 20,

@@ -24,7 +24,7 @@ const ChannelSelector: React.FC<ChannelSelectorProps> = ({ onSelectChannel }) =>
       <ScrollView style={styles.container}>
         <View style={styles.header}>
           <Image
-            source={require('../../../../assets/images/Thai-Message.webp')}
+            source={require('../../../../assets/images/Gebäude_Architektur.jpg')}
             style={styles.headerImage}
           />
           <View style={styles.overlay}>

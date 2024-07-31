@@ -2,10 +2,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- Für die Kamera -->
 <uses-permission android:name="android.permission.CAMERA" />
-<!-- Für das Lesen von externem Speicher -->
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 
 
     <application
