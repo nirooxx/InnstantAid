@@ -15,26 +15,30 @@ import RootNavigation from "./app/routes/RootNavigation";
 
 import StorybookUIRoot from "./.storybook";
 
-let Root = function App() {
+const App = React.memo(() => {
+  console.log('App component rendering');
   return (
     <SafeAreaProvider>
       <Provider store={store}>
         <ThemeProvider>
-        <ApolloProvider client={client}>
-        <CartProvider>
-          <RootNavigation />
-          <NoInternetToast />
-         </CartProvider>
-         </ApolloProvider>
+          <ApolloProvider client={client}>
+            <CartProvider>
+              <RootNavigation />
+              <NoInternetToast />
+            </CartProvider>
+          </ApolloProvider>
         </ThemeProvider>
       </Provider>
     </SafeAreaProvider>
   );
-};
+});
 
-// Render StoryBook if the ENV variable set to 'TRUE', type is <string> not <boolean>
+/*
+let Root;
 if (STORYBOOK_MODE === "TRUE") {
-  Root = StorybookUIRoot;
-}
+  Root = React.memo(StorybookUIRoot);
+} else {
+  Root = App;
+}*/
 
-export default Root;
+export default App;

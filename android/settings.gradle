@@ -9,14 +9,16 @@ apply from: new File(["node", "--print", "require.resolve('expo/package.json')"]
 useExpoModules()
 
 // Autolinking für React Native Community-Module
-apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings);
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle");
+applyNativeModulesSettingsGradle(settings);
 
 // Einbinden der App
 include ':app'
-includeBuild('../node_modules/@react-native/gradle-plugin');
 
 // Einbinden von react-native-async-storage
 include ':react-native-async-storage_async-storage'
 project(':react-native-async-storage_async-storage').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-async-storage/async-storage/android');
 
-apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings);
+// Einbinden des React Native Gradle Plugins
+
+includeBuild('../node_modules/@react-native/gradle-plugin');

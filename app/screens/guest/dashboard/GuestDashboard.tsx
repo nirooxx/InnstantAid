@@ -16,7 +16,7 @@ import EventsSection from "./eventsSection/EventsSection";
 import EventsSectionTomorrow from "./eventsSection/EventsSectionTomorrow";
 import RoomDetails from "./roomDetails/RoomDetails";
 import HotelMap from "./hotelMap/HotelMap";
-import SliderComponent from "./slider/SliderComponent";
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fetchRoomStays } from '../../../store/graphqlSlice';
 import { AppDispatch } from '../../../store/store';
@@ -31,7 +31,7 @@ const MemoizedEventsSection = React.memo(EventsSection);
 const MemoizedEventsSectionTomorrow = React.memo(EventsSectionTomorrow);
 const MemoizedRoomDetails = React.memo(RoomDetails);
 const MemoizedHotelMap = React.memo(HotelMap);
-const MemoizedSlider = React.memo(SliderComponent);
+
 
 const Dashboard: React.FC = () => {
   const insets = useSafeAreaInsets();
@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
 
-  const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+  const delay = (ms: number) => new Promise((res:any) => setTimeout(res, ms));
 
   useEffect(() => {
     const todayISOString = new Date().toISOString().split('T')[0];
@@ -165,9 +165,9 @@ const Dashboard: React.FC = () => {
           <Text style={styles.subGreeting}>Hallo, <Text style={styles.greetingName}>{filteredRoomStays[0]?.first_guest?.firstname}!</Text></Text>
           <Text style={styles.mainGreeting}>Willkommen im Palast Hotel.</Text>
         </View>
-        <View style={styles.section}>
-        <MemoizedSlider />
-        </View>
+      {/**  <View style={styles.section}>
+      
+        </View> */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Zimmerdetails</Text>
           {filteredRoomStays.map(stay => (

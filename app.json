@@ -1,4 +1,48 @@
 {
-  "name": "rn_redux_boilerplate",
-  "displayName": "RN Redux Boilerplate"
+  "expo": {
+    "name": "rn_redux_boilerplate",
+     "displayName": "RnReduxBoilerplate",
+    "slug": "rn_redux_boilerplate",
+    "version": "34.0.0",
+    "sdkVersion": "51.0.0",
+    "platforms": ["ios", "android"],
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 34,
+            "targetSdkVersion": 34,
+            "buildToolsVersion": "34.0.0"
+          },
+          "ios": {
+            "deploymentTarget": "13.4"
+          }
+        }
+      ]
+    ],
+    "android": {
+      "enableHermes": false,
+      "adaptiveIcon": {
+        "foregroundImage": "./app/assets/images/appicon.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.example.myapp",
+      "icon": "./app/assets/images/appicon.png"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "splash": {
+      "image": "./app/assets/images/appicon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    }
+  }
 }
